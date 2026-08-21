@@ -2947,21 +2947,8 @@
             </a>
 
             <a href="#apps">
-                Apps
+                Apps|Games
             </a>
-
-            <a href="#games">
-                Games
-            </a>
-
-            <a href="#categories">
-                Categories
-            </a>
-
-            <a href="#">
-                Updates
-            </a>
-
 
             <a
                 href="login.html"
@@ -3423,15 +3410,7 @@
                 </h4>
 
                 <a href="#apps">
-                    Apps
-                </a>
-
-                <a href="#games">
-                    Games
-                </a>
-
-                <a href="#categories">
-                    Categories
+                    Apps|Games
                 </a>
 
                 <a href="#">
@@ -3604,96 +3583,194 @@ if (mobileMenu && navLinks) {
 ========================================== */
 
 const searchInput =
-    document.getElementById("searchInput");
+        document.getElementById("searchInput");
 
-const appsGrid =
-    document.getElementById("appsGrid");
+    const appsSection =
+        document.getElementById("apps");
+
+    const appsGrid =
+        document.getElementById("appsGrid");
 
 
-if (searchInput && appsGrid) {
+    function performSearch() {
+
+        const search =
+            searchInput.value
+                .toLowerCase()
+                .trim();
+
+
+        const appCards =
+            appsGrid.querySelectorAll(".app-card");
+
+
+        appCards.forEach(card => {
+
+            const name =
+                card.querySelector(".app-name")
+                    ?.textContent
+                    .toLowerCase() || "";
+
+            const developer =
+                card.querySelector(".app-developer")
+                    ?.textContent
+                    .toLowerCase() || "";
+
+
+            if (
+                search === "" ||
+                name.includes(search) ||
+                developer.includes(search)
+            ) {
+
+                card.style.display = "";
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        /* SCROLL TO APPS WHEN ENTER IS PRESSED */
+
+        if (search !== "" && appsSection) {
+
+            setTimeout(() => {
+
+                appsSection.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+
+            }, 50);
+
+        }
+
+    }
+
+
+    /* SEARCH WHILE TYPING */
 
     searchInput.addEventListener(
         "input",
         function () {
 
-            const searchText =
+            const search =
                 this.value
                     .toLowerCase()
                     .trim();
 
 
             const appCards =
-                appsGrid.querySelectorAll(
-                    ".app-card"
-                );
+                appsGrid.querySelectorAll(".app-card");
 
 
-            appCards.forEach(
-                function (card) {
+            appCards.forEach(card => {
 
-                    const name =
-                        card.querySelector(
-                            ".app-name"
-                        )
+                const name =
+                    card.querySelector(".app-name")
+                        ?.textContent
+                        .toLowerCase() || "";
+
+                const developer =
+                    card.querySelector(".app-developer")
                         ?.textContent
                         .toLowerCase() || "";
 
 
-                    const developer =
-                        card.querySelector(
-                            ".app-developer"
-                        )
-                        ?.textContent
-                        .toLowerCase() || "";
+                if (
+                    search === "" ||
+                    name.includes(search) ||
+                    developer.includes(search)
+                ) {
 
+                    card.style.display = "";
 
-                    const category =
-                        card.dataset.category
-                            ?.toLowerCase() || "";
+                } else {
 
-
-                    const description =
-                        card.dataset.description
-                            ?.toLowerCase() || "";
-
-
-                    const keywords =
-                        card.dataset.keywords
-                            ?.toLowerCase() || "";
-
-
-                    const searchableText =
-                        name + " " +
-                        developer + " " +
-                        category + " " +
-                        description + " " +
-                        keywords;
-
-
-                    if (
-                        searchText === "" ||
-                        searchableText.includes(
-                            searchText
-                        )
-                    ) {
-
-                        card.style.display =
-                            "";
-
-                    } else {
-
-                        card.style.display =
-                            "none";
-
-                    }
+                    card.style.display = "none";
 
                 }
-            );
+
+            });
 
         }
     );
 
-}
+
+    /* PRESS ENTER */
+
+    searchInput.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (event.key === "Enter") {
+
+                event.preventDefault();
+
+                performSearch();
+
+            }
+
+        }
+    );
+
+
+    /* MOBILE MENU */
+
+    const mobileMenu =
+        document.querySelector(".mobile-menu");
+
+    const navLinks =
+        document.querySelector(".nav-links");
+
+
+    if (mobileMenu && navLinks) {
+
+        mobileMenu.addEventListener(
+            "click",
+            () => {
+
+                if (
+                    navLinks.style.display === "flex"
+                ) {
+
+                    navLinks.style.display = "";
+
+                } else {
+
+                    navLinks.style.display = "flex";
+
+                    navLinks.style.position =
+                        "absolute";
+
+                    navLinks.style.top =
+                        "74px";
+
+                    navLinks.style.left = "0";
+
+                    navLinks.style.right = "0";
+
+                    navLinks.style.padding = "20px";
+
+                    navLinks.style.background =
+                        "rgba(8,10,15,.98)";
+
+                    navLinks.style.flexDirection =
+                        "column";
+
+                    navLinks.style.borderBottom =
+                        "1px solid rgba(255,255,255,.07)";
+
+                }
+
+            }
+        );
+
+    }
 
 
 /* ==========================================
