@@ -72,30 +72,17 @@
 
         async function loadApps() {
 
-            const appsGrid =
-                document.getElementById("appsGrid");
+    const gamesGrid =
+        document.getElementById("gamesGrid");
 
-            const gamesGrid =
-                document.getElementById("gamesGrid");
+    try {
 
-
-            try {
-
-                appsGrid.innerHTML = `
-                    <div class="loading-state">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>Loading apps...</span>
-                    </div>
-                `;
-
-
-                gamesGrid.innerHTML = `
-                    <div class="loading-state">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>Loading games...</span>
-                    </div>
-                `;
-
+        gamesGrid.innerHTML = `
+            <div class="loading-state">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>Loading games...</span>
+            </div>
+        `;
 
                 /*
                  * Get apps from Firestore
@@ -237,22 +224,13 @@
                             .toLowerCase();
 
 
-                        return !(
-                            category.includes("game") ||
-                            tags.includes("game")
-                        );
+                        const games = apps.filter(app => {
 
-                    });
+    return String(app.category)
+        .toLowerCase()
+        .trim() === "games";
 
-
-                /*
-                 * Render apps
-                 */
-
-                renderApps(
-                    appsGrid,
-                    normalApps
-                );
+      });
 
 
                 /*
@@ -299,22 +277,6 @@
                     "Error loading apps:",
                     error
                 );
-
-
-                appsGrid.innerHTML = `
-                    <div class="empty-state">
-
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-
-                        <h3>Unable to load apps</h3>
-
-                        <p>
-                            Please check your Firebase
-                            connection and try again.
-                        </p>
-
-                    </div>
-                `;
 
 
                 gamesGrid.innerHTML = `
