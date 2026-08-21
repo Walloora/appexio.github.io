@@ -1,0 +1,2460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>APKCity Admin</title>
+
+    <meta
+        name="robots"
+        content="noindex,nofollow"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+
+<style>
+
+/* =========================================
+   RESET
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+:root {
+
+    --bg: #080a0f;
+    --panel: #10141c;
+    --card: #151a23;
+
+    --border: rgba(255,255,255,.08);
+
+    --text: #f5f7fb;
+    --muted: #9299a8;
+
+    --primary: #7c5cff;
+    --primary2: #5d7cff;
+
+    --green: #31d47c;
+    --red: #ff5c6c;
+
+}
+
+
+body {
+
+    font-family: "Inter", sans-serif;
+
+    background:
+        radial-gradient(
+            circle at 80% 0%,
+            rgba(124,92,255,.12),
+            transparent 35%
+        ),
+        var(--bg);
+
+    color: var(--text);
+
+    min-height: 100vh;
+
+}
+
+
+button,
+input,
+textarea,
+select {
+    font-family: inherit;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.header {
+
+    height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 4%;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+
+    background:
+        rgba(8,10,15,.88);
+
+    backdrop-filter: blur(20px);
+
+    border-bottom:
+        1px solid var(--border);
+
+}
+
+
+.header-inner {
+
+    width: 100%;
+    max-width: 1450px;
+
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+
+}
+
+
+.logo {
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 20px;
+    font-weight: 800;
+
+}
+
+
+.logo-icon {
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 11px;
+
+    display: grid;
+    place-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary2)
+        );
+
+}
+
+
+.logo span {
+    color: #9c87ff;
+}
+
+
+.admin-label {
+
+    margin-left: 10px;
+
+    padding: 5px 9px;
+
+    border-radius: 7px;
+
+    background:
+        rgba(124,92,255,.1);
+
+    border:
+        1px solid
+        rgba(124,92,255,.2);
+
+    color: #ad9cff;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+}
+
+
+.header-right {
+
+    margin-left: auto;
+
+}
+
+
+.website-btn {
+
+    height: 38px;
+
+    padding: 0 14px;
+
+    border-radius: 9px;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        var(--card);
+
+    color: #d9dce4;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+/* =========================================
+   LAYOUT
+========================================= */
+
+.layout {
+
+    width: 92%;
+
+    max-width: 1450px;
+
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: 220px 1fr;
+
+    min-height:
+        calc(100vh - 72px);
+
+}
+
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+
+    padding:
+        30px 15px 30px 0;
+
+    border-right:
+        1px solid var(--border);
+
+}
+
+
+.sidebar-title {
+
+    color: #626978;
+
+    font-size: 9px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    text-transform: uppercase;
+
+    margin:
+        10px 12px 12px;
+
+}
+
+
+.side-link {
+
+    width: 100%;
+
+    height: 43px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 0 13px;
+
+    margin-bottom: 4px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    color: var(--muted);
+
+    text-align: left;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+}
+
+
+.side-link i {
+
+    width: 18px;
+
+    text-align: center;
+
+}
+
+
+.side-link.active,
+.side-link:hover {
+
+    background:
+        rgba(124,92,255,.1);
+
+    color: #b3a4ff;
+
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
+.main {
+
+    padding:
+        35px 0 70px 35px;
+
+    min-width: 0;
+
+}
+
+
+.page-title {
+
+    margin-bottom: 28px;
+
+}
+
+
+.page-title h1 {
+
+    font-size: 28px;
+
+    letter-spacing: -.8px;
+
+    margin-bottom: 7px;
+
+}
+
+
+.page-title p {
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================
+   FORM LAYOUT
+========================================= */
+
+.form-layout {
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0,1fr) 320px;
+
+    gap: 18px;
+
+}
+
+
+.panel {
+
+    background:
+        var(--panel);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 17px;
+
+    padding: 22px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.panel-title {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 20px;
+
+}
+
+
+.panel-title i {
+
+    color: #9a86ff;
+
+}
+
+
+/* =========================================
+   FORM
+========================================= */
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 15px;
+
+}
+
+
+.field {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+}
+
+
+.field.full {
+
+    grid-column:
+        1 / -1;
+
+}
+
+
+.field label {
+
+    color: #c5c9d2;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+}
+
+
+.field label span {
+
+    color: #686f7d;
+
+    font-weight: 400;
+
+}
+
+
+input,
+textarea,
+select {
+
+    width: 100%;
+
+    outline: none;
+
+    border:
+        1px solid var(--border);
+
+    background:
+        #0c1017;
+
+    color: white;
+
+    border-radius: 9px;
+
+    font-size: 11px;
+
+}
+
+
+input,
+select {
+
+    height: 43px;
+
+    padding: 0 12px;
+
+}
+
+
+textarea {
+
+    min-height: 110px;
+
+    padding: 12px;
+
+    resize: vertical;
+
+    line-height: 1.6;
+
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+
+    border-color:
+        rgba(124,92,255,.55);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(124,92,255,.08);
+
+}
+
+
+/* =========================================
+   SCREENSHOTS
+========================================= */
+
+.screenshot-list {
+
+    display: grid;
+
+    gap: 12px;
+
+}
+
+
+.screenshot-field {
+
+    display: grid;
+
+    grid-template-columns:
+        35px 1fr;
+
+    gap: 10px;
+
+    align-items: center;
+
+}
+
+
+.shot-number {
+
+    width: 35px;
+    height: 35px;
+
+    border-radius: 9px;
+
+    display: grid;
+    place-items: center;
+
+    background: #1a2030;
+
+    color: #9d8cff;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================
+   CHECKBOXES
+========================================= */
+
+.checks {
+
+    display: flex;
+
+    gap: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+
+.check {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #b8bdc8;
+
+    font-size: 10px;
+
+}
+
+
+.check input {
+
+    width: 16px;
+    height: 16px;
+
+    accent-color:
+        var(--primary);
+
+}
+
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.actions {
+
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.btn {
+
+    height: 47px;
+
+    padding:
+        0 20px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+}
+
+
+.btn-primary {
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary2)
+        );
+
+    box-shadow:
+        0 10px 25px
+        rgba(124,92,255,.18);
+
+}
+
+
+.btn-secondary {
+
+    color: #c8ccd5;
+
+    background:
+        #181e28;
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+.btn-danger {
+
+    color: #ff7c88;
+
+    background:
+        rgba(255,92,108,.08);
+
+    border:
+        1px solid
+        rgba(255,92,108,.15);
+
+}
+
+
+/* =========================================
+   PREVIEW
+========================================= */
+
+.preview-box {
+
+    position: sticky;
+
+    top: 95px;
+
+}
+
+
+.preview-label {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.app-preview {
+
+    background:
+        #0c1017;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 15px;
+
+    padding: 16px;
+
+}
+
+
+.preview-top {
+
+    display: flex;
+
+    gap: 13px;
+
+    align-items: center;
+
+}
+
+
+.preview-icon {
+
+    width: 65px;
+    height: 65px;
+
+    border-radius: 16px;
+
+    object-fit: cover;
+
+    background: #1a1f29;
+
+}
+
+
+.preview-name {
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+
+}
+
+
+.preview-developer {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+
+.preview-category {
+
+    display: inline-block;
+
+    margin-top: 7px;
+
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    background:
+        rgba(124,92,255,.1);
+
+    color: #a995ff;
+
+    font-size: 8px;
+
+}
+
+
+.preview-info {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 7px;
+
+    margin-top: 15px;
+
+}
+
+
+.preview-info div {
+
+    padding: 9px;
+
+    border-radius: 8px;
+
+    background: #131821;
+
+}
+
+
+.preview-info strong {
+
+    display: block;
+
+    font-size: 10px;
+
+    margin-bottom: 3px;
+
+}
+
+
+.preview-info span {
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+.toast {
+
+    position: fixed;
+
+    right: 25px;
+
+    bottom: 25px;
+
+    padding:
+        13px 17px;
+
+    border-radius: 10px;
+
+    background:
+        #181e28;
+
+    border:
+        1px solid var(--border);
+
+    color: white;
+
+    font-size: 10px;
+
+    transform:
+        translateY(100px);
+
+    opacity: 0;
+
+    transition: .3s;
+
+    z-index: 999;
+
+}
+
+
+.toast.show {
+
+    transform:
+        translateY(0);
+
+    opacity: 1;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:1000px) {
+
+    .layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .sidebar {
+
+        display: none;
+
+    }
+
+    .main {
+
+        padding:
+            30px 0 60px;
+
+    }
+
+}
+
+
+@media(max-width:750px) {
+
+    .form-layout {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .preview-box {
+
+        position: static;
+
+    }
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .field.full {
+
+        grid-column: auto;
+
+    }
+
+}
+
+
+@media(max-width:500px) {
+
+    .panel {
+
+        padding: 16px;
+
+    }
+
+    .actions {
+
+        flex-direction: column;
+
+    }
+
+    .btn {
+
+        width: 100%;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header class="header">
+
+    <div class="header-inner">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+
+                <i class="fa-brands fa-android"></i>
+
+            </div>
+
+            APK<span>City</span>
+
+            <div class="admin-label">
+                ADMIN
+            </div>
+
+        </div>
+
+
+        <div class="header-right">
+
+            <button
+                class="website-btn"
+                onclick="window.open('../index.html','_blank')"
+            >
+
+                <i class="fa-solid fa-globe"></i>
+
+                Website
+
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+
+<div class="layout">
+
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-title">
+        Management
+    </div>
+
+
+    <button class="side-link active">
+
+        <i class="fa-solid fa-plus"></i>
+
+        Add Application
+
+    </button>
+
+
+    <button
+        class="side-link"
+        onclick="window.location.reload()"
+    >
+
+        <i class="fa-solid fa-layer-group"></i>
+
+        Applications
+
+    </button>
+
+
+    <div class="sidebar-title">
+        Website
+    </div>
+
+
+    <button
+        class="side-link"
+        onclick="window.open('../index.html','_blank')"
+    >
+
+        <i class="fa-solid fa-globe"></i>
+
+        Open APKCity
+
+    </button>
+
+</aside>
+
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+
+    <div class="page-title">
+
+        <h1>
+            Add Application
+        </h1>
+
+        <p>
+            Add a new application to APKCity.
+        </p>
+
+    </div>
+
+
+
+    <div class="form-layout">
+
+
+        <div>
+
+
+            <!-- BASIC INFORMATION -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <i class="fa-solid fa-circle-info"></i>
+
+                    Basic Information
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <div class="field">
+
+                        <label>
+                            App Name
+                        </label>
+
+                        <input
+                            id="appName"
+                            type="text"
+                            placeholder="WhatsApp"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Developer
+                        </label>
+
+                        <input
+                            id="developer"
+                            type="text"
+                            placeholder="WhatsApp LLC"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <select id="category">
+
+                            <option value="">
+                                Select Category
+                            </option>
+
+                            <option>Apps</option>
+                            <option>Games</option>
+                            <option>Social</option>
+                            <option>Communication</option>
+                            <option>Entertainment</option>
+                            <option>Music & Audio</option>
+                            <option>Video Players</option>
+                            <option>Photography</option>
+                            <option>Tools</option>
+                            <option>Productivity</option>
+                            <option>Education</option>
+                            <option>Finance</option>
+                            <option>Lifestyle</option>
+                            <option>Other</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Version
+                        </label>
+
+                        <input
+                            id="version"
+                            type="text"
+                            placeholder="1.0.0"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            APK Size
+                        </label>
+
+                        <input
+                            id="size"
+                            type="text"
+                            placeholder="85 MB"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Android Requirement
+                        </label>
+
+                        <input
+                            id="android"
+                            type="text"
+                            placeholder="Android 8.0+"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Rating
+                        </label>
+
+                        <input
+                            id="rating"
+                            type="number"
+                            min="0"
+                            max="5"
+                            step="0.1"
+                            value="4.5"
+                        >
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label>
+                            Downloads
+                        </label>
+
+                        <input
+                            id="downloads"
+                            type="text"
+                            placeholder="10K+"
+                        >
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- SEARCH TAGS -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <i class="fa-solid fa-tags"></i>
+
+                    Search Tags
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Search Keywords
+                    </label>
+
+                    <input
+                        id="tags"
+                        type="text"
+                        placeholder="whatsapp, chat, messaging, calling, social"
+                    >
+
+                    <small style="
+                        color:#626978;
+                        font-size:9px;
+                    ">
+                        Separate keywords with commas.
+                    </small>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- GITHUB FILES -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <i class="fa-solid fa-link"></i>
+
+                    GitHub Files
+
+                </div>
+
+
+                <div class="form-grid">
+
+
+                    <div class="field full">
+
+                        <label>
+                            App Picture
+                        </label>
+
+                        <input
+                            id="icon"
+                            type="text"
+                            placeholder="assets/apps/whatsapp.png"
+                        >
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label>
+                            APK File
+                        </label>
+
+                        <input
+                            id="apk"
+                            type="text"
+                            placeholder="apks/whatsapp.apk"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <br>
+
+
+                <div class="field">
+
+                    <label>
+                        Screenshots
+                        <span>
+                            Maximum 3
+                        </span>
+                    </label>
+
+
+                    <div class="screenshot-list">
+
+
+                        <div class="screenshot-field">
+
+                            <div class="shot-number">
+                                1
+                            </div>
+
+                            <input
+                                id="screenshot1"
+                                type="text"
+                                placeholder="assets/screenshots/whatsapp/1.jpg"
+                            >
+
+                        </div>
+
+
+                        <div class="screenshot-field">
+
+                            <div class="shot-number">
+                                2
+                            </div>
+
+                            <input
+                                id="screenshot2"
+                                type="text"
+                                placeholder="assets/screenshots/whatsapp/2.jpg"
+                            >
+
+                        </div>
+
+
+                        <div class="screenshot-field">
+
+                            <div class="shot-number">
+                                3
+                            </div>
+
+                            <input
+                                id="screenshot3"
+                                type="text"
+                                placeholder="assets/screenshots/whatsapp/3.jpg"
+                            >
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <i class="fa-solid fa-align-left"></i>
+
+                    Description
+
+                </div>
+
+
+                <textarea
+                    id="description"
+                    placeholder="Write the application description..."
+                ></textarea>
+
+            </section>
+
+
+
+            <!-- WHAT'S NEW -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+
+                    What's New
+
+                </div>
+
+
+                <textarea
+                    id="whatsNew"
+                    placeholder="New features&#10;Performance improvements&#10;Bug fixes"
+                ></textarea>
+
+            </section>
+
+
+
+            <!-- OPTIONS -->
+
+            <section class="panel">
+
+                <div class="panel-title">
+
+                    <i class="fa-solid fa-sliders"></i>
+
+                    Options
+
+                </div>
+
+
+                <div class="checks">
+
+
+                    <label class="check">
+
+                        <input
+                            id="featured"
+                            type="checkbox"
+                        >
+
+                        Featured App
+
+                    </label>
+
+
+                    <label class="check">
+
+                        <input
+                            id="verified"
+                            type="checkbox"
+                            checked
+                        >
+
+                        APKCity Verified
+
+                    </label>
+
+
+                </div>
+
+            </section>
+
+
+
+            <!-- BUTTONS -->
+
+            <div class="actions">
+
+
+                <button
+                    class="btn btn-primary"
+                    id="addAppBtn"
+                >
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    ADD APP
+
+                </button>
+
+
+                <button
+                    class="btn btn-danger"
+                    onclick="resetForm()"
+                >
+
+                    <i class="fa-solid fa-rotate-left"></i>
+
+                    RESET
+
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PREVIEW -->
+
+        <aside class="preview-box">
+
+            <div class="preview-label">
+                Live Preview
+            </div>
+
+
+            <div class="app-preview">
+
+
+                <div class="preview-top">
+
+
+                    <img
+                        id="previewIcon"
+                        class="preview-icon"
+                        alt="App"
+                    >
+
+
+                    <div>
+
+                        <div
+                            id="previewName"
+                            class="preview-name"
+                        >
+                            App Name
+                        </div>
+
+
+                        <div
+                            id="previewDeveloper"
+                            class="preview-developer"
+                        >
+                            Developer
+                        </div>
+
+
+                        <div
+                            id="previewCategory"
+                            class="preview-category"
+                        >
+                            Category
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="preview-info">
+
+
+                    <div>
+
+                        <strong id="previewVersion">
+                            —
+                        </strong>
+
+                        <span>
+                            Version
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="previewSize">
+                            —
+                        </strong>
+
+                        <span>
+                            Size
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="previewRating">
+                            —
+                        </strong>
+
+                        <span>
+                            Rating
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong id="previewAndroid">
+                            —
+                        </strong>
+
+                        <span>
+                            Android
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </aside>
+
+
+    </div>
+
+</main>
+
+</div>
+
+
+
+<div
+    class="toast"
+    id="toast"
+>
+</div>
+
+
+
+<!-- =========================================
+     FIREBASE
+========================================= -->
+
+<script type="module">
+
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+import {
+    getAuth,
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    collection,
+    addDoc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+/* =========================================
+   FIREBASE CONFIG
+========================================= */
+
+const firebaseConfig = {
+
+    apiKey: "AIzaSyABU60kwZik2S1_8Dx7sfT6HfGBIr935Bw",
+
+    authDomain: "apkcity-30fa1.firebaseapp.com",
+
+    projectId: "apkcity-30fa1",
+
+    storageBucket: "apkcity-30fa1.firebasestorage.app",
+
+    messagingSenderId: "965202080311",
+
+    appId: "1:965202080311:web:6419bf702de3dcf024c5b2"
+
+};
+
+
+const app =
+    initializeApp(firebaseConfig);
+
+
+const auth =
+    getAuth(app);
+
+
+const db =
+    getFirestore(app);
+
+
+/* =========================================
+   PROTECT ADMIN PANEL
+========================================= */
+
+onAuthStateChanged(
+    auth,
+    user => {
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+        console.log(
+            "Admin logged in:",
+            user.email
+        );
+
+    }
+);
+
+
+/* =========================================
+   ADD APP
+========================================= */
+
+const addAppBtn =
+    document.getElementById(
+        "addAppBtn"
+    );
+
+
+addAppBtn.addEventListener(
+    "click",
+    async () => {
+
+
+        const name =
+            document
+                .getElementById("appName")
+                .value
+                .trim();
+
+
+        const developer =
+            document
+                .getElementById("developer")
+                .value
+                .trim();
+
+
+        const category =
+            document
+                .getElementById("category")
+                .value
+                .trim();
+
+
+        const version =
+            document
+                .getElementById("version")
+                .value
+                .trim();
+
+
+        const size =
+            document
+                .getElementById("size")
+                .value
+                .trim();
+
+
+        const android =
+            document
+                .getElementById("android")
+                .value
+                .trim();
+
+
+        const rating =
+            Number(
+                document
+                    .getElementById("rating")
+                    .value
+            ) || 0;
+
+
+        const downloads =
+            document
+                .getElementById("downloads")
+                .value
+                .trim();
+
+
+        const icon =
+            document
+                .getElementById("icon")
+                .value
+                .trim();
+
+
+        const apk =
+            document
+                .getElementById("apk")
+                .value
+                .trim();
+
+
+        const screenshot1 =
+            document
+                .getElementById("screenshot1")
+                .value
+                .trim();
+
+
+        const screenshot2 =
+            document
+                .getElementById("screenshot2")
+                .value
+                .trim();
+
+
+        const screenshot3 =
+            document
+                .getElementById("screenshot3")
+                .value
+                .trim();
+
+
+        const description =
+            document
+                .getElementById("description")
+                .value
+                .trim();
+
+
+        const whatsNew =
+            document
+                .getElementById("whatsNew")
+                .value
+                .trim();
+
+
+        const tags =
+            document
+                .getElementById("tags")
+                .value
+
+                .split(",")
+
+                .map(
+                    tag =>
+                        tag.trim()
+                )
+
+                .filter(
+                    tag =>
+                        tag.length > 0
+                );
+
+
+        const screenshots = [
+
+            screenshot1,
+
+            screenshot2,
+
+            screenshot3
+
+        ].filter(Boolean);
+
+
+        const featured =
+            document
+                .getElementById("featured")
+                .checked;
+
+
+        const verified =
+            document
+                .getElementById("verified")
+                .checked;
+
+
+
+        /* =================================
+           VALIDATION
+        ================================= */
+
+
+        if (!name) {
+
+            showToast(
+                "Please enter the app name."
+            );
+
+            return;
+
+        }
+
+
+        if (!developer) {
+
+            showToast(
+                "Please enter the developer name."
+            );
+
+            return;
+
+        }
+
+
+        if (!category) {
+
+            showToast(
+                "Please select a category."
+            );
+
+            return;
+
+        }
+
+
+        if (!icon) {
+
+            showToast(
+                "Please enter the app picture path."
+            );
+
+            return;
+
+        }
+
+
+        if (!apk) {
+
+            showToast(
+                "Please enter the APK file path."
+            );
+
+            return;
+
+        }
+
+
+
+        /* =================================
+           BUTTON LOADING
+        ================================= */
+
+
+        addAppBtn.disabled = true;
+
+
+        addAppBtn.innerHTML = `
+
+            <i class="fa-solid fa-spinner fa-spin"></i>
+
+            ADDING...
+
+        `;
+
+
+
+        try {
+
+
+            /* ==============================
+               SAVE TO FIRESTORE
+            ============================== */
+
+
+            const docRef =
+                await addDoc(
+                    collection(
+                        db,
+                        "apps"
+                    ),
+                    {
+
+                        name: name,
+
+                        developer: developer,
+
+                        category: category,
+
+                        version: version,
+
+                        size: size,
+
+                        android: android,
+
+                        rating: rating,
+
+                        downloads: downloads,
+
+                        icon: icon,
+
+                        apk: apk,
+
+                        screenshots:
+                            screenshots,
+
+                        tags: tags,
+
+                        description:
+                            description,
+
+                        whatsNew:
+                            whatsNew,
+
+                        featured:
+                            featured,
+
+                        verified:
+                            verified,
+
+                        createdAt:
+                            serverTimestamp(),
+
+                        updatedAt:
+                            serverTimestamp()
+
+                    }
+                );
+
+
+            console.log(
+                "App added:",
+                docRef.id
+            );
+
+
+            showToast(
+                "✓ App added successfully!"
+            );
+
+
+            resetForm();
+
+
+
+        } catch (error) {
+
+
+            console.error(
+                "Firestore error:",
+                error
+            );
+
+
+            showToast(
+                "Failed to add app: " +
+                error.message
+            );
+
+
+        } finally {
+
+
+            addAppBtn.disabled =
+                false;
+
+
+            addAppBtn.innerHTML = `
+
+                <i class="fa-solid fa-plus"></i>
+
+                ADD APP
+
+            `;
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   RESET FORM
+========================================= */
+
+window.resetForm =
+    function () {
+
+
+        if (
+            !confirm(
+                "Clear all fields?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        document
+            .querySelectorAll(
+                "input[type='text'], input[type='number'], textarea"
+            )
+
+            .forEach(
+                element => {
+
+                    element.value = "";
+
+                }
+            );
+
+
+        document
+            .getElementById(
+                "category"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "rating"
+            )
+            .value = "4.5";
+
+
+        document
+            .getElementById(
+                "featured"
+            )
+            .checked = false;
+
+
+        document
+            .getElementById(
+                "verified"
+            )
+            .checked = true;
+
+
+        updatePreview();
+
+    };
+
+
+/* =========================================
+   LIVE PREVIEW
+========================================= */
+
+function updatePreview() {
+
+
+    const name =
+        document
+            .getElementById("appName")
+            .value;
+
+
+    const developer =
+        document
+            .getElementById("developer")
+            .value;
+
+
+    const category =
+        document
+            .getElementById("category")
+            .value;
+
+
+    const version =
+        document
+            .getElementById("version")
+            .value;
+
+
+    const size =
+        document
+            .getElementById("size")
+            .value;
+
+
+    const android =
+        document
+            .getElementById("android")
+            .value;
+
+
+    const rating =
+        document
+            .getElementById("rating")
+            .value;
+
+
+    const icon =
+        document
+            .getElementById("icon")
+            .value;
+
+
+
+    document
+        .getElementById(
+            "previewName"
+        )
+        .textContent =
+            name ||
+            "App Name";
+
+
+    document
+        .getElementById(
+            "previewDeveloper"
+        )
+        .textContent =
+            developer ||
+            "Developer";
+
+
+    document
+        .getElementById(
+            "previewCategory"
+        )
+        .textContent =
+            category ||
+            "Category";
+
+
+    document
+        .getElementById(
+            "previewVersion"
+        )
+        .textContent =
+            version ||
+            "—";
+
+
+    document
+        .getElementById(
+            "previewSize"
+        )
+        .textContent =
+            size ||
+            "—";
+
+
+    document
+        .getElementById(
+            "previewAndroid"
+        )
+        .textContent =
+            android ||
+            "—";
+
+
+    document
+        .getElementById(
+            "previewRating"
+        )
+        .textContent =
+            rating
+                ? "★ " + rating
+                : "—";
+
+
+    const previewIcon =
+        document
+            .getElementById(
+                "previewIcon"
+            );
+
+
+    if (icon) {
+
+        previewIcon.src =
+            icon;
+
+    } else {
+
+        previewIcon.removeAttribute(
+            "src"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   PREVIEW EVENTS
+========================================= */
+
+[
+    "appName",
+    "developer",
+    "category",
+    "version",
+    "size",
+    "android",
+    "rating",
+    "icon"
+
+].forEach(
+    id => {
+
+        document
+            .getElementById(id)
+            .addEventListener(
+                "input",
+                updatePreview
+            );
+
+    }
+);
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function showToast(message) {
+
+
+    const toast =
+        document.getElementById(
+            "toast"
+        );
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        3000
+    );
+
+}
+
+
+/* =========================================
+   LOGOUT FUNCTION
+========================================= */
+
+window.logoutAdmin =
+    async function () {
+
+        try {
+
+            await signOut(auth);
+
+            window.location.href =
+                "login.html";
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    };
+
+
+</script>
+
+
+</body>
+
+</html>
