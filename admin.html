@@ -2042,6 +2042,33 @@ Options
 
 </div>
 
+<div class="field" style="margin-bottom:20px;">
+
+<label>
+    Homepage Section
+</label>
+
+<select id="homepageSection">
+
+    <option value="popular">
+        Popular Apps
+    </option>
+
+    <option value="trending">
+        Trending Games
+    </option>
+
+</select>
+
+<small style="
+color:#626978;
+font-size:9px;
+">
+Choose where this app should appear on the APKCity homepage.
+</small>
+
+</div>
+
 
 <div class="checks">
 
@@ -2987,6 +3014,11 @@ function editApp(id) {
         app.category
     );
 
+    document
+    .getElementById("homepageSection")
+    .value =
+        app.homepageSection || "popular";
+
     setValue(
         "version",
         app.version
@@ -3248,10 +3280,15 @@ function collectFormData() {
     ].filter(Boolean);
 
 
-    return {
+   return {
 
-        name:
-            get("appName"),
+    name:
+        get("appName"),
+
+    homepageSection:
+        document
+            .getElementById("homepageSection")
+            .value,
 
         developer:
             get("developer"),
@@ -3503,6 +3540,10 @@ function clearForm(confirmFirst = true) {
             "category"
         )
         .value = "";
+
+    document
+    .getElementById("homepageSection")
+    .value = "popular";
 
 
     document
