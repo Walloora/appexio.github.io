@@ -3591,22 +3591,30 @@ const searchInput =
         });
 
 
-        /* SCROLL TO APPS WHEN ENTER IS PRESSED */
+       if (searchInput) {
 
-        if (search !== "" && appsSection) {
+    searchInput.addEventListener("keydown", function (event) {
 
-            setTimeout(() => {
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            const appsSection = document.getElementById("apps");
+
+            if (appsSection) {
 
                 appsSection.scrollIntoView({
                     behavior: "smooth",
                     block: "start"
                 });
 
-            }, 50);
+            }
 
         }
 
-    }
+    });
+
+}
 
 
     /* SEARCH WHILE TYPING */
