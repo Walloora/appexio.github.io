@@ -24,6 +24,878 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+
+    <!-- Firebase -->
+    <script type="module">
+
+        import { initializeApp }
+            from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+        import {
+            getFirestore,
+            collection,
+            getDocs,
+            query,
+            orderBy
+        }
+        from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+        /* =========================================
+           FIREBASE CONFIG
+        ========================================= */
+
+        const firebaseConfig = {
+
+            apiKey: "YOUR_API_KEY",
+            authDomain: "apkcity-30fa1.firebaseapp.com",
+            projectId: "apkcity-30fa1",
+            storageBucket: "apkcity-30fa1.firebasestorage.app",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+
+        };
+
+
+        /* =========================================
+           INITIALIZE FIREBASE
+        ========================================= */
+
+        const app = initializeApp(firebaseConfig);
+
+        const db = getFirestore(app);
+
+
+        /* =========================================
+           LOAD APPS
+        ========================================= */
+
+        async function loadApps() {
+
+            const appsGrid =
+                document.getElementById("appsGrid");
+
+            const gamesGrid =
+                document.getElementById("gamesGrid");
+
+
+            try {
+
+                appsGrid.innerHTML = `
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Loading apps...</span>
+                    </div>
+                `;
+
+
+                gamesGrid.innerHTML = `
+                    <div class="loading-state">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Loading games...</span>
+                    </div>
+                `;
+
+
+                /*
+                 * Get apps from Firestore
+                 *
+                 * Collection:
+                 * apps
+                 *
+                 * Newest apps first
+                 */
+
+                let snapshot;
+
+
+                try {
+
+                    const appsQuery = query(
+                        collection(db, "apps"),
+                        orderBy("createdAt", "desc")
+                    );
+
+                    snapshot = await getDocs(appsQuery);
+
+                } catch (error) {
+
+                    /*
+                     * If some old documents do not have
+                     * createdAt, load the collection normally.
+                     */
+
+                    console.warn(
+                        "createdAt ordering failed. Loading apps normally.",
+                        error
+                    );
+
+                    snapshot =
+                        await getDocs(
+                            collection(db, "apps")
+                        );
+
+                }
+
+
+                const apps = [];
+
+
+                snapshot.forEach(doc => {
+
+                    const data = doc.data();
+
+                    apps.push({
+
+                        id: doc.id,
+
+                        name: data.name || "Unnamed App",
+
+                        developer:
+                            data.developer ||
+                            "APKCity Developer",
+
+                        category:
+                            data.category ||
+                            "Apps",
+
+                        rating:
+                            data.rating ||
+                            "4.8",
+
+                        downloads:
+                            data.downloads ||
+                            "New",
+
+                        icon:
+                            data.icon ||
+                            "assets/logo.png",
+
+                        apk:
+                            data.apk ||
+                            "#",
+
+                        version:
+                            data.version ||
+                            "",
+
+                        size:
+                            data.size ||
+                            "",
+
+                        tags:
+                            Array.isArray(data.tags)
+                                ? data.tags
+                                : []
+
+                    });
+
+                });
+
+
+                console.log(
+                    "APKCity apps loaded:",
+                    apps
+                );
+
+
+                /*
+                 * Split apps and games
+                 */
+
+                const games =
+                    apps.filter(app => {
+
+                        const category =
+                            String(app.category)
+                            .toLowerCase();
+
+                        const tags =
+                            app.tags
+                            .join(" ")
+                            .toLowerCase();
+
+
+                        return (
+                            category.includes("game") ||
+                            tags.includes("game")
+                        );
+
+                    });
+
+
+                const normalApps =
+                    apps.filter(app => {
+
+                        const category =
+                            String(app.category)
+                            .toLowerCase();
+
+                        const tags =
+                            app.tags
+                            .join(" ")
+                            .toLowerCase();
+
+
+                        return !(
+                            category.includes("game") ||
+                            tags.includes("game")
+                        );
+
+                    });
+
+
+                /*
+                 * Render apps
+                 */
+
+                renderApps(
+                    appsGrid,
+                    normalApps
+                );
+
+
+                /*
+                 * Render games
+                 */
+
+                renderApps(
+                    gamesGrid,
+                    games
+                );
+
+
+                /*
+                 * Update app count
+                 */
+
+                const count =
+                    document.getElementById(
+                        "appCount"
+                    );
+
+                if (count) {
+
+                    count.textContent =
+                        apps.length + "+";
+
+                }
+
+
+                /*
+                 * Re-enable search
+                 */
+
+                window.apkCityApps =
+                    apps;
+
+
+                setupSearch(apps);
+
+
+            } catch (error) {
+
+                console.error(
+                    "Error loading apps:",
+                    error
+                );
+
+
+                appsGrid.innerHTML = `
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                        <h3>Unable to load apps</h3>
+
+                        <p>
+                            Please check your Firebase
+                            connection and try again.
+                        </p>
+
+                    </div>
+                `;
+
+
+                gamesGrid.innerHTML = `
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-gamepad"></i>
+
+                        <h3>No games available</h3>
+
+                        <p>
+                            Games will appear here when
+                            they are added.
+                        </p>
+
+                    </div>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           CREATE APP CARD
+        ========================================= */
+
+        function createAppCard(app) {
+
+            const card =
+                document.createElement("a");
+
+
+            card.className =
+                "app-card";
+
+
+            /*
+             * Clicking the card
+             *
+             * If an APK exists, download it.
+             */
+
+            if (
+                app.apk &&
+                app.apk !== "#"
+            ) {
+
+                card.href =
+                    app.apk;
+
+                card.target =
+                    "_blank";
+
+                card.rel =
+                    "noopener noreferrer";
+
+            } else {
+
+                card.href =
+                    "#";
+
+                card.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+
+                    }
+                );
+
+            }
+
+
+            /*
+             * VERIFIED BADGE
+             */
+
+            const verified =
+                document.createElement("div");
+
+            verified.className =
+                "verified";
+
+            verified.innerHTML =
+                `<i class="fa-solid fa-check"></i>`;
+
+
+            /*
+             * ICON
+             */
+
+            const icon =
+                document.createElement("img");
+
+            icon.className =
+                "app-icon";
+
+            icon.src =
+                app.icon;
+
+            icon.alt =
+                app.name;
+
+            icon.loading =
+                "lazy";
+
+
+            /*
+             * Broken image fallback
+             */
+
+            icon.onerror =
+                function () {
+
+                    this.onerror = null;
+
+                    this.src =
+                        "assets/logo.png";
+
+                };
+
+
+            /*
+             * NAME
+             */
+
+            const name =
+                document.createElement("div");
+
+            name.className =
+                "app-name";
+
+            name.textContent =
+                app.name;
+
+
+            /*
+             * DEVELOPER
+             */
+
+            const developer =
+                document.createElement("div");
+
+            developer.className =
+                "app-developer";
+
+            developer.textContent =
+                app.developer;
+
+
+            /*
+             * META
+             */
+
+            const meta =
+                document.createElement("div");
+
+            meta.className =
+                "app-meta";
+
+
+            const rating =
+                document.createElement("div");
+
+            rating.className =
+                "rating";
+
+            rating.innerHTML =
+                `
+                    <i class="fa-solid fa-star"></i>
+                    ${escapeHTML(String(app.rating))}
+                `;
+
+
+            const downloads =
+                document.createElement("div");
+
+            downloads.className =
+                "downloads";
+
+            downloads.textContent =
+                formatDownloads(
+                    app.downloads
+                );
+
+
+            meta.appendChild(
+                rating
+            );
+
+            meta.appendChild(
+                downloads
+            );
+
+
+            /*
+             * ADD EVERYTHING
+             */
+
+            card.appendChild(
+                verified
+            );
+
+            card.appendChild(
+                icon
+            );
+
+            card.appendChild(
+                name
+            );
+
+            card.appendChild(
+                developer
+            );
+
+            card.appendChild(
+                meta
+            );
+
+
+            /*
+             * Extra information tooltip
+             */
+
+            const extra = [];
+
+            if (app.version)
+                extra.push(
+                    "Version: " +
+                    app.version
+                );
+
+            if (app.size)
+                extra.push(
+                    "Size: " +
+                    app.size
+                );
+
+            if (extra.length) {
+
+                card.title =
+                    extra.join(" • ");
+
+            }
+
+
+            return card;
+
+        }
+
+
+        /* =========================================
+           RENDER APPS
+        ========================================= */
+
+        function renderApps(
+            container,
+            apps
+        ) {
+
+            container.innerHTML =
+                "";
+
+
+            if (!apps.length) {
+
+                container.innerHTML = `
+
+                    <div class="empty-state">
+
+                        <i class="fa-solid fa-box-open"></i>
+
+                        <h3>No apps available</h3>
+
+                        <p>
+                            New apps will appear here
+                            when they are published.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            /*
+             * Show all apps
+             */
+
+            apps.forEach(app => {
+
+                container.appendChild(
+                    createAppCard(app)
+                );
+
+            });
+
+        }
+
+
+        /* =========================================
+           DOWNLOAD FORMATTER
+        ========================================= */
+
+        function formatDownloads(value) {
+
+            if (
+                value === undefined ||
+                value === null ||
+                value === ""
+            ) {
+
+                return "New";
+
+            }
+
+
+            return String(value);
+
+        }
+
+
+        /* =========================================
+           SEARCH
+        ========================================= */
+
+        function setupSearch(apps) {
+
+            const searchInput =
+                document.getElementById(
+                    "searchInput"
+                );
+
+
+            if (!searchInput)
+                return;
+
+
+            /*
+             * Remove old listener by cloning
+             */
+
+            const newInput =
+                searchInput.cloneNode(true);
+
+            searchInput.parentNode.replaceChild(
+                newInput,
+                searchInput
+            );
+
+
+            newInput.addEventListener(
+                "input",
+                function () {
+
+                    const search =
+                        this.value
+                        .toLowerCase()
+                        .trim();
+
+
+                    const appCards =
+                        document.querySelectorAll(
+                            ".app-card"
+                        );
+
+
+                    if (!search) {
+
+                        appCards.forEach(
+                            card => {
+
+                                card.style.display =
+                                    "";
+
+                            }
+                        );
+
+                        return;
+
+                    }
+
+
+                    apps.forEach(
+                        (app, index) => {
+
+                            /*
+                             * Search by:
+                             *
+                             * name
+                             * developer
+                             * category
+                             * tags
+                             */
+
+                            const searchable = [
+
+                                app.name,
+
+                                app.developer,
+
+                                app.category,
+
+                                ...(app.tags || [])
+
+                            ]
+                            .join(" ")
+                            .toLowerCase();
+
+
+                            /*
+                             * Find cards by data
+                             */
+
+                            const cards =
+                                document.querySelectorAll(
+                                    ".app-card"
+                                );
+
+
+                            /*
+                             * Cards are rendered
+                             * in app/game sections.
+                             */
+
+                            cards.forEach(card => {
+
+                                const name =
+                                    card
+                                    .querySelector(
+                                        ".app-name"
+                                    )
+                                    ?.textContent
+                                    .toLowerCase()
+                                    || "";
+
+
+                                const developer =
+                                    card
+                                    .querySelector(
+                                        ".app-developer"
+                                    )
+                                    ?.textContent
+                                    .toLowerCase()
+                                    || "";
+
+
+                                if (
+                                    name.includes(search) ||
+                                    developer.includes(search) ||
+                                    searchable.includes(search)
+                                ) {
+
+                                    card.style.display =
+                                        "";
+
+                                }
+
+                            });
+
+                        }
+                    );
+
+
+                    /*
+                     * Hide cards that don't match
+                     */
+
+                    const allCards =
+                        document.querySelectorAll(
+                            ".app-card"
+                        );
+
+
+                    allCards.forEach(card => {
+
+                        const name =
+                            card
+                            .querySelector(
+                                ".app-name"
+                            )
+                            ?.textContent
+                            .toLowerCase()
+                            || "";
+
+
+                        const developer =
+                            card
+                            .querySelector(
+                                ".app-developer"
+                            )
+                            ?.textContent
+                            .toLowerCase()
+                            || "";
+
+
+                        if (
+                            !name.includes(search) &&
+                            !developer.includes(search)
+                        ) {
+
+                            /*
+                             * Check whether the
+                             * full app data matches.
+                             */
+
+                            const matchingApp =
+                                apps.find(
+                                    app =>
+                                        app.name
+                                        .toLowerCase()
+                                        .includes(search) &&
+                                        app.name
+                                        .toLowerCase()
+                                        === name
+                                );
+
+
+                            if (!matchingApp) {
+
+                                card.style.display =
+                                    "none";
+
+                            }
+
+                        }
+
+                    });
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           ESCAPE HTML
+        ========================================= */
+
+        function escapeHTML(value) {
+
+            return value
+                .replace(
+                    /[&<>"']/g,
+                    character => {
+
+                        const entities = {
+
+                            "&": "&amp;",
+                            "<": "&lt;",
+                            ">": "&gt;",
+                            '"': "&quot;",
+                            "'": "&#039;"
+
+                        };
+
+                        return entities[
+                            character
+                        ];
+
+                    }
+                );
+
+        }
+
+
+        /* =========================================
+           START
+        ========================================= */
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            loadApps
+        );
+
+    </script>
+
+
     <style>
 
         /* ================================
@@ -60,11 +932,17 @@
 
         body {
             font-family: "Inter", sans-serif;
+
             background:
-                radial-gradient(circle at 80% 0%, rgba(124,92,255,.12), transparent 35%),
+                radial-gradient(
+                    circle at 80% 0%,
+                    rgba(124,92,255,.12),
+                    transparent 35%
+                ),
                 var(--bg);
 
             color: var(--text);
+
             min-height: 100vh;
         }
 
@@ -77,6 +955,7 @@
         input {
             font-family: inherit;
         }
+
 
         /* ================================
            SCROLLBAR
@@ -95,6 +974,7 @@
             border-radius: 20px;
         }
 
+
         /* ================================
            HEADER
         ================================= */
@@ -111,10 +991,13 @@
 
             padding: 0 5%;
 
-            background: rgba(8,10,15,.82);
+            background:
+                rgba(8,10,15,.82);
+
             backdrop-filter: blur(20px);
 
-            border-bottom: 1px solid var(--border);
+            border-bottom:
+                1px solid var(--border);
         }
 
         .nav {
@@ -124,57 +1007,70 @@
 
             display: flex;
             align-items: center;
+
             gap: 35px;
         }
 
+
+        /* ================================
+           ADMIN LOCK
+        ================================= */
+
         .admin-lock {
 
-    width: 34px;
-    height: 34px;
+            width: 34px;
+            height: 34px;
 
-    display: inline-flex;
+            display: inline-flex;
 
-    align-items: center;
-    justify-content: center;
+            align-items: center;
+            justify-content: center;
 
-    margin-left: 10px;
+            margin-left: 10px;
 
-    border-radius: 9px;
+            border-radius: 9px;
 
-    color: #8e96a6;
+            color: #8e96a6;
 
-    background: rgba(255,255,255,.04);
+            background:
+                rgba(255,255,255,.04);
 
-    border: 1px solid rgba(255,255,255,.07);
+            border:
+                1px solid rgba(255,255,255,.07);
 
-    text-decoration: none;
+            text-decoration: none;
 
-    font-size: 12px;
+            font-size: 12px;
 
-    transition:
-        .2s ease;
+            transition:
+                .2s ease;
 
-}
+        }
 
-.admin-lock:hover {
+        .admin-lock:hover {
 
-    color: #ffffff;
+            color: #ffffff;
 
-    background: rgba(124,92,255,.14);
+            background:
+                rgba(124,92,255,.14);
 
-    border-color:
-        rgba(124,92,255,.35);
+            border-color:
+                rgba(124,92,255,.35);
 
-    transform:
-        translateY(-1px);
+            transform:
+                translateY(-1px);
 
-}
+        }
 
-        /* LOGO */
+
+        /* ================================
+           LOGO
+        ================================= */
 
         .logo {
             display: flex;
             align-items: center;
+
             gap: 11px;
 
             font-size: 21px;
@@ -193,12 +1089,15 @@
             place-items: center;
 
             background:
-                linear-gradient(135deg,
-                var(--primary),
-                #4d7cff);
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #4d7cff
+                );
 
             box-shadow:
-                0 8px 30px rgba(124,92,255,.28);
+                0 8px 30px
+                rgba(124,92,255,.28);
 
             font-size: 18px;
         }
@@ -207,11 +1106,15 @@
             color: var(--primary2);
         }
 
-        /* NAV LINKS */
+
+        /* ================================
+           NAV LINKS
+        ================================= */
 
         .nav-links {
             display: flex;
             align-items: center;
+
             gap: 28px;
 
             margin-left: 15px;
@@ -219,6 +1122,7 @@
 
         .nav-links a {
             color: var(--muted);
+
             font-size: 14px;
             font-weight: 600;
 
@@ -230,7 +1134,10 @@
             color: white;
         }
 
-        /* SEARCH */
+
+        /* ================================
+           SEARCH
+        ================================= */
 
         .nav-search {
             margin-left: auto;
@@ -242,10 +1149,13 @@
             align-items: center;
 
             padding: 0 14px;
+
             gap: 10px;
 
             background: #11151d;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
 
             border-radius: 13px;
 
@@ -253,8 +1163,14 @@
         }
 
         .nav-search:focus-within {
-            border-color: rgba(124,92,255,.6);
-            box-shadow: 0 0 0 4px rgba(124,92,255,.08);
+
+            border-color:
+                rgba(124,92,255,.6);
+
+            box-shadow:
+                0 0 0 4px
+                rgba(124,92,255,.08);
+
         }
 
         .nav-search i {
@@ -262,12 +1178,14 @@
         }
 
         .nav-search input {
+
             width: 100%;
 
             border: none;
             outline: none;
 
             background: transparent;
+
             color: white;
 
             font-size: 13px;
@@ -277,46 +1195,64 @@
             color: #737987;
         }
 
+
+        /* ================================
+           MOBILE MENU
+        ================================= */
+
         .mobile-menu {
+
             display: none;
 
             width: 42px;
             height: 42px;
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
+
             background: var(--card);
 
             color: white;
+
             border-radius: 12px;
 
             cursor: pointer;
         }
+
 
         /* ================================
            MAIN
         ================================= */
 
         main {
+
             width: 90%;
             max-width: 1450px;
 
             margin: auto;
+
         }
+
 
         /* ================================
            HERO
         ================================= */
 
         .hero {
+
             min-height: 480px;
 
             display: grid;
-            grid-template-columns: 1.15fr .85fr;
+
+            grid-template-columns:
+                1.15fr .85fr;
 
             align-items: center;
+
             gap: 50px;
 
-            padding: 65px 0 45px;
+            padding:
+                65px 0 45px;
         }
 
         .hero-content {
@@ -324,20 +1260,28 @@
         }
 
         .hero-badge {
+
             display: inline-flex;
+
             align-items: center;
+
             gap: 8px;
 
             padding: 8px 13px;
 
-            background: rgba(124,92,255,.1);
-            border: 1px solid rgba(124,92,255,.2);
+            background:
+                rgba(124,92,255,.1);
+
+            border:
+                1px solid
+                rgba(124,92,255,.2);
 
             border-radius: 100px;
 
             color: #b9aaff;
 
             font-size: 12px;
+
             font-weight: 700;
 
             margin-bottom: 23px;
@@ -349,7 +1293,9 @@
         }
 
         .hero h1 {
-            font-size: clamp(42px, 5vw, 72px);
+
+            font-size:
+                clamp(42px,5vw,72px);
 
             line-height: 1.03;
 
@@ -359,34 +1305,46 @@
         }
 
         .hero h1 span {
-            background:
-                linear-gradient(100deg,
-                #fff,
-                #9d83ff,
-                #6d8cff);
 
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background:
+                linear-gradient(
+                    100deg,
+                    #fff,
+                    #9d83ff,
+                    #6d8cff
+                );
+
+            -webkit-background-clip:
+                text;
+
+            -webkit-text-fill-color:
+                transparent;
         }
 
         .hero p {
+
             max-width: 600px;
 
             color: var(--muted);
 
             font-size: 16px;
+
             line-height: 1.8;
 
             margin-bottom: 30px;
         }
 
         .hero-buttons {
+
             display: flex;
+
             gap: 12px;
+
             flex-wrap: wrap;
         }
 
         .btn {
+
             height: 48px;
 
             padding: 0 20px;
@@ -394,12 +1352,14 @@
             border-radius: 12px;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
             gap: 9px;
 
             font-size: 13px;
+
             font-weight: 700;
 
             border: none;
@@ -410,26 +1370,38 @@
         }
 
         .btn-primary {
+
             color: white;
 
             background:
-                linear-gradient(135deg,
-                var(--primary),
-                #5c7cff);
+                linear-gradient(
+                    135deg,
+                    var(--primary),
+                    #5c7cff
+                );
 
             box-shadow:
-                0 10px 30px rgba(124,92,255,.22);
+                0 10px 30px
+                rgba(124,92,255,.22);
         }
 
         .btn-primary:hover {
-            transform: translateY(-2px);
+
+            transform:
+                translateY(-2px);
+
             box-shadow:
-                0 15px 40px rgba(124,92,255,.32);
+                0 15px 40px
+                rgba(124,92,255,.32);
         }
 
         .btn-secondary {
+
             background: #151922;
-            border: 1px solid var(--border);
+
+            border:
+                1px solid var(--border);
+
             color: #e4e7ed;
         }
 
@@ -437,18 +1409,24 @@
             background: #1c212c;
         }
 
-        /* HERO VISUAL */
+
+        /* ================================
+           HERO VISUAL
+        ================================= */
 
         .hero-visual {
+
             position: relative;
 
             min-height: 360px;
 
             display: grid;
+
             place-items: center;
         }
 
         .hero-phone {
+
             width: 260px;
             height: 390px;
 
@@ -457,20 +1435,29 @@
             padding: 13px;
 
             background:
-                linear-gradient(145deg,
-                #252b39,
-                #0b0d12);
+                linear-gradient(
+                    145deg,
+                    #252b39,
+                    #0b0d12
+                );
 
-            border: 1px solid rgba(255,255,255,.12);
+            border:
+                1px solid
+                rgba(255,255,255,.12);
 
             box-shadow:
-                0 40px 90px rgba(0,0,0,.6),
-                0 0 70px rgba(124,92,255,.12);
+                0 40px 90px
+                rgba(0,0,0,.6),
 
-            transform: rotate(6deg);
+                0 0 70px
+                rgba(124,92,255,.12);
+
+            transform:
+                rotate(6deg);
         }
 
         .phone-screen {
+
             width: 100%;
             height: 100%;
 
@@ -479,15 +1466,19 @@
             border-radius: 25px;
 
             background:
-                linear-gradient(160deg,
-                #171b26,
-                #0b0d12);
+                linear-gradient(
+                    160deg,
+                    #171b26,
+                    #0b0d12
+                );
         }
 
         .phone-top {
+
             height: 55px;
 
             display: flex;
+
             align-items: center;
             justify-content: space-between;
 
@@ -501,17 +1492,21 @@
         }
 
         .phone-app-icon {
+
             width: 68px;
             height: 68px;
 
             border-radius: 18px;
 
             background:
-                linear-gradient(135deg,
-                #7c5cff,
-                #3978ff);
+                linear-gradient(
+                    135deg,
+                    #7c5cff,
+                    #3978ff
+                );
 
             display: grid;
+
             place-items: center;
 
             font-size: 27px;
@@ -520,36 +1515,48 @@
         }
 
         .phone-app h3 {
+
             font-size: 17px;
+
             margin-bottom: 5px;
         }
 
         .phone-app small {
+
             color: var(--muted);
+
             font-size: 10px;
         }
 
         .phone-download {
+
             margin-top: 20px;
 
             height: 35px;
 
             border-radius: 9px;
 
-            background: var(--green);
+            background:
+                var(--green);
 
             color: #06140c;
 
             display: grid;
+
             place-items: center;
 
             font-size: 10px;
+
             font-weight: 800;
         }
 
-        /* FLOATING CARD */
+
+        /* ================================
+           FLOATING CARD
+        ================================= */
 
         .floating-card {
+
             position: absolute;
 
             right: 2%;
@@ -559,26 +1566,35 @@
 
             padding: 14px;
 
-            background: rgba(20,24,34,.88);
+            background:
+                rgba(20,24,34,.88);
 
-            backdrop-filter: blur(15px);
+            backdrop-filter:
+                blur(15px);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
 
             border-radius: 15px;
 
-            box-shadow: 0 20px 50px rgba(0,0,0,.4);
+            box-shadow:
+                0 20px 50px
+                rgba(0,0,0,.4);
         }
 
         .floating-card-top {
+
             display: flex;
+
             align-items: center;
+
             gap: 10px;
 
             margin-bottom: 12px;
         }
 
         .floating-icon {
+
             width: 35px;
             height: 35px;
 
@@ -587,6 +1603,7 @@
             background: #232a38;
 
             display: grid;
+
             place-items: center;
 
             color: #8da1ff;
@@ -597,14 +1614,19 @@
         }
 
         .floating-card small {
+
             color: var(--muted);
+
             font-size: 9px;
         }
 
         .stars {
+
             color: #ffca5c;
+
             font-size: 10px;
         }
+
 
         /* ================================
            SECTION
@@ -615,19 +1637,26 @@
         }
 
         .section-header {
+
             display: flex;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
+
             align-items: end;
 
             margin-bottom: 23px;
         }
 
         .section-title h2 {
+
             font-size: 23px;
+
             letter-spacing: -.5px;
         }
 
         .section-title p {
+
             color: var(--muted);
 
             font-size: 12px;
@@ -636,29 +1665,35 @@
         }
 
         .view-all {
+
             color: #a994ff;
 
             font-size: 12px;
+
             font-weight: 700;
         }
+
 
         /* ================================
            CATEGORIES
         ================================= */
 
         .categories {
+
             display: grid;
 
             grid-template-columns:
-                repeat(6, 1fr);
+                repeat(6,1fr);
 
             gap: 12px;
         }
 
         .category {
+
             min-height: 105px;
 
             display: flex;
+
             flex-direction: column;
 
             align-items: center;
@@ -666,11 +1701,14 @@
 
             gap: 10px;
 
-            background: var(--card);
+            background:
+                var(--card);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
 
-            border-radius: var(--radius);
+            border-radius:
+                var(--radius);
 
             transition: .25s;
 
@@ -678,20 +1716,26 @@
         }
 
         .category:hover {
-            transform: translateY(-4px);
 
-            background: var(--card-hover);
+            transform:
+                translateY(-4px);
 
-            border-color: rgba(124,92,255,.3);
+            background:
+                var(--card-hover);
+
+            border-color:
+                rgba(124,92,255,.3);
         }
 
         .category-icon {
+
             width: 40px;
             height: 40px;
 
             border-radius: 12px;
 
             display: grid;
+
             place-items: center;
 
             background: #1b2030;
@@ -700,53 +1744,71 @@
         }
 
         .category span {
+
             color: #dce0e8;
 
             font-size: 11px;
+
             font-weight: 600;
         }
+
 
         /* ================================
            APP GRID
         ================================= */
 
         .apps-grid {
+
             display: grid;
 
             grid-template-columns:
-                repeat(5, 1fr);
+                repeat(5,1fr);
 
             gap: 14px;
+
+            min-height: 30px;
         }
 
         .app-card {
+
             position: relative;
 
             padding: 16px;
 
-            background: var(--card);
+            background:
+                var(--card);
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
 
-            border-radius: var(--radius);
+            border-radius:
+                var(--radius);
 
             transition: .25s;
 
             cursor: pointer;
+
+            min-width: 0;
         }
 
         .app-card:hover {
-            transform: translateY(-5px);
 
-            background: var(--card-hover);
+            transform:
+                translateY(-5px);
 
-            border-color: rgba(124,92,255,.25);
+            background:
+                var(--card-hover);
+
+            border-color:
+                rgba(124,92,255,.25);
 
             box-shadow:
-                0 20px 45px rgba(0,0,0,.22);
+                0 20px 45px
+                rgba(0,0,0,.22);
         }
 
         .app-icon {
+
             width: 64px;
             height: 64px;
 
@@ -762,51 +1824,81 @@
         }
 
         .app-name {
+
             font-size: 14px;
+
             font-weight: 700;
 
             white-space: nowrap;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
 
             margin-bottom: 6px;
         }
 
         .app-developer {
+
             color: var(--muted);
 
             font-size: 10px;
 
             white-space: nowrap;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
 
             margin-bottom: 10px;
         }
 
         .app-meta {
+
             display: flex;
+
             align-items: center;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
+
+            gap: 5px;
         }
 
         .rating {
+
             display: flex;
+
             align-items: center;
+
             gap: 4px;
 
             color: #ffcb5c;
 
             font-size: 10px;
+
             font-weight: 700;
         }
 
-        .downloads {
-            color: #7f8796;
+        .rating i {
             font-size: 9px;
         }
 
+        .downloads {
+
+            color: #7f8796;
+
+            font-size: 9px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+        }
+
         .verified {
+
             position: absolute;
 
             top: 14px;
@@ -816,31 +1908,123 @@
             height: 19px;
 
             display: grid;
+
             place-items: center;
 
             border-radius: 50%;
 
-            background: rgba(49,212,124,.12);
+            background:
+                rgba(49,212,124,.12);
 
-            color: var(--green);
+            color:
+                var(--green);
 
             font-size: 9px;
         }
+
+
+        /* ================================
+           LOADING
+        ================================= */
+
+        .loading-state {
+
+            grid-column:
+                1 / -1;
+
+            min-height: 180px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            gap: 12px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+        .loading-state i {
+
+            color:
+                var(--primary);
+
+            font-size: 24px;
+        }
+
+
+        /* ================================
+           EMPTY STATE
+        ================================= */
+
+        .empty-state {
+
+            grid-column:
+                1 / -1;
+
+            min-height: 180px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            text-align: center;
+
+            gap: 8px;
+
+            color: var(--muted);
+
+            padding: 30px;
+        }
+
+        .empty-state i {
+
+            font-size: 28px;
+
+            color:
+                var(--primary);
+
+            margin-bottom: 5px;
+        }
+
+        .empty-state h3 {
+
+            color: #e9ebf1;
+
+            font-size: 15px;
+        }
+
+        .empty-state p {
+
+            color: var(--muted);
+
+            font-size: 11px;
+        }
+
 
         /* ================================
            FEATURED
         ================================= */
 
         .featured-grid {
+
             display: grid;
 
             grid-template-columns:
-                repeat(3, 1fr);
+                repeat(3,1fr);
 
             gap: 15px;
         }
 
         .featured-card {
+
             min-height: 190px;
 
             padding: 23px;
@@ -848,17 +2032,22 @@
             border-radius: 20px;
 
             position: relative;
+
             overflow: hidden;
 
             background:
-                linear-gradient(135deg,
-                #171b29,
-                #10131a);
+                linear-gradient(
+                    135deg,
+                    #171b29,
+                    #10131a
+                );
 
-            border: 1px solid var(--border);
+            border:
+                1px solid var(--border);
         }
 
         .featured-card::after {
+
             content: "";
 
             position: absolute;
@@ -871,63 +2060,78 @@
 
             border-radius: 50%;
 
-            background: rgba(124,92,255,.12);
+            background:
+                rgba(124,92,255,.12);
 
             filter: blur(5px);
         }
 
         .featured-card h3 {
+
             font-size: 17px;
 
             margin-bottom: 8px;
         }
 
         .featured-card p {
+
             color: var(--muted);
 
             font-size: 11px;
+
             line-height: 1.6;
 
             max-width: 250px;
         }
 
         .featured-card .mini-btn {
+
             position: absolute;
 
             bottom: 20px;
 
-            padding: 8px 13px;
+            padding:
+                8px 13px;
 
             border-radius: 8px;
 
-            background: rgba(255,255,255,.06);
+            background:
+                rgba(255,255,255,.06);
 
             font-size: 10px;
+
             font-weight: 700;
         }
+
 
         /* ================================
            FOOTER
         ================================= */
 
         footer {
+
             margin-top: 60px;
 
-            border-top: 1px solid var(--border);
+            border-top:
+                1px solid var(--border);
 
             background: #07090d;
         }
 
         .footer-inner {
+
             width: 90%;
+
             max-width: 1450px;
 
             margin: auto;
 
-            padding: 45px 0 25px;
+            padding:
+                45px 0 25px;
         }
 
         .footer-grid {
+
             display: grid;
 
             grid-template-columns:
@@ -939,23 +2143,27 @@
         }
 
         .footer-brand p {
+
             max-width: 350px;
 
             color: var(--muted);
 
             font-size: 11px;
+
             line-height: 1.8;
 
             margin-top: 15px;
         }
 
         .footer-column h4 {
+
             font-size: 12px;
 
             margin-bottom: 17px;
         }
 
         .footer-column a {
+
             display: block;
 
             color: var(--muted);
@@ -972,17 +2180,22 @@
         }
 
         .copyright {
+
             padding-top: 20px;
 
-            border-top: 1px solid var(--border);
+            border-top:
+                1px solid var(--border);
 
             display: flex;
-            justify-content: space-between;
+
+            justify-content:
+                space-between;
 
             color: #626978;
 
             font-size: 10px;
         }
+
 
         /* ================================
            RESPONSIVE
@@ -991,17 +2204,21 @@
         @media(max-width:1100px) {
 
             .apps-grid {
+
                 grid-template-columns:
-                    repeat(4, 1fr);
+                    repeat(4,1fr);
             }
 
             .categories {
+
                 grid-template-columns:
-                    repeat(3, 1fr);
+                    repeat(3,1fr);
             }
 
             .hero {
-                grid-template-columns: 1fr .7fr;
+
+                grid-template-columns:
+                    1fr .7fr;
             }
 
             .nav-links {
@@ -1014,6 +2231,7 @@
 
         }
 
+
         @media(max-width:800px) {
 
             .header {
@@ -1021,12 +2239,16 @@
             }
 
             .nav-search {
+
                 width: auto;
+
                 flex: 1;
+
                 max-width: 240px;
             }
 
             .hero {
+
                 grid-template-columns: 1fr;
 
                 text-align: center;
@@ -1039,11 +2261,13 @@
             }
 
             .hero p {
+
                 margin-left: auto;
                 margin-right: auto;
             }
 
             .hero-buttons {
+
                 justify-content: center;
             }
 
@@ -1052,20 +2276,25 @@
             }
 
             .apps-grid {
+
                 grid-template-columns:
-                    repeat(3, 1fr);
+                    repeat(3,1fr);
             }
 
             .featured-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
             }
 
             .footer-grid {
+
                 grid-template-columns:
                     1fr 1fr;
             }
 
         }
+
 
         @media(max-width:560px) {
 
@@ -1078,6 +2307,7 @@
             }
 
             .logo-icon {
+
                 width: 35px;
                 height: 35px;
             }
@@ -1087,7 +2317,9 @@
             }
 
             .hero h1 {
+
                 font-size: 42px;
+
                 letter-spacing: -2px;
             }
 
@@ -1096,6 +2328,7 @@
             }
 
             .hero-phone {
+
                 width: 220px;
                 height: 330px;
             }
@@ -1105,8 +2338,9 @@
             }
 
             .categories {
+
                 grid-template-columns:
-                    repeat(3, 1fr);
+                    repeat(3,1fr);
             }
 
             .category {
@@ -1114,37 +2348,45 @@
             }
 
             .apps-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
 
-.app-card {
-    padding: 12px;
-    min-width: 0;
-}
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
 
-.app-icon {
-    width: 58px;
-    height: 58px;
-    margin-bottom: 11px;
-}
+            .app-card {
+                padding: 13px;
+            }
+
+            .app-icon {
+
+                width: 58px;
+                height: 58px;
+            }
 
             .footer-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
+
                 gap: 30px;
             }
 
             .copyright {
+
                 flex-direction: column;
+
                 gap: 8px;
             }
 
         }
 
     </style>
+
 </head>
 
+
 <body>
+
 
 <!-- ================================
      HEADER
@@ -1157,7 +2399,9 @@
         <a href="index.html" class="logo">
 
             <div class="logo-icon">
+
                 <i class="fa-brands fa-android"></i>
+
             </div>
 
             APK<span>City</span>
@@ -1167,24 +2411,37 @@
 
         <div class="nav-links">
 
-            <a href="#" class="active">Home</a>
+            <a href="#" class="active">
+                Home
+            </a>
 
-            <a href="#apps">Apps</a>
+            <a href="#apps">
+                Apps
+            </a>
 
-            <a href="#games">Games</a>
+            <a href="#games">
+                Games
+            </a>
 
-            <a href="#categories">Categories</a>
+            <a href="#categories">
+                Categories
+            </a>
 
-            <a href="#">Updates</a>
+            <a href="#">
+                Updates
+            </a>
+
 
             <a
-    href="login.html"
-    class="admin-lock"
-    aria-label="Admin Login"
-    title="Admin Login"
->
-    <i class="fa-solid fa-lock"></i>
-</a>
+                href="login.html"
+                class="admin-lock"
+                aria-label="Admin Login"
+                title="Admin Login"
+            >
+
+                <i class="fa-solid fa-lock"></i>
+
+            </a>
 
         </div>
 
@@ -1203,7 +2460,11 @@
         </div>
 
 
-        <button class="mobile-menu">
+        <button
+            class="mobile-menu"
+            type="button"
+            aria-label="Open menu"
+        >
 
             <i class="fa-solid fa-bars"></i>
 
@@ -1214,8 +2475,8 @@
 </header>
 
 
-
 <main>
+
 
 <!-- ================================
      HERO
@@ -1255,7 +2516,10 @@
 
         <div class="hero-buttons">
 
-            <a href="#apps" class="btn btn-primary">
+            <a
+                href="#apps"
+                class="btn btn-primary"
+            >
 
                 <i class="fa-solid fa-compass"></i>
 
@@ -1264,7 +2528,10 @@
             </a>
 
 
-            <a href="#categories" class="btn btn-secondary">
+            <a
+                href="#categories"
+                class="btn btn-secondary"
+            >
 
                 <i class="fa-solid fa-layer-group"></i>
 
@@ -1301,7 +2568,10 @@
                     </div>
 
 
-                    <h3>APKCity</h3>
+                    <h3>
+                        APKCity
+                    </h3>
+
 
                     <small>
                         Android Marketplace
@@ -1331,17 +2601,23 @@
 
                 </div>
 
+
                 <div>
 
-                    <strong>Trusted Downloads</strong>
+                    <strong>
+                        Trusted Downloads
+                    </strong>
 
                     <br>
 
-                    <small>APKCity Verified</small>
+                    <small>
+                        APKCity Verified
+                    </small>
 
                 </div>
 
             </div>
+
 
             <div class="stars">
 
@@ -1356,18 +2632,22 @@
 </section>
 
 
-
 <!-- ================================
      CATEGORIES
 ================================= -->
 
-<section class="section" id="categories">
+<section
+    class="section"
+    id="categories"
+>
 
     <div class="section-header">
 
         <div class="section-title">
 
-            <h2>Browse Categories</h2>
+            <h2>
+                Browse Categories
+            </h2>
 
             <p>
                 Find exactly what you're looking for
@@ -1375,7 +2655,11 @@
 
         </div>
 
-        <a href="#" class="view-all">
+
+        <a
+            href="#apps"
+            class="view-all"
+        >
             View all →
         </a>
 
@@ -1390,7 +2674,9 @@
                 <i class="fa-solid fa-gamepad"></i>
             </div>
 
-            <span>Games</span>
+            <span>
+                Games
+            </span>
 
         </div>
 
@@ -1401,7 +2687,9 @@
                 <i class="fa-solid fa-comment-dots"></i>
             </div>
 
-            <span>Social</span>
+            <span>
+                Social
+            </span>
 
         </div>
 
@@ -1412,7 +2700,9 @@
                 <i class="fa-solid fa-play"></i>
             </div>
 
-            <span>Entertainment</span>
+            <span>
+                Entertainment
+            </span>
 
         </div>
 
@@ -1423,7 +2713,9 @@
                 <i class="fa-solid fa-wrench"></i>
             </div>
 
-            <span>Tools</span>
+            <span>
+                Tools
+            </span>
 
         </div>
 
@@ -1434,7 +2726,9 @@
                 <i class="fa-solid fa-camera"></i>
             </div>
 
-            <span>Photography</span>
+            <span>
+                Photography
+            </span>
 
         </div>
 
@@ -1445,227 +2739,69 @@
                 <i class="fa-solid fa-briefcase"></i>
             </div>
 
-            <span>Productivity</span>
+            <span>
+                Productivity
+            </span>
 
         </div>
 
     </div>
 
 </section>
-
 
 
 <!-- ================================
      POPULAR APPS
 ================================= -->
 
-<section class="section" id="apps">
+<section
+    class="section"
+    id="apps"
+>
 
     <div class="section-header">
 
         <div class="section-title">
 
-            <h2>Popular Apps</h2>
+            <h2>
+                Popular Apps
+            </h2>
 
             <p>
-                Most downloaded apps on APKCity
+                Apps published on APKCity
             </p>
 
         </div>
 
-        <a href="#" class="view-all">
+
+        <a
+            href="#apps"
+            class="view-all"
+        >
             See all →
         </a>
 
     </div>
 
 
-    <div class="apps-grid" id="appsGrid">
+    <div
+        class="apps-grid"
+        id="appsGrid"
+    >
 
-        <!-- APP 1 -->
+        <div class="loading-state">
 
-        <a class="app-card" href="#">
+            <i class="fa-solid fa-spinner fa-spin"></i>
 
-            <div class="verified">
-                <i class="fa-solid fa-check"></i>
-            </div>
+            <span>
+                Loading apps...
+            </span>
 
-            <img
-                class="app-icon"
-                src="assets/apps/sample-1.png"
-                alt="Sample App"
-            >
-
-            <div class="app-name">
-                Sample App
-            </div>
-
-            <div class="app-developer">
-                APKCity Developer
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.8
-                </div>
-
-                <div class="downloads">
-                    1M+ downloads
-                </div>
-
-            </div>
-
-        </a>
-
-
-
-        <!-- APP 2 -->
-
-        <a class="app-card" href="#">
-
-            <div class="verified">
-                <i class="fa-solid fa-check"></i>
-            </div>
-
-            <img
-                class="app-icon"
-                src="assets/apps/sample-2.png"
-                alt="Music App"
-            >
-
-            <div class="app-name">
-                Music Player
-            </div>
-
-            <div class="app-developer">
-                APKCity Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.7
-                </div>
-
-                <div class="downloads">
-                    500K+
-                </div>
-
-            </div>
-
-        </a>
-
-
-
-        <!-- APP 3 -->
-
-        <a class="app-card" href="#">
-
-            <div class="verified">
-                <i class="fa-solid fa-check"></i>
-            </div>
-
-            <img
-                class="app-icon"
-                src="assets/apps/sample-3.png"
-                alt="Video App"
-            >
-
-            <div class="app-name">
-                Video Player
-            </div>
-
-            <div class="app-developer">
-                APKCity Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.6
-                </div>
-
-                <div class="downloads">
-                    400K+
-                </div>
-
-            </div>
-
-        </a>
-
-
-
-        <!-- APP 4 -->
-
-        <a class="app-card" href="#">
-
-            <img
-                class="app-icon"
-                src="assets/apps/sample-4.png"
-                alt="File Manager"
-            >
-
-            <div class="app-name">
-                File Manager
-            </div>
-
-            <div class="app-developer">
-                APKCity Tools
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.5
-                </div>
-
-                <div class="downloads">
-                    300K+
-                </div>
-
-            </div>
-
-        </a>
-
-
-
-        <!-- APP 5 -->
-
-        <a class="app-card" href="#">
-
-            <img
-                class="app-icon"
-                src="assets/apps/sample-5.png"
-                alt="Photo Editor"
-            >
-
-            <div class="app-name">
-                Photo Editor
-            </div>
-
-            <div class="app-developer">
-                APKCity Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.9
-                </div>
-
-                <div class="downloads">
-                    2M+
-                </div>
-
-            </div>
-
-        </a>
+        </div>
 
     </div>
 
 </section>
-
 
 
 <!-- ================================
@@ -1678,7 +2814,9 @@
 
         <div class="section-title">
 
-            <h2>Why APKCity?</h2>
+            <h2>
+                Why APKCity?
+            </h2>
 
             <p>
                 Built for a better Android experience
@@ -1695,59 +2833,84 @@
         <div class="featured-card">
 
             <h3>
+
                 <i class="fa-solid fa-bolt"></i>
+
                 Fresh Releases
+
             </h3>
 
+
             <p>
+
                 Discover newly released applications
                 and updates without digging through
                 endless pages.
+
             </p>
 
+
             <div class="mini-btn">
+
                 Explore New Apps →
+
             </div>
 
         </div>
 
 
-
         <div class="featured-card">
 
             <h3>
+
                 <i class="fa-solid fa-shield-halved"></i>
+
                 Organized Library
+
             </h3>
 
+
             <p>
+
                 Apps are organized into clear categories
                 so you can quickly find the software
                 you're looking for.
+
             </p>
 
+
             <div class="mini-btn">
+
                 Browse Library →
+
             </div>
 
         </div>
 
 
-
         <div class="featured-card">
 
             <h3>
+
                 <i class="fa-solid fa-mobile-screen"></i>
+
                 Built for Android
+
             </h3>
 
+
             <p>
+
                 A fast, responsive experience designed
                 specifically for Android users.
+
             </p>
 
+
             <div class="mini-btn">
+
                 Discover Apps →
+
             </div>
 
         </div>
@@ -1757,18 +2920,22 @@
 </section>
 
 
-
 <!-- ================================
      GAMES
 ================================= -->
 
-<section class="section" id="games">
+<section
+    class="section"
+    id="games"
+>
 
     <div class="section-header">
 
         <div class="section-title">
 
-            <h2>Trending Games</h2>
+            <h2>
+                Trending Games
+            </h2>
 
             <p>
                 Popular games users are checking out
@@ -1776,175 +2943,38 @@
 
         </div>
 
-        <a href="#" class="view-all">
+
+        <a
+            href="#games"
+            class="view-all"
+        >
             View games →
         </a>
 
     </div>
 
 
-    <div class="apps-grid">
+    <div
+        class="apps-grid"
+        id="gamesGrid"
+    >
 
-        <a class="app-card" href="#">
+        <div class="loading-state">
 
-            <img
-                class="app-icon"
-                src="assets/apps/game-1.png"
-                alt="Game"
-            >
+            <i class="fa-solid fa-spinner fa-spin"></i>
 
-            <div class="app-name">
-                Featured Game
-            </div>
+            <span>
+                Loading games...
+            </span>
 
-            <div class="app-developer">
-                Game Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.8
-                </div>
-
-                <div class="downloads">
-                    5M+
-                </div>
-
-            </div>
-
-        </a>
-
-
-        <a class="app-card" href="#">
-
-            <img
-                class="app-icon"
-                src="assets/apps/game-2.png"
-                alt="Game"
-            >
-
-            <div class="app-name">
-                Action Game
-            </div>
-
-            <div class="app-developer">
-                Game Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.7
-                </div>
-
-                <div class="downloads">
-                    2M+
-                </div>
-
-            </div>
-
-        </a>
-
-
-        <a class="app-card" href="#">
-
-            <img
-                class="app-icon"
-                src="assets/apps/game-3.png"
-                alt="Game"
-            >
-
-            <div class="app-name">
-                Racing Game
-            </div>
-
-            <div class="app-developer">
-                Game Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.6
-                </div>
-
-                <div class="downloads">
-                    1M+
-                </div>
-
-            </div>
-
-        </a>
-
-
-        <a class="app-card" href="#">
-
-            <img
-                class="app-icon"
-                src="assets/apps/game-4.png"
-                alt="Game"
-            >
-
-            <div class="app-name">
-                Strategy Game
-            </div>
-
-            <div class="app-developer">
-                Game Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.5
-                </div>
-
-                <div class="downloads">
-                    800K+
-                </div>
-
-            </div>
-
-        </a>
-
-
-        <a class="app-card" href="#">
-
-            <img
-                class="app-icon"
-                src="assets/apps/game-5.png"
-                alt="Game"
-            >
-
-            <div class="app-name">
-                Adventure Game
-            </div>
-
-            <div class="app-developer">
-                Game Studio
-            </div>
-
-            <div class="app-meta">
-
-                <div class="rating">
-                    ★ 4.9
-                </div>
-
-                <div class="downloads">
-                    3M+
-                </div>
-
-            </div>
-
-        </a>
+        </div>
 
     </div>
 
 </section>
 
-</main>
 
+</main>
 
 
 <!-- ================================
@@ -1960,7 +2990,10 @@
 
             <div class="footer-brand">
 
-                <a href="#" class="logo">
+                <a
+                    href="#"
+                    class="logo"
+                >
 
                     <div class="logo-icon">
 
@@ -1986,45 +3019,85 @@
 
             <div class="footer-column">
 
-                <h4>Explore</h4>
+                <h4>
+                    Explore
+                </h4>
 
-                <a href="#">Apps</a>
-                <a href="#">Games</a>
-                <a href="#">Categories</a>
-                <a href="#">New Releases</a>
+                <a href="#apps">
+                    Apps
+                </a>
 
-            </div>
+                <a href="#games">
+                    Games
+                </a>
 
-
-            <div class="footer-column">
-
-                <h4>APKCity</h4>
-
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms</a>
-
-            </div>
-
-
-            <div class="footer-column">
-
-                <h4>Follow</h4>
+                <a href="#categories">
+                    Categories
+                </a>
 
                 <a href="#">
+                    New Releases
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>
+                    APKCity
+                </h4>
+
+                <a href="#">
+                    About Us
+                </a>
+
+                <a href="#">
+                    Contact
+                </a>
+
+                <a href="#">
+                    Privacy Policy
+                </a>
+
+                <a href="#">
+                    Terms
+                </a>
+
+            </div>
+
+
+            <div class="footer-column">
+
+                <h4>
+                    Follow
+                </h4>
+
+
+                <a href="#">
+
                     <i class="fa-brands fa-telegram"></i>
+
                     Telegram
+
                 </a>
 
+
                 <a href="#">
+
                     <i class="fa-brands fa-x-twitter"></i>
+
                     X / Twitter
+
                 </a>
 
+
                 <a href="#">
+
                     <i class="fa-brands fa-instagram"></i>
+
                     Instagram
+
                 </a>
 
             </div>
@@ -2035,11 +3108,17 @@
         <div class="copyright">
 
             <span>
-                © 2026 APKCity. All rights reserved.
+
+                © 2026 APKCity.
+                All rights reserved.
+
             </span>
 
+
             <span>
+
                 Made for Android users.
+
             </span>
 
         </div>
@@ -2049,104 +3128,76 @@
 </footer>
 
 
-
 <!-- ================================
-     JAVASCRIPT
+     MOBILE MENU JAVASCRIPT
 ================================= -->
 
 <script>
 
-    /* ============================
-       SEARCH
-    ============================ */
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-    const appCards =
-        document.querySelectorAll(".app-card");
-
-
-    searchInput.addEventListener("input", function () {
-
-        const search =
-            this.value.toLowerCase().trim();
-
-
-        appCards.forEach(card => {
-
-            const name =
-                card.querySelector(".app-name")
-                ?.textContent
-                .toLowerCase() || "";
-
-
-            const developer =
-                card.querySelector(".app-developer")
-                ?.textContent
-                .toLowerCase() || "";
-
-
-            if (
-                name.includes(search) ||
-                developer.includes(search)
-            ) {
-
-                card.style.display = "";
-
-            } else {
-
-                card.style.display = "none";
-
-            }
-
-        });
-
-    });
-
-
-    /* ============================
-       MOBILE MENU
-    ============================ */
-
     const mobileMenu =
-        document.querySelector(".mobile-menu");
+        document.querySelector(
+            ".mobile-menu"
+        );
+
 
     const navLinks =
-        document.querySelector(".nav-links");
+        document.querySelector(
+            ".nav-links"
+        );
 
 
-    mobileMenu.addEventListener("click", () => {
+    if (mobileMenu && navLinks) {
 
-        if (navLinks.style.display === "flex") {
+        mobileMenu.addEventListener(
+            "click",
+            () => {
 
-            navLinks.style.display = "";
+                if (
+                    navLinks.style.display ===
+                    "flex"
+                ) {
 
-        } else {
+                    navLinks.style.display =
+                        "";
 
-            navLinks.style.display = "flex";
+                } else {
 
-            navLinks.style.position = "absolute";
-            navLinks.style.top = "74px";
-            navLinks.style.left = "0";
-            navLinks.style.right = "0";
+                    navLinks.style.display =
+                        "flex";
 
-            navLinks.style.padding = "20px";
+                    navLinks.style.position =
+                        "absolute";
 
-            navLinks.style.background =
-                "rgba(8,10,15,.98)";
+                    navLinks.style.top =
+                        "74px";
 
-            navLinks.style.flexDirection =
-                "column";
+                    navLinks.style.left =
+                        "0";
 
-            navLinks.style.borderBottom =
-                "1px solid rgba(255,255,255,.07)";
+                    navLinks.style.right =
+                        "0";
 
-        }
+                    navLinks.style.padding =
+                        "20px";
 
-    });
+                    navLinks.style.background =
+                        "rgba(8,10,15,.98)";
+
+                    navLinks.style.flexDirection =
+                        "column";
+
+                    navLinks.style.borderBottom =
+                        "1px solid rgba(255,255,255,.07)";
+
+                }
+
+            }
+        );
+
+    }
 
 </script>
+
 
 </body>
 </html>
