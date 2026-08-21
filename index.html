@@ -3132,69 +3132,270 @@
      MOBILE MENU JAVASCRIPT
 ================================= -->
 
+<!-- ================================
+     MOBILE MENU + SEARCH JAVASCRIPT
+================================= -->
+
 <script>
 
-    const mobileMenu =
-        document.querySelector(
-            ".mobile-menu"
-        );
+/* ==========================================
+   MOBILE MENU
+========================================== */
+
+const mobileMenu =
+    document.querySelector(".mobile-menu");
+
+const navLinks =
+    document.querySelector(".nav-links");
 
 
-    const navLinks =
-        document.querySelector(
-            ".nav-links"
-        );
+if (mobileMenu && navLinks) {
+
+    mobileMenu.addEventListener(
+        "click",
+        () => {
+
+            if (
+                navLinks.style.display ===
+                "flex"
+            ) {
+
+                navLinks.style.display =
+                    "";
+
+            } else {
+
+                navLinks.style.display =
+                    "flex";
+
+                navLinks.style.position =
+                    "absolute";
+
+                navLinks.style.top =
+                    "74px";
+
+                navLinks.style.left =
+                    "0";
+
+                navLinks.style.right =
+                    "0";
+
+                navLinks.style.padding =
+                    "20px";
+
+                navLinks.style.background =
+                    "rgba(8,10,15,.98)";
+
+                navLinks.style.flexDirection =
+                    "column";
+
+                navLinks.style.borderBottom =
+                    "1px solid rgba(255,255,255,.07)";
+
+            }
+
+        }
+    );
+
+}
 
 
-    if (mobileMenu && navLinks) {
+/* ==========================================
+   APKCITY SEARCH
+========================================== */
 
-        mobileMenu.addEventListener(
-            "click",
-            () => {
+const searchInput =
+    document.getElementById("searchInput");
 
-                if (
-                    navLinks.style.display ===
-                    "flex"
-                ) {
+const appsGrid =
+    document.getElementById("appsGrid");
 
-                    navLinks.style.display =
-                        "";
 
-                } else {
+if (searchInput && appsGrid) {
 
-                    navLinks.style.display =
-                        "flex";
+    searchInput.addEventListener(
+        "input",
+        function () {
 
-                    navLinks.style.position =
-                        "absolute";
+            const searchText =
+                this.value
+                    .toLowerCase()
+                    .trim();
 
-                    navLinks.style.top =
-                        "74px";
 
-                    navLinks.style.left =
-                        "0";
+            const appCards =
+                appsGrid.querySelectorAll(
+                    ".app-card"
+                );
 
-                    navLinks.style.right =
-                        "0";
 
-                    navLinks.style.padding =
-                        "20px";
+            appCards.forEach(
+                function (card) {
 
-                    navLinks.style.background =
-                        "rgba(8,10,15,.98)";
+                    const name =
+                        card.querySelector(
+                            ".app-name"
+                        )
+                        ?.textContent
+                        .toLowerCase() || "";
 
-                    navLinks.style.flexDirection =
-                        "column";
 
-                    navLinks.style.borderBottom =
-                        "1px solid rgba(255,255,255,.07)";
+                    const developer =
+                        card.querySelector(
+                            ".app-developer"
+                        )
+                        ?.textContent
+                        .toLowerCase() || "";
+
+
+                    const category =
+                        card.dataset.category
+                            ?.toLowerCase() || "";
+
+
+                    const description =
+                        card.dataset.description
+                            ?.toLowerCase() || "";
+
+
+                    const keywords =
+                        card.dataset.keywords
+                            ?.toLowerCase() || "";
+
+
+                    const searchableText =
+                        name + " " +
+                        developer + " " +
+                        category + " " +
+                        description + " " +
+                        keywords;
+
+
+                    if (
+                        searchText === "" ||
+                        searchableText.includes(
+                            searchText
+                        )
+                    ) {
+
+                        card.style.display =
+                            "";
+
+                    } else {
+
+                        card.style.display =
+                            "none";
+
+                    }
 
                 }
+            );
+
+        }
+    );
+
+}
+
+
+/* ==========================================
+   FIRESTORE / DYNAMIC APP SUPPORT
+========================================== */
+
+if (appsGrid) {
+
+    const searchObserver =
+        new MutationObserver(
+            function () {
+
+                /*
+                 * This makes sure the search
+                 * continues working when Firestore
+                 * adds new app cards dynamically.
+                 */
+
+                const searchText =
+                    searchInput
+                        ?.value
+                        .toLowerCase()
+                        .trim() || "";
+
+
+                if (!searchText) {
+                    return;
+                }
+
+
+                const appCards =
+                    appsGrid.querySelectorAll(
+                        ".app-card"
+                    );
+
+
+                appCards.forEach(
+                    function (card) {
+
+                        const name =
+                            card.querySelector(
+                                ".app-name"
+                            )
+                            ?.textContent
+                            .toLowerCase() || "";
+
+
+                        const developer =
+                            card.querySelector(
+                                ".app-developer"
+                            )
+                            ?.textContent
+                            .toLowerCase() || "";
+
+
+                        const category =
+                            card.dataset.category
+                                ?.toLowerCase() || "";
+
+
+                        const description =
+                            card.dataset.description
+                                ?.toLowerCase() || "";
+
+
+                        const keywords =
+                            card.dataset.keywords
+                                ?.toLowerCase() || "";
+
+
+                        const searchableText =
+                            name + " " +
+                            developer + " " +
+                            category + " " +
+                            description + " " +
+                            keywords;
+
+
+                        card.style.display =
+                            searchableText.includes(
+                                searchText
+                            )
+                                ? ""
+                                : "none";
+
+                    }
+                );
 
             }
         );
 
-    }
+
+    searchObserver.observe(
+        appsGrid,
+        {
+            childList: true,
+            subtree: true
+        }
+    );
+
+}
 
 </script>
 
