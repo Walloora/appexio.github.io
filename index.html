@@ -2920,60 +2920,6 @@
 </section>
 
 
-<!-- ================================
-     GAMES
-================================= -->
-
-<section
-    class="section"
-    id="games"
->
-
-    <div class="section-header">
-
-        <div class="section-title">
-
-            <h2>
-                Trending Games
-            </h2>
-
-            <p>
-                Popular games users are checking out
-            </p>
-
-        </div>
-
-
-        <a
-            href="#games"
-            class="view-all"
-        >
-            View games →
-        </a>
-
-    </div>
-
-
-    <div
-        class="apps-grid"
-        id="gamesGrid"
-    >
-
-        <div class="loading-state">
-
-            <i class="fa-solid fa-spinner fa-spin"></i>
-
-            <span>
-                Loading games...
-            </span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
 </main>
 
 
@@ -3128,73 +3074,205 @@
 </footer>
 
 
-<!-- ================================
-     MOBILE MENU JAVASCRIPT
-================================= -->
-
 <script>
 
-    const mobileMenu =
-        document.querySelector(
-            ".mobile-menu"
-        );
+/* ==========================================
+   APKCITY SEARCH
+   Works with dynamically loaded Firestore apps
+========================================== */
 
+const searchInput = document.getElementById("searchInput");
 
-    const navLinks =
-        document.querySelector(
-            ".nav-links"
-        );
+if (searchInput) {
 
+    searchInput.addEventListener("input", function () {
 
-    if (mobileMenu && navLinks) {
+        const search = this.value
+            .toLowerCase()
+            .trim();
 
-        mobileMenu.addEventListener(
-            "click",
-            () => {
+        const appCards = document.querySelectorAll(".app-card");
 
-                if (
-                    navLinks.style.display ===
-                    "flex"
-                ) {
+        appCards.forEach(card => {
 
-                    navLinks.style.display =
-                        "";
+            const name =
+                card.querySelector(".app-name")
+                ?.textContent
+                .toLowerCase() || "";
 
-                } else {
+            const developer =
+                card.querySelector(".app-developer")
+                ?.textContent
+                .toLowerCase() || "";
 
-                    navLinks.style.display =
-                        "flex";
+            const category =
+                card.dataset.category
+                ?.toLowerCase() || "";
 
-                    navLinks.style.position =
-                        "absolute";
+            const description =
+                card.dataset.description
+                ?.toLowerCase() || "";
 
-                    navLinks.style.top =
-                        "74px";
+            const keywords =
+                card.dataset.keywords
+                ?.toLowerCase() || "";
 
-                    navLinks.style.left =
-                        "0";
+            const matches =
+                name.includes(search) ||
+                developer.includes(search) ||
+                category.includes(search) ||
+                description.includes(search) ||
+                keywords.includes(search);
 
-                    navLinks.style.right =
-                        "0";
-
-                    navLinks.style.padding =
-                        "20px";
-
-                    navLinks.style.background =
-                        "rgba(8,10,15,.98)";
-
-                    navLinks.style.flexDirection =
-                        "column";
-
-                    navLinks.style.borderBottom =
-                        "1px solid rgba(255,255,255,.07)";
-
-                }
-
+            if (matches) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
             }
-        );
 
+        });
+
+    });
+
+}
+
+
+/* ==========================================
+   MOBILE MENU
+========================================== */
+
+const mobileMenu =
+    document.querySelector(".mobile-menu");
+
+const navLinks =
+    document.querySelector(".nav-links");
+
+if (mobileMenu && navLinks) {
+
+    mobileMenu.addEventListener("click", () => {
+
+        if (navLinks.style.display === "flex") {
+
+            navLinks.style.display = "";
+
+        } else {
+
+            navLinks.style.display = "flex";
+
+            navLinks.style.position = "absolute";
+            navLinks.style.top = "74px";
+            navLinks.style.left = "0";
+            navLinks.style.right = "0";
+
+            navLinks.style.padding = "20px";
+
+            navLinks.style.background =
+                "rgba(8,10,15,.98)";
+
+            navLinks.style.flexDirection =
+                "column";
+
+            navLinks.style.borderBottom =
+                "1px solid rgba(255,255,255,.07)";
+
+        }
+
+    });
+
+}
+
+
+/* ==========================================
+   FIRESTORE APPS SEARCH REFRESH
+   ========================================== */
+
+function refreshAppSearch() {
+
+    if (!searchInput) return;
+
+    const search =
+        searchInput.value
+        .toLowerCase()
+        .trim();
+
+    if (!search) {
+
+        document
+            .querySelectorAll(".app-card")
+            .forEach(card => {
+                card.style.display = "";
+            });
+
+        return;
     }
+
+    document
+        .querySelectorAll(".app-card")
+        .forEach(card => {
+
+            const name =
+                card.querySelector(".app-name")
+                ?.textContent
+                .toLowerCase() || "";
+
+            const developer =
+                card.querySelector(".app-developer")
+                ?.textContent
+                .toLowerCase() || "";
+
+            const category =
+                card.dataset.category
+                ?.toLowerCase() || "";
+
+            const description =
+                card.dataset.description
+                ?.toLowerCase() || "";
+
+            const keywords =
+                card.dataset.keywords
+                ?.toLowerCase() || "";
+
+            const found =
+                name.includes(search) ||
+                developer.includes(search) ||
+                category.includes(search) ||
+                description.includes(search) ||
+                keywords.includes(search);
+
+            card.style.display =
+                found ? "" : "none";
+
+        });
+
+}
+
+
+/*
+   Firestore apps can appear AFTER this script
+   has already executed.
+
+   This observer automatically re-applies
+   the search whenever the app grid changes.
+*/
+
+const appsGrid =
+    document.getElementById("appsGrid");
+
+if (appsGrid) {
+
+    const observer =
+        new MutationObserver(() => {
+
+            refreshAppSearch();
+
+        });
+
+    observer.observe(appsGrid, {
+        childList: true,
+        subtree: true
+    });
+
+}
 
 </script>
 
