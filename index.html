@@ -1270,6 +1270,80 @@
             color: #737987;
         }
 
+        /* ================================
+   SEARCH BUTTON
+================================ */
+
+.search-wrapper {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+/* SMALL SEARCH BUTTON */
+
+.search-button {
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--border);
+
+    border-radius: 12px;
+
+    background: #11151d;
+
+    color: #9299a8;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: .25s;
+}
+
+
+.search-button:hover {
+
+    color: white;
+
+    background: #181d29;
+
+    border-color:
+        rgba(124,92,255,.45);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* SEARCH BAR */
+
+.nav-search {
+
+    display: none;
+
+    margin-left: 0;
+
+    width: 280px;
+
+}
+
+
+.search-wrapper.search-open .nav-search {
+
+    display: flex;
+
+}
+
 
         /* ================================
            MOBILE MENU
@@ -3013,19 +3087,30 @@
 
         <!-- SEARCH -->
 
-        <div class="nav-search">
+        <div class="search-wrapper">
 
-            <i
-                class="fa-solid fa-magnifying-glass"
-            ></i>
+    <button
+        class="search-button"
+        id="searchButton"
+        type="button"
+        aria-label="Search"
+        title="Search"
+    >
+        <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
 
+    <div class="nav-search" id="navSearch">
 
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search apps & games..."
-                autocomplete="off"
-            >
+        <i class="fa-solid fa-magnifying-glass"></i>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search apps & games..."
+            autocomplete="off"
+        >
+
+    </div>
 
         </div>
 
@@ -3652,6 +3737,65 @@
             );
 
     }
+
+    /* ================================
+   SEARCH BUTTON
+================================ */
+
+const searchButton =
+    document.getElementById("searchButton");
+
+const searchWrapper =
+    document.querySelector(".search-wrapper");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const gamesSection =
+    document.getElementById("games");
+
+
+if (
+    searchButton &&
+    searchWrapper &&
+    searchInput &&
+    gamesSection
+) {
+
+    searchButton.addEventListener(
+        "click",
+        function () {
+
+            /* Open search */
+
+            searchWrapper.classList.add(
+                "search-open"
+            );
+
+
+            /* Scroll to apps/games */
+
+            gamesSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+
+            /* Focus search */
+
+            setTimeout(
+                function () {
+
+                    searchInput.focus();
+
+                },
+                400
+            );
+
+        }
+    );
+
+}
 
 </script>
 
