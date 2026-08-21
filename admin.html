@@ -3,47 +3,38 @@
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title>APKCity Admin</title>
+<title>APKCity Admin</title>
 
-    <meta
-        name="robots"
-        content="noindex,nofollow"
-    >
+<meta
+    name="robots"
+    content="noindex,nofollow"
+>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin
-    >
+<link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    >
-
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+>
 
 <style>
 
-/* =========================================
+/* =====================================================
    RESET
-========================================= */
+===================================================== */
 
 * {
     margin: 0;
@@ -51,12 +42,12 @@
     box-sizing: border-box;
 }
 
-
 :root {
 
     --bg: #080a0f;
     --panel: #10141c;
     --card: #151a23;
+    --input: #0c1017;
 
     --border: rgba(255,255,255,.08);
 
@@ -68,28 +59,36 @@
 
     --green: #31d47c;
     --red: #ff5c6c;
+    --yellow: #ffc857;
 
 }
 
+html {
+    scroll-behavior: smooth;
+}
 
 body {
 
     font-family: "Inter", sans-serif;
 
+    color: var(--text);
+
     background:
         radial-gradient(
             circle at 80% 0%,
-            rgba(124,92,255,.12),
+            rgba(124,92,255,.13),
             transparent 35%
         ),
+        radial-gradient(
+            circle at 10% 100%,
+            rgba(93,124,255,.07),
+            transparent 30%
+        ),
         var(--bg);
-
-    color: var(--text);
 
     min-height: 100vh;
 
 }
-
 
 button,
 input,
@@ -98,29 +97,28 @@ select {
     font-family: inherit;
 }
 
-
 button {
     cursor: pointer;
 }
 
 
-/* =========================================
+/* =====================================================
    HEADER
-========================================= */
+===================================================== */
 
 .header {
 
     height: 72px;
 
-    display: flex;
-    align-items: center;
-
-    padding: 0 4%;
-
     position: sticky;
     top: 0;
 
     z-index: 100;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 4%;
 
     background:
         rgba(8,10,15,.88);
@@ -131,7 +129,6 @@ button {
         1px solid var(--border);
 
 }
-
 
 .header-inner {
 
@@ -145,7 +142,6 @@ button {
 
 }
 
-
 .logo {
 
     display: flex;
@@ -158,16 +154,15 @@ button {
 
 }
 
-
 .logo-icon {
 
     width: 38px;
     height: 38px;
 
-    border-radius: 11px;
-
     display: grid;
     place-items: center;
+
+    border-radius: 11px;
 
     background:
         linear-gradient(
@@ -178,17 +173,15 @@ button {
 
 }
 
-
 .logo span {
     color: #9c87ff;
 }
 
-
 .admin-label {
 
-    margin-left: 10px;
-
     padding: 5px 9px;
+
+    margin-left: 4px;
 
     border-radius: 7px;
 
@@ -202,50 +195,58 @@ button {
     color: #ad9cff;
 
     font-size: 9px;
-
     font-weight: 700;
 
 }
-
 
 .header-right {
 
     margin-left: auto;
 
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
 }
 
-
-.website-btn {
+.header-btn {
 
     height: 38px;
 
-    padding: 0 14px;
+    padding: 0 13px;
 
     border-radius: 9px;
 
     border:
         1px solid var(--border);
 
-    background:
-        var(--card);
+    background: var(--card);
 
     color: #d9dce4;
 
-    font-size: 11px;
-
+    font-size: 10px;
     font-weight: 600;
 
 }
 
+.header-btn:hover {
+    border-color: rgba(124,92,255,.35);
+}
 
-/* =========================================
+.logout-btn:hover {
+    color: #ff8b95;
+    border-color: rgba(255,92,108,.25);
+}
+
+
+/* =====================================================
    LAYOUT
-========================================= */
+===================================================== */
 
 .layout {
 
     width: 92%;
-
     max-width: 1450px;
 
     margin: auto;
@@ -260,9 +261,9 @@ button {
 }
 
 
-/* =========================================
+/* =====================================================
    SIDEBAR
-========================================= */
+===================================================== */
 
 .sidebar {
 
@@ -273,7 +274,6 @@ button {
         1px solid var(--border);
 
 }
-
 
 .sidebar-title {
 
@@ -292,7 +292,6 @@ button {
 
 }
 
-
 .side-link {
 
     width: 100%;
@@ -300,7 +299,6 @@ button {
     height: 43px;
 
     display: flex;
-
     align-items: center;
 
     gap: 12px;
@@ -325,7 +323,6 @@ button {
 
 }
 
-
 .side-link i {
 
     width: 18px;
@@ -333,7 +330,6 @@ button {
     text-align: center;
 
 }
-
 
 .side-link.active,
 .side-link:hover {
@@ -346,9 +342,9 @@ button {
 }
 
 
-/* =========================================
+/* =====================================================
    MAIN
-========================================= */
+===================================================== */
 
 .main {
 
@@ -359,13 +355,11 @@ button {
 
 }
 
-
 .page-title {
 
-    margin-bottom: 28px;
+    margin-bottom: 25px;
 
 }
-
 
 .page-title h1 {
 
@@ -377,7 +371,6 @@ button {
 
 }
 
-
 .page-title p {
 
     color: var(--muted);
@@ -387,21 +380,372 @@ button {
 }
 
 
-/* =========================================
-   FORM LAYOUT
-========================================= */
+/* =====================================================
+   STATS
+===================================================== */
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+
+}
+
+.stat {
+
+    padding: 17px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    background:
+        rgba(16,20,28,.82);
+
+}
+
+.stat-top {
+
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+
+}
+
+.stat-icon {
+
+    width: 31px;
+    height: 31px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 8px;
+
+    background:
+        rgba(124,92,255,.1);
+
+    color: #a492ff;
+
+    font-size: 11px;
+
+}
+
+.stat-label {
+
+    color: var(--muted);
+
+    font-size: 9px;
+
+}
+
+.stat-value {
+
+    font-size: 21px;
+
+    font-weight: 800;
+
+}
+
+
+/* =====================================================
+   MANAGEMENT TOOLBAR
+===================================================== */
+
+.management {
+
+    display: none;
+
+}
+
+.management.active {
+    display: block;
+}
+
+.toolbar {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 17px;
+
+}
+
+.search-box {
+
+    position: relative;
+
+    flex: 1;
+
+}
+
+.search-box i {
+
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #5d6573;
+
+    font-size: 11px;
+
+}
+
+.search-box input {
+
+    height: 43px;
+
+    padding-left: 37px;
+
+}
+
+
+/* =====================================================
+   APP LIST
+===================================================== */
+
+.apps-list {
+
+    display: grid;
+
+    gap: 10px;
+
+}
+
+.empty-state {
+
+    padding: 60px 20px;
+
+    text-align: center;
+
+    border:
+        1px dashed
+        rgba(255,255,255,.1);
+
+    border-radius: 15px;
+
+    color: var(--muted);
+
+}
+
+.empty-state i {
+
+    display: block;
+
+    font-size: 30px;
+
+    margin-bottom: 14px;
+
+    color: #4d5563;
+
+}
+
+.empty-state strong {
+
+    display: block;
+
+    color: #dce0e8;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+
+}
+
+.empty-state span {
+
+    font-size: 9px;
+
+}
+
+
+.app-row {
+
+    display: grid;
+
+    grid-template-columns:
+        58px
+        minmax(0,1fr)
+        auto;
+
+    gap: 14px;
+
+    align-items: center;
+
+    padding: 14px;
+
+    background:
+        var(--panel);
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+}
+
+.app-row-icon {
+
+    width: 58px;
+    height: 58px;
+
+    object-fit: cover;
+
+    border-radius: 14px;
+
+    background: #1b202b;
+
+}
+
+.app-row-info {
+    min-width: 0;
+}
+
+.app-row-name {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    margin-bottom: 5px;
+
+}
+
+.verified {
+
+    color: #5d9dff;
+
+    font-size: 10px;
+
+}
+
+.app-row-meta {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+}
+
+.meta {
+
+    padding: 4px 7px;
+
+    border-radius: 5px;
+
+    background: #171d27;
+
+    color: var(--muted);
+
+    font-size: 8px;
+
+}
+
+.app-row-tags {
+
+    color: #666f7e;
+
+    font-size: 8px;
+
+    margin-top: 6px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+}
+
+.app-actions {
+
+    display: flex;
+
+    gap: 7px;
+
+}
+
+.icon-btn {
+
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border-radius: 9px;
+
+    border:
+        1px solid var(--border);
+
+    background: #171d27;
+
+    color: #aeb5c2;
+
+    font-size: 10px;
+
+}
+
+.icon-btn:hover {
+    border-color: rgba(124,92,255,.35);
+    color: #c8beff;
+}
+
+.icon-btn.delete:hover {
+    border-color: rgba(255,92,108,.3);
+    color: #ff7d88;
+    background: rgba(255,92,108,.06);
+}
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+.form-management {
+    display: block;
+}
+
+.form-management.hidden {
+    display: none;
+}
 
 .form-layout {
 
     display: grid;
 
     grid-template-columns:
-        minmax(0,1fr) 320px;
+        minmax(0,1fr)
+        320px;
 
     gap: 18px;
 
 }
-
 
 .panel {
 
@@ -419,7 +763,6 @@ button {
 
 }
 
-
 .panel-title {
 
     display: flex;
@@ -436,17 +779,9 @@ button {
 
 }
 
-
 .panel-title i {
-
     color: #9a86ff;
-
 }
-
-
-/* =========================================
-   FORM
-========================================= */
 
 .form-grid {
 
@@ -459,7 +794,6 @@ button {
 
 }
 
-
 .field {
 
     display: flex;
@@ -470,14 +804,9 @@ button {
 
 }
 
-
 .field.full {
-
-    grid-column:
-        1 / -1;
-
+    grid-column: 1 / -1;
 }
-
 
 .field label {
 
@@ -489,7 +818,6 @@ button {
 
 }
 
-
 .field label span {
 
     color: #686f7d;
@@ -497,7 +825,6 @@ button {
     font-weight: 400;
 
 }
-
 
 input,
 textarea,
@@ -511,7 +838,7 @@ select {
         1px solid var(--border);
 
     background:
-        #0c1017;
+        var(--input);
 
     color: white;
 
@@ -521,7 +848,6 @@ select {
 
 }
 
-
 input,
 select {
 
@@ -530,7 +856,6 @@ select {
     padding: 0 12px;
 
 }
-
 
 textarea {
 
@@ -543,7 +868,6 @@ textarea {
     line-height: 1.6;
 
 }
-
 
 input:focus,
 textarea:focus,
@@ -559,9 +883,9 @@ select:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    SCREENSHOTS
-========================================= */
+===================================================== */
 
 .screenshot-list {
 
@@ -570,7 +894,6 @@ select:focus {
     gap: 12px;
 
 }
-
 
 .screenshot-field {
 
@@ -584,7 +907,6 @@ select:focus {
     align-items: center;
 
 }
-
 
 .shot-number {
 
@@ -607,9 +929,9 @@ select:focus {
 }
 
 
-/* =========================================
-   CHECKBOXES
-========================================= */
+/* =====================================================
+   CHECKS
+===================================================== */
 
 .checks {
 
@@ -620,7 +942,6 @@ select:focus {
     flex-wrap: wrap;
 
 }
-
 
 .check {
 
@@ -636,7 +957,6 @@ select:focus {
 
 }
 
-
 .check input {
 
     width: 16px;
@@ -648,9 +968,9 @@ select:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    ACTIONS
-========================================= */
+===================================================== */
 
 .actions {
 
@@ -661,7 +981,6 @@ select:focus {
     margin-bottom: 18px;
 
 }
-
 
 .btn {
 
@@ -688,7 +1007,6 @@ select:focus {
 
 }
 
-
 .btn-primary {
 
     color: white;
@@ -706,7 +1024,6 @@ select:focus {
 
 }
 
-
 .btn-secondary {
 
     color: #c8ccd5;
@@ -718,7 +1035,6 @@ select:focus {
         1px solid var(--border);
 
 }
-
 
 .btn-danger {
 
@@ -734,9 +1050,9 @@ select:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    PREVIEW
-========================================= */
+===================================================== */
 
 .preview-box {
 
@@ -745,7 +1061,6 @@ select:focus {
     top: 95px;
 
 }
-
 
 .preview-label {
 
@@ -761,7 +1076,6 @@ select:focus {
 
 }
 
-
 .app-preview {
 
     background:
@@ -776,7 +1090,6 @@ select:focus {
 
 }
 
-
 .preview-top {
 
     display: flex;
@@ -786,7 +1099,6 @@ select:focus {
     align-items: center;
 
 }
-
 
 .preview-icon {
 
@@ -801,7 +1113,6 @@ select:focus {
 
 }
 
-
 .preview-name {
 
     font-size: 14px;
@@ -812,7 +1123,6 @@ select:focus {
 
 }
 
-
 .preview-developer {
 
     color: var(--muted);
@@ -820,7 +1130,6 @@ select:focus {
     font-size: 9px;
 
 }
-
 
 .preview-category {
 
@@ -841,7 +1150,6 @@ select:focus {
 
 }
 
-
 .preview-info {
 
     display: grid;
@@ -855,7 +1163,6 @@ select:focus {
 
 }
 
-
 .preview-info div {
 
     padding: 9px;
@@ -865,7 +1172,6 @@ select:focus {
     background: #131821;
 
 }
-
 
 .preview-info strong {
 
@@ -877,7 +1183,6 @@ select:focus {
 
 }
 
-
 .preview-info span {
 
     color: var(--muted);
@@ -887,17 +1192,18 @@ select:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    TOAST
-========================================= */
+===================================================== */
 
 .toast {
 
     position: fixed;
 
     right: 25px;
-
     bottom: 25px;
+
+    max-width: 350px;
 
     padding:
         13px 17px;
@@ -921,10 +1227,9 @@ select:focus {
 
     transition: .3s;
 
-    z-index: 999;
+    z-index: 9999;
 
 }
-
 
 .toast.show {
 
@@ -936,81 +1241,100 @@ select:focus {
 }
 
 
-/* =========================================
+/* =====================================================
    MOBILE
-========================================= */
+===================================================== */
 
 @media(max-width:1000px) {
 
     .layout {
-
         grid-template-columns: 1fr;
-
     }
 
     .sidebar {
-
         display: none;
-
     }
 
     .main {
-
         padding:
             30px 0 60px;
-
     }
 
 }
 
+@media(max-width:800px) {
 
-@media(max-width:750px) {
+    .stats {
+        grid-template-columns:
+            repeat(2,1fr);
+    }
 
     .form-layout {
-
         grid-template-columns: 1fr;
-
     }
 
     .preview-box {
-
         position: static;
-
-    }
-
-    .form-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-    .field.full {
-
-        grid-column: auto;
-
     }
 
 }
 
+@media(max-width:650px) {
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .field.full {
+        grid-column: auto;
+    }
+
+    .app-row {
+        grid-template-columns:
+            48px 1fr;
+    }
+
+    .app-row-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .app-actions {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .app-actions .icon-btn {
+        flex: 1;
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+}
 
 @media(max-width:500px) {
 
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
     .panel {
-
         padding: 16px;
-
     }
 
     .actions {
-
         flex-direction: column;
-
     }
 
     .btn {
-
         width: 100%;
+    }
 
+    .header-btn span {
+        display: none;
     }
 
 }
@@ -1023,45 +1347,57 @@ select:focus {
 <body>
 
 
-<!-- HEADER -->
+<!-- =====================================================
+     HEADER
+===================================================== -->
 
 <header class="header">
 
-    <div class="header-inner">
+<div class="header-inner">
 
-        <div class="logo">
+<div class="logo">
 
-            <div class="logo-icon">
+<div class="logo-icon">
+<i class="fa-brands fa-android"></i>
+</div>
 
-                <i class="fa-brands fa-android"></i>
+APK<span>City</span>
 
-            </div>
+<div class="admin-label">
+ADMIN
+</div>
 
-            APK<span>City</span>
-
-            <div class="admin-label">
-                ADMIN
-            </div>
-
-        </div>
+</div>
 
 
-        <div class="header-right">
+<div class="header-right">
 
-            <button
-                class="website-btn"
-                onclick="window.open('../index.html','_blank')"
-            >
+<button
+    class="header-btn"
+    onclick="window.open('../index.html','_blank')"
+>
 
-                <i class="fa-solid fa-globe"></i>
+<i class="fa-solid fa-globe"></i>
 
-                Website
+<span>Website</span>
 
-            </button>
+</button>
 
-        </div>
 
-    </div>
+<button
+    class="header-btn logout-btn"
+    id="logoutBtn"
+>
+
+<i class="fa-solid fa-right-from-bracket"></i>
+
+<span>Logout</span>
+
+</button>
+
+</div>
+
+</div>
 
 </header>
 
@@ -1070,638 +1406,845 @@ select:focus {
 <div class="layout">
 
 
-<!-- SIDEBAR -->
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
 
 <aside class="sidebar">
 
-    <div class="sidebar-title">
-        Management
-    </div>
+<div class="sidebar-title">
+Management
+</div>
 
 
-    <button class="side-link active">
+<button
+    class="side-link"
+    id="showDashboardBtn"
+>
 
-        <i class="fa-solid fa-plus"></i>
+<i class="fa-solid fa-layer-group"></i>
 
-        Add Application
+Applications
 
-    </button>
-
-
-    <button
-        class="side-link"
-        onclick="window.location.reload()"
-    >
-
-        <i class="fa-solid fa-layer-group"></i>
-
-        Applications
-
-    </button>
+</button>
 
 
-    <div class="sidebar-title">
-        Website
-    </div>
+<button
+    class="side-link active"
+    id="showAddBtn"
+>
+
+<i class="fa-solid fa-plus"></i>
+
+Add Application
+
+</button>
 
 
-    <button
-        class="side-link"
-        onclick="window.open('../index.html','_blank')"
-    >
+<div class="sidebar-title">
+Website
+</div>
 
-        <i class="fa-solid fa-globe"></i>
 
-        Open APKCity
+<button
+    class="side-link"
+    onclick="window.open('../index.html','_blank')"
+>
 
-    </button>
+<i class="fa-solid fa-globe"></i>
+
+Open APKCity
+
+</button>
 
 </aside>
 
 
 
-<!-- MAIN -->
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <main class="main">
 
 
-    <div class="page-title">
+<div class="page-title">
 
-        <h1>
-            Add Application
-        </h1>
+<h1 id="pageHeading">
+Applications
+</h1>
 
-        <p>
-            Add a new application to APKCity.
-        </p>
+<p id="pageDescription">
+Manage all applications published on APKCity.
+</p>
 
-    </div>
+</div>
 
 
 
-    <div class="form-layout">
+<!-- =====================================================
+     STATS
+===================================================== -->
 
+<div class="stats">
 
-        <div>
+<div class="stat">
 
+<div class="stat-top">
 
-            <!-- BASIC INFORMATION -->
+<div class="stat-label">
+Total Apps
+</div>
 
-            <section class="panel">
+<div class="stat-icon">
+<i class="fa-solid fa-mobile-screen-button"></i>
+</div>
 
-                <div class="panel-title">
+</div>
 
-                    <i class="fa-solid fa-circle-info"></i>
+<div
+    class="stat-value"
+    id="totalApps"
+>
+0
+</div>
 
-                    Basic Information
+</div>
 
-                </div>
 
+<div class="stat">
 
-                <div class="form-grid">
+<div class="stat-top">
 
+<div class="stat-label">
+Featured
+</div>
 
-                    <div class="field">
+<div class="stat-icon">
+<i class="fa-solid fa-star"></i>
+</div>
 
-                        <label>
-                            App Name
-                        </label>
+</div>
 
-                        <input
-                            id="appName"
-                            type="text"
-                            placeholder="WhatsApp"
-                        >
+<div
+    class="stat-value"
+    id="featuredApps"
+>
+0
+</div>
 
-                    </div>
+</div>
 
 
-                    <div class="field">
+<div class="stat">
 
-                        <label>
-                            Developer
-                        </label>
+<div class="stat-top">
 
-                        <input
-                            id="developer"
-                            type="text"
-                            placeholder="WhatsApp LLC"
-                        >
+<div class="stat-label">
+Verified
+</div>
 
-                    </div>
+<div class="stat-icon">
+<i class="fa-solid fa-circle-check"></i>
+</div>
 
+</div>
 
-                    <div class="field">
+<div
+    class="stat-value"
+    id="verifiedApps"
+>
+0
+</div>
 
-                        <label>
-                            Category
-                        </label>
+</div>
 
-                        <select id="category">
 
-                            <option value="">
-                                Select Category
-                            </option>
+<div class="stat">
 
-                            <option>Apps</option>
-                            <option>Games</option>
-                            <option>Social</option>
-                            <option>Communication</option>
-                            <option>Entertainment</option>
-                            <option>Music & Audio</option>
-                            <option>Video Players</option>
-                            <option>Photography</option>
-                            <option>Tools</option>
-                            <option>Productivity</option>
-                            <option>Education</option>
-                            <option>Finance</option>
-                            <option>Lifestyle</option>
-                            <option>Other</option>
+<div class="stat-top">
 
-                        </select>
+<div class="stat-label">
+Categories
+</div>
 
-                    </div>
+<div class="stat-icon">
+<i class="fa-solid fa-grid-2"></i>
+</div>
 
+</div>
 
-                    <div class="field">
+<div
+    class="stat-value"
+    id="categoryCount"
+>
+0
+</div>
 
-                        <label>
-                            Version
-                        </label>
+</div>
 
-                        <input
-                            id="version"
-                            type="text"
-                            placeholder="1.0.0"
-                        >
+</div>
 
-                    </div>
 
 
-                    <div class="field">
+<!-- =====================================================
+     APP MANAGEMENT
+===================================================== -->
 
-                        <label>
-                            APK Size
-                        </label>
+<section
+    class="management active"
+    id="management"
+>
 
-                        <input
-                            id="size"
-                            type="text"
-                            placeholder="85 MB"
-                        >
 
-                    </div>
+<div class="toolbar">
 
+<div class="search-box">
 
-                    <div class="field">
+<i class="fa-solid fa-magnifying-glass"></i>
 
-                        <label>
-                            Android Requirement
-                        </label>
+<input
+    id="appSearch"
+    type="search"
+    placeholder="Search applications..."
+>
 
-                        <input
-                            id="android"
-                            type="text"
-                            placeholder="Android 8.0+"
-                        >
+</div>
 
-                    </div>
 
+<button
+    class="btn btn-primary"
+    id="toolbarAddBtn"
+    style="height:43px;"
+>
 
-                    <div class="field">
+<i class="fa-solid fa-plus"></i>
 
-                        <label>
-                            Rating
-                        </label>
+Add App
 
-                        <input
-                            id="rating"
-                            type="number"
-                            min="0"
-                            max="5"
-                            step="0.1"
-                            value="4.5"
-                        >
+</button>
 
-                    </div>
+</div>
 
 
-                    <div class="field">
+<div
+    class="apps-list"
+    id="appsList"
+>
 
-                        <label>
-                            Downloads
-                        </label>
+<div class="empty-state">
 
-                        <input
-                            id="downloads"
-                            type="text"
-                            placeholder="10K+"
-                        >
+<i class="fa-solid fa-spinner fa-spin"></i>
 
-                    </div>
+<strong>
+Loading applications...
+</strong>
 
-                </div>
+<span>
+Please wait while Firestore loads your apps.
+</span>
 
-            </section>
+</div>
 
+</div>
 
+</section>
 
-            <!-- SEARCH TAGS -->
 
-            <section class="panel">
 
-                <div class="panel-title">
+<!-- =====================================================
+     FORM MANAGEMENT
+===================================================== -->
 
-                    <i class="fa-solid fa-tags"></i>
+<section
+    class="form-management hidden"
+    id="formManagement"
+>
 
-                    Search Tags
 
-                </div>
+<div class="form-layout">
 
 
-                <div class="field">
+<div>
 
-                    <label>
-                        Search Keywords
-                    </label>
 
-                    <input
-                        id="tags"
-                        type="text"
-                        placeholder="whatsapp, chat, messaging, calling, social"
-                    >
+<!-- BASIC INFORMATION -->
 
-                    <small style="
-                        color:#626978;
-                        font-size:9px;
-                    ">
-                        Separate keywords with commas.
-                    </small>
+<section class="panel">
 
-                </div>
+<div class="panel-title">
 
-            </section>
+<i class="fa-solid fa-circle-info"></i>
 
+<span id="formTitle">
+Basic Information
+</span>
 
+</div>
 
-            <!-- GITHUB FILES -->
 
-            <section class="panel">
+<div class="form-grid">
 
-                <div class="panel-title">
 
-                    <i class="fa-solid fa-link"></i>
+<div class="field">
 
-                    GitHub Files
+<label>
+App Name
+</label>
 
-                </div>
+<input
+    id="appName"
+    type="text"
+    placeholder="WhatsApp"
+>
 
+</div>
 
-                <div class="form-grid">
 
+<div class="field">
 
-                    <div class="field full">
+<label>
+Developer
+</label>
 
-                        <label>
-                            App Picture
-                        </label>
+<input
+    id="developer"
+    type="text"
+    placeholder="WhatsApp LLC"
+>
 
-                        <input
-                            id="icon"
-                            type="text"
-                            placeholder="assets/apps/whatsapp.png"
-                        >
+</div>
 
-                    </div>
 
+<div class="field">
 
-                    <div class="field full">
+<label>
+Category
+</label>
 
-                        <label>
-                            APK File
-                        </label>
+<select id="category">
 
-                        <input
-                            id="apk"
-                            type="text"
-                            placeholder="apks/whatsapp.apk"
-                        >
+<option value="">
+Select Category
+</option>
 
-                    </div>
+<option>Apps</option>
+<option>Games</option>
+<option>Social</option>
+<option>Communication</option>
+<option>Entertainment</option>
+<option>Music & Audio</option>
+<option>Video Players</option>
+<option>Photography</option>
+<option>Tools</option>
+<option>Productivity</option>
+<option>Education</option>
+<option>Finance</option>
+<option>Lifestyle</option>
+<option>Other</option>
 
-                </div>
+</select>
 
+</div>
 
-                <br>
 
+<div class="field">
 
-                <div class="field">
+<label>
+Version
+</label>
 
-                    <label>
-                        Screenshots
-                        <span>
-                            Maximum 3
-                        </span>
-                    </label>
+<input
+    id="version"
+    type="text"
+    placeholder="1.0.0"
+>
 
+</div>
 
-                    <div class="screenshot-list">
 
+<div class="field">
 
-                        <div class="screenshot-field">
+<label>
+APK Size
+</label>
 
-                            <div class="shot-number">
-                                1
-                            </div>
+<input
+    id="size"
+    type="text"
+    placeholder="85 MB"
+>
 
-                            <input
-                                id="screenshot1"
-                                type="text"
-                                placeholder="assets/screenshots/whatsapp/1.jpg"
-                            >
+</div>
 
-                        </div>
 
+<div class="field">
 
-                        <div class="screenshot-field">
+<label>
+Android Requirement
+</label>
 
-                            <div class="shot-number">
-                                2
-                            </div>
+<input
+    id="android"
+    type="text"
+    placeholder="Android 8.0+"
+>
 
-                            <input
-                                id="screenshot2"
-                                type="text"
-                                placeholder="assets/screenshots/whatsapp/2.jpg"
-                            >
+</div>
 
-                        </div>
 
+<div class="field">
 
-                        <div class="screenshot-field">
+<label>
+Rating
+</label>
 
-                            <div class="shot-number">
-                                3
-                            </div>
+<input
+    id="rating"
+    type="number"
+    min="0"
+    max="5"
+    step="0.1"
+    value="4.5"
+>
 
-                            <input
-                                id="screenshot3"
-                                type="text"
-                                placeholder="assets/screenshots/whatsapp/3.jpg"
-                            >
+</div>
 
-                        </div>
 
+<div class="field">
 
-                    </div>
+<label>
+Downloads
+</label>
 
-                </div>
+<input
+    id="downloads"
+    type="text"
+    placeholder="10K+"
+>
 
-            </section>
+</div>
 
+</div>
 
+</section>
 
-            <!-- DESCRIPTION -->
 
-            <section class="panel">
 
-                <div class="panel-title">
+<!-- SEARCH TAGS -->
 
-                    <i class="fa-solid fa-align-left"></i>
+<section class="panel">
 
-                    Description
+<div class="panel-title">
 
-                </div>
+<i class="fa-solid fa-tags"></i>
 
+Search Tags
 
-                <textarea
-                    id="description"
-                    placeholder="Write the application description..."
-                ></textarea>
+</div>
 
-            </section>
 
+<div class="field">
 
+<label>
+Search Keywords
+</label>
 
-            <!-- WHAT'S NEW -->
+<input
+    id="tags"
+    type="text"
+    placeholder="whatsapp, chat, messaging, calling"
+>
 
-            <section class="panel">
+<small style="
+color:#626978;
+font-size:9px;
+">
+Separate keywords with commas.
+</small>
 
-                <div class="panel-title">
+</div>
 
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+</section>
 
-                    What's New
 
-                </div>
 
+<!-- GITHUB FILES -->
 
-                <textarea
-                    id="whatsNew"
-                    placeholder="New features&#10;Performance improvements&#10;Bug fixes"
-                ></textarea>
+<section class="panel">
 
-            </section>
+<div class="panel-title">
 
+<i class="fa-solid fa-link"></i>
 
+GitHub Files
 
-            <!-- OPTIONS -->
+</div>
 
-            <section class="panel">
 
-                <div class="panel-title">
+<div class="form-grid">
 
-                    <i class="fa-solid fa-sliders"></i>
 
-                    Options
+<div class="field full">
 
-                </div>
+<label>
+App Picture
+</label>
 
+<input
+    id="icon"
+    type="text"
+    placeholder="https://apkcity.github.io/assets/apps/whatsapp.png"
+>
 
-                <div class="checks">
+</div>
 
 
-                    <label class="check">
+<div class="field full">
 
-                        <input
-                            id="featured"
-                            type="checkbox"
-                        >
+<label>
+APK File
+</label>
 
-                        Featured App
+<input
+    id="apk"
+    type="text"
+    placeholder="https://apkcity.github.io/apks/whatsapp.apk"
+>
 
-                    </label>
+</div>
 
+</div>
 
-                    <label class="check">
 
-                        <input
-                            id="verified"
-                            type="checkbox"
-                            checked
-                        >
+<br>
 
-                        APKCity Verified
 
-                    </label>
+<div class="field">
 
+<label>
+Screenshots
+<span>
+Maximum 3
+</span>
+</label>
 
-                </div>
 
-            </section>
+<div class="screenshot-list">
 
 
+<div class="screenshot-field">
 
-            <!-- BUTTONS -->
+<div class="shot-number">
+1
+</div>
 
-            <div class="actions">
+<input
+    id="screenshot1"
+    type="text"
+    placeholder="https://apkcity.github.io/assets/screenshots/app/1.jpg"
+>
 
+</div>
 
-                <button
-                    class="btn btn-primary"
-                    id="addAppBtn"
-                >
 
-                    <i class="fa-solid fa-plus"></i>
+<div class="screenshot-field">
 
-                    ADD APP
+<div class="shot-number">
+2
+</div>
 
-                </button>
+<input
+    id="screenshot2"
+    type="text"
+    placeholder="https://apkcity.github.io/assets/screenshots/app/2.jpg"
+>
 
+</div>
 
-                <button
-                    class="btn btn-danger"
-                    onclick="resetForm()"
-                >
 
-                    <i class="fa-solid fa-rotate-left"></i>
+<div class="screenshot-field">
 
-                    RESET
+<div class="shot-number">
+3
+</div>
 
-                </button>
+<input
+    id="screenshot3"
+    type="text"
+    placeholder="https://apkcity.github.io/assets/screenshots/app/3.jpg"
+>
 
-            </div>
+</div>
 
 
-        </div>
+</div>
 
+</div>
 
+</section>
 
-        <!-- PREVIEW -->
 
-        <aside class="preview-box">
 
-            <div class="preview-label">
-                Live Preview
-            </div>
+<!-- DESCRIPTION -->
 
+<section class="panel">
 
-            <div class="app-preview">
+<div class="panel-title">
 
+<i class="fa-solid fa-align-left"></i>
 
-                <div class="preview-top">
+Description
 
+</div>
 
-                    <img
-                        id="previewIcon"
-                        class="preview-icon"
-                        alt="App"
-                    >
 
+<textarea
+    id="description"
+    placeholder="Write the application description..."
+></textarea>
 
-                    <div>
+</section>
 
-                        <div
-                            id="previewName"
-                            class="preview-name"
-                        >
-                            App Name
-                        </div>
 
 
-                        <div
-                            id="previewDeveloper"
-                            class="preview-developer"
-                        >
-                            Developer
-                        </div>
+<!-- WHAT'S NEW -->
 
+<section class="panel">
 
-                        <div
-                            id="previewCategory"
-                            class="preview-category"
-                        >
-                            Category
-                        </div>
+<div class="panel-title">
 
-                    </div>
+<i class="fa-solid fa-wand-magic-sparkles"></i>
 
-                </div>
+What's New
 
+</div>
 
-                <div class="preview-info">
 
+<textarea
+    id="whatsNew"
+    placeholder="New features&#10;Performance improvements&#10;Bug fixes"
+></textarea>
 
-                    <div>
+</section>
 
-                        <strong id="previewVersion">
-                            —
-                        </strong>
 
-                        <span>
-                            Version
-                        </span>
 
-                    </div>
+<!-- OPTIONS -->
 
+<section class="panel">
 
-                    <div>
+<div class="panel-title">
 
-                        <strong id="previewSize">
-                            —
-                        </strong>
+<i class="fa-solid fa-sliders"></i>
 
-                        <span>
-                            Size
-                        </span>
+Options
 
-                    </div>
+</div>
 
 
-                    <div>
+<div class="checks">
 
-                        <strong id="previewRating">
-                            —
-                        </strong>
 
-                        <span>
-                            Rating
-                        </span>
+<label class="check">
 
-                    </div>
+<input
+    id="featured"
+    type="checkbox"
+>
 
+Featured App
 
-                    <div>
+</label>
 
-                        <strong id="previewAndroid">
-                            —
-                        </strong>
 
-                        <span>
-                            Android
-                        </span>
+<label class="check">
 
-                    </div>
+<input
+    id="verified"
+    type="checkbox"
+    checked
+>
 
+APKCity Verified
 
-                </div>
+</label>
 
-            </div>
 
-        </aside>
+</div>
 
+</section>
 
-    </div>
+
+
+<!-- BUTTONS -->
+
+<div class="actions">
+
+
+<button
+    class="btn btn-primary"
+    id="saveAppBtn"
+>
+
+<i class="fa-solid fa-plus"></i>
+
+<span id="saveAppText">
+ADD APP
+</span>
+
+</button>
+
+
+<button
+    class="btn btn-secondary"
+    id="cancelBtn"
+>
+
+<i class="fa-solid fa-xmark"></i>
+
+CANCEL
+
+</button>
+
+
+<button
+    class="btn btn-danger"
+    id="resetBtn"
+>
+
+<i class="fa-solid fa-rotate-left"></i>
+
+RESET
+
+</button>
+
+
+</div>
+
+
+</div>
+
+
+
+<!-- PREVIEW -->
+
+<aside class="preview-box">
+
+<div class="preview-label">
+Live Preview
+</div>
+
+
+<div class="app-preview">
+
+
+<div class="preview-top">
+
+
+<img
+    id="previewIcon"
+    class="preview-icon"
+    alt="App"
+>
+
+
+<div>
+
+<div
+    id="previewName"
+    class="preview-name"
+>
+App Name
+</div>
+
+
+<div
+    id="previewDeveloper"
+    class="preview-developer"
+>
+Developer
+</div>
+
+
+<div
+    id="previewCategory"
+    class="preview-category"
+>
+Category
+</div>
+
+</div>
+
+</div>
+
+
+<div class="preview-info">
+
+
+<div>
+
+<strong id="previewVersion">
+—
+</strong>
+
+<span>
+Version
+</span>
+
+</div>
+
+
+<div>
+
+<strong id="previewSize">
+—
+</strong>
+
+<span>
+Size
+</span>
+
+</div>
+
+
+<div>
+
+<strong id="previewRating">
+—
+</strong>
+
+<span>
+Rating
+</span>
+
+</div>
+
+
+<div>
+
+<strong id="previewAndroid">
+—
+</strong>
+
+<span>
+Android
+</span>
+
+</div>
+
+
+</div>
+
+</div>
+
+</aside>
+
+
+</div>
+
+</section>
+
 
 </main>
 
@@ -1712,14 +2255,13 @@ select:focus {
 <div
     class="toast"
     id="toast"
->
-</div>
+></div>
 
 
 
-<!-- =========================================
+<!-- =====================================================
      FIREBASE
-========================================= -->
+===================================================== -->
 
 <script type="module">
 
@@ -1737,27 +2279,39 @@ import {
     getFirestore,
     collection,
     addDoc,
-    serverTimestamp
+    updateDoc,
+    deleteDoc,
+    doc,
+    serverTimestamp,
+    onSnapshot,
+    query,
+    orderBy
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
-/* =========================================
+/* =====================================================
    FIREBASE CONFIG
-========================================= */
+===================================================== */
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyABU60kwZik2S1_8Dx7sfT6HfGBIr935Bw",
+    apiKey:
+        "AIzaSyABU60kwZik2S1_8Dx7sfT6HfGBIr935Bw",
 
-    authDomain: "apkcity-30fa1.firebaseapp.com",
+    authDomain:
+        "apkcity-30fa1.firebaseapp.com",
 
-    projectId: "apkcity-30fa1",
+    projectId:
+        "apkcity-30fa1",
 
-    storageBucket: "apkcity-30fa1.firebasestorage.app",
+    storageBucket:
+        "apkcity-30fa1.firebasestorage.app",
 
-    messagingSenderId: "965202080311",
+    messagingSenderId:
+        "965202080311",
 
-    appId: "1:965202080311:web:6419bf702de3dcf024c5b2"
+    appId:
+        "1:965202080311:web:6419bf702de3dcf024c5b2"
 
 };
 
@@ -1765,18 +2319,58 @@ const firebaseConfig = {
 const app =
     initializeApp(firebaseConfig);
 
-
 const auth =
     getAuth(app);
-
 
 const db =
     getFirestore(app);
 
 
-/* =========================================
-   PROTECT ADMIN PANEL
-========================================= */
+/* =====================================================
+   STATE
+===================================================== */
+
+let currentUser = null;
+
+let allApps = [];
+
+let editingAppId = null;
+
+let unsubscribeApps = null;
+
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const management =
+    document.getElementById("management");
+
+const formManagement =
+    document.getElementById("formManagement");
+
+const appsList =
+    document.getElementById("appsList");
+
+const appSearch =
+    document.getElementById("appSearch");
+
+const pageHeading =
+    document.getElementById("pageHeading");
+
+const pageDescription =
+    document.getElementById("pageDescription");
+
+const saveAppBtn =
+    document.getElementById("saveAppBtn");
+
+const saveAppText =
+    document.getElementById("saveAppText");
+
+
+/* =====================================================
+   AUTH PROTECTION
+===================================================== */
 
 onAuthStateChanged(
     auth,
@@ -1785,329 +2379,795 @@ onAuthStateChanged(
         if (!user) {
 
             window.location.href =
-                "login.html";
+                "admin/login.html";
 
             return;
 
         }
 
+        currentUser = user;
+
         console.log(
-            "Admin logged in:",
+            "Admin authenticated:",
             user.email
         );
+
+        startAppsListener();
 
     }
 );
 
 
-/* =========================================
-   ADD APP
-========================================= */
+/* =====================================================
+   FIRESTORE REAL-TIME LISTENER
+===================================================== */
 
-const addAppBtn =
-    document.getElementById(
-        "addAppBtn"
-    );
+function startAppsListener() {
 
+    if (unsubscribeApps) {
+        unsubscribeApps();
+    }
 
-addAppBtn.addEventListener(
-    "click",
-    async () => {
+    const appsRef =
+        collection(db, "apps");
 
+    const appsQuery =
+        query(
+            appsRef,
+            orderBy(
+                "createdAt",
+                "desc"
+            )
+        );
 
-        const name =
-            document
-                .getElementById("appName")
-                .value
-                .trim();
+    unsubscribeApps =
+        onSnapshot(
+            appsQuery,
+            snapshot => {
 
+                allApps =
+                    snapshot.docs.map(
+                        item => ({
+                            id: item.id,
+                            ...item.data()
+                        })
+                    );
 
-        const developer =
-            document
-                .getElementById("developer")
-                .value
-                .trim();
+                updateStats();
 
+                renderApps();
 
-        const category =
-            document
-                .getElementById("category")
-                .value
-                .trim();
+            },
 
+            error => {
 
-        const version =
-            document
-                .getElementById("version")
-                .value
-                .trim();
-
-
-        const size =
-            document
-                .getElementById("size")
-                .value
-                .trim();
-
-
-        const android =
-            document
-                .getElementById("android")
-                .value
-                .trim();
-
-
-        const rating =
-            Number(
-                document
-                    .getElementById("rating")
-                    .value
-            ) || 0;
-
-
-        const downloads =
-            document
-                .getElementById("downloads")
-                .value
-                .trim();
-
-
-        const icon =
-            document
-                .getElementById("icon")
-                .value
-                .trim();
-
-
-        const apk =
-            document
-                .getElementById("apk")
-                .value
-                .trim();
-
-
-        const screenshot1 =
-            document
-                .getElementById("screenshot1")
-                .value
-                .trim();
-
-
-        const screenshot2 =
-            document
-                .getElementById("screenshot2")
-                .value
-                .trim();
-
-
-        const screenshot3 =
-            document
-                .getElementById("screenshot3")
-                .value
-                .trim();
-
-
-        const description =
-            document
-                .getElementById("description")
-                .value
-                .trim();
-
-
-        const whatsNew =
-            document
-                .getElementById("whatsNew")
-                .value
-                .trim();
-
-
-        const tags =
-            document
-                .getElementById("tags")
-                .value
-
-                .split(",")
-
-                .map(
-                    tag =>
-                        tag.trim()
-                )
-
-                .filter(
-                    tag =>
-                        tag.length > 0
+                console.error(
+                    "Apps listener error:",
+                    error
                 );
 
+                showToast(
+                    "Unable to load apps: " +
+                    error.message
+                );
 
-        const screenshots = [
+            }
+        );
 
-            screenshot1,
-
-            screenshot2,
-
-            screenshot3
-
-        ].filter(Boolean);
-
-
-        const featured =
-            document
-                .getElementById("featured")
-                .checked;
+}
 
 
-        const verified =
-            document
-                .getElementById("verified")
-                .checked;
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats() {
+
+    document.getElementById(
+        "totalApps"
+    ).textContent =
+        allApps.length;
 
 
-
-        /* =================================
-           VALIDATION
-        ================================= */
-
-
-        if (!name) {
-
-            showToast(
-                "Please enter the app name."
-            );
-
-            return;
-
-        }
+    document.getElementById(
+        "featuredApps"
+    ).textContent =
+        allApps.filter(
+            app => app.featured === true
+        ).length;
 
 
-        if (!developer) {
-
-            showToast(
-                "Please enter the developer name."
-            );
-
-            return;
-
-        }
+    document.getElementById(
+        "verifiedApps"
+    ).textContent =
+        allApps.filter(
+            app => app.verified === true
+        ).length;
 
 
-        if (!category) {
+    const categories =
+        new Set(
+            allApps
+                .map(
+                    app => app.category
+                )
+                .filter(Boolean)
+        );
 
-            showToast(
-                "Please select a category."
-            );
+    document.getElementById(
+        "categoryCount"
+    ).textContent =
+        categories.size;
 
-            return;
-
-        }
-
-
-        if (!icon) {
-
-            showToast(
-                "Please enter the app picture path."
-            );
-
-            return;
-
-        }
+}
 
 
-        if (!apk) {
+/* =====================================================
+   RENDER APPS
+===================================================== */
 
-            showToast(
-                "Please enter the APK file path."
-            );
+function renderApps() {
 
-            return;
-
-        }
-
-
-
-        /* =================================
-           BUTTON LOADING
-        ================================= */
+    const search =
+        appSearch.value
+            .trim()
+            .toLowerCase();
 
 
-        addAppBtn.disabled = true;
+    const filtered =
+        allApps.filter(
+            app => {
+
+                if (!search) {
+                    return true;
+                }
+
+                const searchable = [
+
+                    app.name,
+
+                    app.developer,
+
+                    app.category,
+
+                    ...(app.tags || [])
+
+                ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
+
+                return searchable.includes(search);
+
+            }
+        );
 
 
-        addAppBtn.innerHTML = `
+    if (!filtered.length) {
 
-            <i class="fa-solid fa-spinner fa-spin"></i>
+        appsList.innerHTML = `
 
-            ADDING...
+            <div class="empty-state">
+
+                <i class="fa-solid fa-box-open"></i>
+
+                <strong>
+                    ${
+                        search
+                            ? "No matching applications"
+                            : "No applications yet"
+                    }
+                </strong>
+
+                <span>
+                    ${
+                        search
+                            ? "Try another search."
+                            : "Add your first APK using the Add App button."
+                    }
+                </span>
+
+            </div>
 
         `;
 
+        return;
+
+    }
 
 
-        try {
+    appsList.innerHTML =
+        filtered
+            .map(
+                app => createAppRow(app)
+            )
+            .join("");
 
 
-            /* ==============================
-               SAVE TO FIRESTORE
-            ============================== */
+    document
+        .querySelectorAll(
+            "[data-edit]"
+        )
+        .forEach(
+            button => {
 
+                button.addEventListener(
+                    "click",
+                    () => {
 
-            const docRef =
-                await addDoc(
-                    collection(
-                        db,
-                        "apps"
-                    ),
-                    {
-
-                        name: name,
-
-                        developer: developer,
-
-                        category: category,
-
-                        version: version,
-
-                        size: size,
-
-                        android: android,
-
-                        rating: rating,
-
-                        downloads: downloads,
-
-                        icon: icon,
-
-                        apk: apk,
-
-                        screenshots:
-                            screenshots,
-
-                        tags: tags,
-
-                        description:
-                            description,
-
-                        whatsNew:
-                            whatsNew,
-
-                        featured:
-                            featured,
-
-                        verified:
-                            verified,
-
-                        createdAt:
-                            serverTimestamp(),
-
-                        updatedAt:
-                            serverTimestamp()
+                        editApp(
+                            button.dataset.edit
+                        );
 
                     }
                 );
 
+            }
+        );
 
-            console.log(
-                "App added:",
-                docRef.id
+
+    document
+        .querySelectorAll(
+            "[data-delete]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        deleteApp(
+                            button.dataset.delete
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   APP ROW
+===================================================== */
+
+function createAppRow(app) {
+
+    const tags =
+        Array.isArray(app.tags)
+            ? app.tags.join(", ")
+            : "";
+
+
+    const icon =
+        app.icon ||
+        "";
+
+
+    return `
+
+        <div class="app-row">
+
+            <img
+                class="app-row-icon"
+                src="${escapeHtml(icon)}"
+                alt=""
+                onerror="this.style.opacity='.25'"
+            >
+
+
+            <div class="app-row-info">
+
+                <div class="app-row-name">
+
+                    ${escapeHtml(
+                        app.name || "Unnamed App"
+                    )}
+
+                    ${
+                        app.verified
+                            ? `
+                                <i
+                                    class="fa-solid fa-circle-check verified"
+                                    title="Verified"
+                                ></i>
+                              `
+                            : ""
+                    }
+
+                </div>
+
+
+                <div class="app-row-meta">
+
+                    ${
+                        app.category
+                            ? `
+                                <span class="meta">
+                                    ${escapeHtml(app.category)}
+                                </span>
+                              `
+                            : ""
+                    }
+
+                    ${
+                        app.version
+                            ? `
+                                <span class="meta">
+                                    v${escapeHtml(app.version)}
+                                </span>
+                              `
+                            : ""
+                    }
+
+                    ${
+                        app.size
+                            ? `
+                                <span class="meta">
+                                    ${escapeHtml(app.size)}
+                                </span>
+                              `
+                            : ""
+                    }
+
+                    ${
+                        app.featured
+                            ? `
+                                <span class="meta">
+                                    ★ Featured
+                                </span>
+                              `
+                            : ""
+                    }
+
+                </div>
+
+
+                <div class="app-row-tags">
+
+                    ${
+                        tags
+                            ? "Tags: " + escapeHtml(tags)
+                            : "No search tags"
+                    }
+
+                </div>
+
+            </div>
+
+
+            <div class="app-actions">
+
+                <button
+                    class="icon-btn"
+                    data-edit="${app.id}"
+                    title="Edit App"
+                >
+
+                    <i class="fa-solid fa-pen"></i>
+
+                </button>
+
+
+                <button
+                    class="icon-btn delete"
+                    data-delete="${app.id}"
+                    title="Delete App"
+                >
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+appSearch.addEventListener(
+    "input",
+    renderApps
+);
+
+
+/* =====================================================
+   SHOW APPLICATIONS
+===================================================== */
+
+function showApplications() {
+
+    management.classList.add(
+        "active"
+    );
+
+    formManagement.classList.add(
+        "hidden"
+    );
+
+    pageHeading.textContent =
+        "Applications";
+
+    pageDescription.textContent =
+        "Manage all applications published on APKCity.";
+
+    document
+        .getElementById(
+            "showDashboardBtn"
+        )
+        .classList.add("active");
+
+    document
+        .getElementById(
+            "showAddBtn"
+        )
+        .classList.remove("active");
+
+    editingAppId = null;
+
+}
+
+
+/* =====================================================
+   SHOW ADD FORM
+===================================================== */
+
+function showAddForm() {
+
+    management.classList.remove(
+        "active"
+    );
+
+    formManagement.classList.remove(
+        "hidden"
+    );
+
+    pageHeading.textContent =
+        "Add Application";
+
+    pageDescription.textContent =
+        "Add a new application to APKCity.";
+
+    document
+        .getElementById(
+            "showAddBtn"
+        )
+        .classList.add("active");
+
+    document
+        .getElementById(
+            "showDashboardBtn"
+        )
+        .classList.remove("active");
+
+    editingAppId = null;
+
+    clearForm(false);
+
+    document
+        .getElementById(
+            "formTitle"
+        )
+        .textContent =
+            "Basic Information";
+
+    saveAppText.textContent =
+        "ADD APP";
+
+    saveAppBtn.innerHTML = `
+
+        <i class="fa-solid fa-plus"></i>
+
+        <span id="saveAppText">
+            ADD APP
+        </span>
+
+    `;
+
+}
+
+
+/* =====================================================
+   SIDEBAR EVENTS
+===================================================== */
+
+document
+    .getElementById(
+        "showDashboardBtn"
+    )
+    .addEventListener(
+        "click",
+        showApplications
+    );
+
+
+document
+    .getElementById(
+        "showAddBtn"
+    )
+    .addEventListener(
+        "click",
+        showAddForm
+    );
+
+
+document
+    .getElementById(
+        "toolbarAddBtn"
+    )
+    .addEventListener(
+        "click",
+        showAddForm
+    );
+
+
+/* =====================================================
+   EDIT APP
+===================================================== */
+
+function editApp(id) {
+
+    const app =
+        allApps.find(
+            item => item.id === id
+        );
+
+
+    if (!app) {
+
+        showToast(
+            "Application not found."
+        );
+
+        return;
+
+    }
+
+
+    editingAppId = id;
+
+
+    management.classList.remove(
+        "active"
+    );
+
+    formManagement.classList.remove(
+        "hidden"
+    );
+
+
+    pageHeading.textContent =
+        "Edit Application";
+
+    pageDescription.textContent =
+        "Update the selected application.";
+
+
+    document
+        .getElementById(
+            "formTitle"
+        )
+        .textContent =
+            "Edit Application";
+
+
+    saveAppBtn.innerHTML = `
+
+        <i class="fa-solid fa-floppy-disk"></i>
+
+        <span>
+            UPDATE APP
+        </span>
+
+    `;
+
+
+    setValue(
+        "appName",
+        app.name
+    );
+
+    setValue(
+        "developer",
+        app.developer
+    );
+
+    setValue(
+        "category",
+        app.category
+    );
+
+    setValue(
+        "version",
+        app.version
+    );
+
+    setValue(
+        "size",
+        app.size
+    );
+
+    setValue(
+        "android",
+        app.android
+    );
+
+    setValue(
+        "rating",
+        app.rating ?? 4.5
+    );
+
+    setValue(
+        "downloads",
+        app.downloads
+    );
+
+    setValue(
+        "icon",
+        app.icon
+    );
+
+    setValue(
+        "apk",
+        app.apk
+    );
+
+    setValue(
+        "screenshot1",
+        app.screenshots?.[0] || ""
+    );
+
+    setValue(
+        "screenshot2",
+        app.screenshots?.[1] || ""
+    );
+
+    setValue(
+        "screenshot3",
+        app.screenshots?.[2] || ""
+    );
+
+    setValue(
+        "description",
+        app.description
+    );
+
+    setValue(
+        "whatsNew",
+        app.whatsNew
+    );
+
+
+    document
+        .getElementById(
+            "tags"
+        )
+        .value =
+            Array.isArray(app.tags)
+                ? app.tags.join(", ")
+                : "";
+
+
+    document
+        .getElementById(
+            "featured"
+        )
+        .checked =
+            app.featured === true;
+
+
+    document
+        .getElementById(
+            "verified"
+        )
+        .checked =
+            app.verified !== false;
+
+
+    updatePreview();
+
+}
+
+
+/* =====================================================
+   SAVE / UPDATE
+===================================================== */
+
+saveAppBtn.addEventListener(
+    "click",
+    saveApp
+);
+
+
+async function saveApp() {
+
+    if (!currentUser) {
+
+        showToast(
+            "You are not authenticated."
+        );
+
+        return;
+
+    }
+
+
+    const data =
+        collectFormData();
+
+
+    if (!validateData(data)) {
+        return;
+    }
+
+
+    saveAppBtn.disabled =
+        true;
+
+
+    saveAppBtn.innerHTML = `
+
+        <i class="fa-solid fa-spinner fa-spin"></i>
+
+        <span>
+            ${
+                editingAppId
+                    ? "UPDATING..."
+                    : "ADDING..."
+            }
+        </span>
+
+    `;
+
+
+    try {
+
+        if (editingAppId) {
+
+            await updateDoc(
+                doc(
+                    db,
+                    "apps",
+                    editingAppId
+                ),
+                {
+                    ...data,
+                    updatedAt:
+                        serverTimestamp()
+                }
+            );
+
+
+            showToast(
+                "✓ App updated successfully!"
+            );
+
+        } else {
+
+            await addDoc(
+                collection(
+                    db,
+                    "apps"
+                ),
+                {
+                    ...data,
+
+                    createdAt:
+                        serverTimestamp(),
+
+                    updatedAt:
+                        serverTimestamp()
+                }
             );
 
 
@@ -2115,167 +3175,407 @@ addAppBtn.addEventListener(
                 "✓ App added successfully!"
             );
 
-
-            resetForm();
-
-
-
-        } catch (error) {
-
-
-            console.error(
-                "Firestore error:",
-                error
-            );
-
-
-            showToast(
-                "Failed to add app: " +
-                error.message
-            );
-
-
-        } finally {
-
-
-            addAppBtn.disabled =
-                false;
-
-
-            addAppBtn.innerHTML = `
-
-                <i class="fa-solid fa-plus"></i>
-
-                ADD APP
-
-            `;
-
         }
+
+
+        clearForm(false);
+
+        showApplications();
+
+
+    } catch (error) {
+
+        console.error(
+            "Firestore error:",
+            error
+        );
+
+        showToast(
+            "Failed: " +
+            error.message
+        );
+
+    } finally {
+
+        saveAppBtn.disabled =
+            false;
+
+        saveAppBtn.innerHTML = editingAppId
+            ? `
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>UPDATE APP</span>
+              `
+            : `
+                <i class="fa-solid fa-plus"></i>
+                <span>ADD APP</span>
+              `;
 
     }
-);
+
+}
 
 
-/* =========================================
-   RESET FORM
-========================================= */
+/* =====================================================
+   COLLECT FORM
+===================================================== */
 
-window.resetForm =
-    function () {
+function collectFormData() {
+
+    const get =
+        id =>
+            document
+                .getElementById(id)
+                .value
+                .trim();
 
 
-        if (
-            !confirm(
-                "Clear all fields?"
+    const tags =
+        get("tags")
+            .split(",")
+            .map(
+                tag =>
+                    tag.trim()
             )
-        ) {
-
-            return;
-
-        }
+            .filter(Boolean);
 
 
-        document
-            .querySelectorAll(
-                "input[type='text'], input[type='number'], textarea"
-            )
+    const screenshots = [
 
-            .forEach(
-                element => {
+        get("screenshot1"),
+        get("screenshot2"),
+        get("screenshot3")
 
-                    element.value = "";
-
-                }
-            );
+    ].filter(Boolean);
 
 
-        document
-            .getElementById(
-                "category"
-            )
-            .value = "";
+    return {
 
+        name:
+            get("appName"),
 
-        document
-            .getElementById(
-                "rating"
-            )
-            .value = "4.5";
+        developer:
+            get("developer"),
 
+        category:
+            get("category"),
 
-        document
-            .getElementById(
-                "featured"
-            )
-            .checked = false;
+        version:
+            get("version"),
 
+        size:
+            get("size"),
 
-        document
-            .getElementById(
-                "verified"
-            )
-            .checked = true;
+        android:
+            get("android"),
 
+        rating:
+            Number(
+                get("rating")
+            ) || 0,
 
-        updatePreview();
+        downloads:
+            get("downloads"),
+
+        icon:
+            get("icon"),
+
+        apk:
+            get("apk"),
+
+        screenshots:
+            screenshots,
+
+        tags:
+            tags,
+
+        description:
+            get("description"),
+
+        whatsNew:
+            get("whatsNew"),
+
+        featured:
+            document
+                .getElementById(
+                    "featured"
+                )
+                .checked,
+
+        verified:
+            document
+                .getElementById(
+                    "verified"
+                )
+                .checked
 
     };
 
+}
 
-/* =========================================
+
+/* =====================================================
+   VALIDATION
+===================================================== */
+
+function validateData(data) {
+
+    if (!data.name) {
+
+        showToast(
+            "Please enter the app name."
+        );
+
+        return false;
+
+    }
+
+
+    if (!data.developer) {
+
+        showToast(
+            "Please enter the developer."
+        );
+
+        return false;
+
+    }
+
+
+    if (!data.category) {
+
+        showToast(
+            "Please select a category."
+        );
+
+        return false;
+
+    }
+
+
+    if (!data.icon) {
+
+        showToast(
+            "Please enter the app picture URL."
+        );
+
+        return false;
+
+    }
+
+
+    if (!data.apk) {
+
+        showToast(
+            "Please enter the APK URL."
+        );
+
+        return false;
+
+    }
+
+
+    if (
+        data.rating < 0 ||
+        data.rating > 5
+    ) {
+
+        showToast(
+            "Rating must be between 0 and 5."
+        );
+
+        return false;
+
+    }
+
+
+    if (
+        data.screenshots.length > 3
+    ) {
+
+        showToast(
+            "Maximum 3 screenshots allowed."
+        );
+
+        return false;
+
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   DELETE APP
+===================================================== */
+
+async function deleteApp(id) {
+
+    const app =
+        allApps.find(
+            item => item.id === id
+        );
+
+
+    if (!app) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            `Delete "${app.name}"?\n\nThis will permanently remove the app from Firestore and from the APKCity website.`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        await deleteDoc(
+            doc(
+                db,
+                "apps",
+                id
+            )
+        );
+
+
+        showToast(
+            "✓ App deleted successfully!"
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete error:",
+            error
+        );
+
+        showToast(
+            "Failed to delete: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   CLEAR FORM
+===================================================== */
+
+function clearForm(confirmFirst = true) {
+
+    if (
+        confirmFirst &&
+        !confirm(
+            "Clear all fields?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    document
+        .querySelectorAll(
+            "#formManagement input[type='text'], #formManagement input[type='number'], #formManagement textarea"
+        )
+        .forEach(
+            element => {
+
+                element.value = "";
+
+            }
+        );
+
+
+    document
+        .getElementById(
+            "category"
+        )
+        .value = "";
+
+
+    document
+        .getElementById(
+            "rating"
+        )
+        .value = "4.5";
+
+
+    document
+        .getElementById(
+            "featured"
+        )
+        .checked = false;
+
+
+    document
+        .getElementById(
+            "verified"
+        )
+        .checked = true;
+
+
+    updatePreview();
+
+}
+
+
+document
+    .getElementById(
+        "resetBtn"
+    )
+    .addEventListener(
+        "click",
+        () => clearForm(true)
+    );
+
+
+document
+    .getElementById(
+        "cancelBtn"
+    )
+    .addEventListener(
+        "click",
+        showApplications
+    );
+
+
+/* =====================================================
+   SET VALUE
+===================================================== */
+
+function setValue(id, value) {
+
+    document
+        .getElementById(id)
+        .value =
+            value ?? "";
+
+}
+
+
+/* =====================================================
    LIVE PREVIEW
-========================================= */
+===================================================== */
 
 function updatePreview() {
 
-
-    const name =
-        document
-            .getElementById("appName")
-            .value;
-
-
-    const developer =
-        document
-            .getElementById("developer")
-            .value;
-
-
-    const category =
-        document
-            .getElementById("category")
-            .value;
-
-
-    const version =
-        document
-            .getElementById("version")
-            .value;
-
-
-    const size =
-        document
-            .getElementById("size")
-            .value;
-
-
-    const android =
-        document
-            .getElementById("android")
-            .value;
-
-
-    const rating =
-        document
-            .getElementById("rating")
-            .value;
-
-
-    const icon =
-        document
-            .getElementById("icon")
-            .value;
-
+    const get =
+        id =>
+            document
+                .getElementById(id)
+                .value;
 
 
     document
@@ -2283,7 +3583,7 @@ function updatePreview() {
             "previewName"
         )
         .textContent =
-            name ||
+            get("appName") ||
             "App Name";
 
 
@@ -2292,7 +3592,7 @@ function updatePreview() {
             "previewDeveloper"
         )
         .textContent =
-            developer ||
+            get("developer") ||
             "Developer";
 
 
@@ -2301,7 +3601,7 @@ function updatePreview() {
             "previewCategory"
         )
         .textContent =
-            category ||
+            get("category") ||
             "Category";
 
 
@@ -2310,7 +3610,7 @@ function updatePreview() {
             "previewVersion"
         )
         .textContent =
-            version ||
+            get("version") ||
             "—";
 
 
@@ -2319,7 +3619,7 @@ function updatePreview() {
             "previewSize"
         )
         .textContent =
-            size ||
+            get("size") ||
             "—";
 
 
@@ -2328,7 +3628,7 @@ function updatePreview() {
             "previewAndroid"
         )
         .textContent =
-            android ||
+            get("android") ||
             "—";
 
 
@@ -2337,22 +3637,21 @@ function updatePreview() {
             "previewRating"
         )
         .textContent =
-            rating
-                ? "★ " + rating
+            get("rating")
+                ? "★ " + get("rating")
                 : "—";
 
 
     const previewIcon =
-        document
-            .getElementById(
-                "previewIcon"
-            );
+        document.getElementById(
+            "previewIcon"
+        );
 
 
-    if (icon) {
+    if (get("icon")) {
 
         previewIcon.src =
-            icon;
+            get("icon");
 
     } else {
 
@@ -2364,10 +3663,6 @@ function updatePreview() {
 
 }
 
-
-/* =========================================
-   PREVIEW EVENTS
-========================================= */
 
 [
     "appName",
@@ -2389,16 +3684,101 @@ function updatePreview() {
                 updatePreview
             );
 
+        document
+            .getElementById(id)
+            .addEventListener(
+                "change",
+                updatePreview
+            );
+
     }
 );
 
 
-/* =========================================
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+document
+    .getElementById(
+        "logoutBtn"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            const confirmed =
+                confirm(
+                    "Log out of APKCity Admin?"
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                await signOut(auth);
+
+                window.location.href =
+                    "admin/login.html";
+
+            } catch (error) {
+
+                console.error(error);
+
+                showToast(
+                    "Logout failed."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
    TOAST
-========================================= */
+===================================================== */
+
+let toastTimer = null;
 
 function showToast(message) {
-
 
     const toast =
         document.getElementById(
@@ -2415,45 +3795,26 @@ function showToast(message) {
     );
 
 
-    setTimeout(
-        () => {
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },
-        3000
+    clearTimeout(
+        toastTimer
     );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            3500
+        );
 
 }
 
-
-/* =========================================
-   LOGOUT FUNCTION
-========================================= */
-
-window.logoutAdmin =
-    async function () {
-
-        try {
-
-            await signOut(auth);
-
-            window.location.href =
-                "login.html";
-
-        } catch (error) {
-
-            console.error(error);
-
-        }
-
-    };
-
-
 </script>
-
 
 </body>
 
