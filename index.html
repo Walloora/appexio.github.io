@@ -2203,34 +2203,35 @@
 
         @media(max-width:1100px) {
 
-            .apps-grid {
+    .nav-links.mobile-open {
+        display: flex !important;
+        position: absolute;
+        top: 74px;
+        left: 0;
+        right: 0;
 
-                grid-template-columns:
-                    repeat(4,1fr);
-            }
+        padding: 20px;
 
-            .categories {
+        background: rgba(8,10,15,.98);
 
-                grid-template-columns:
-                    repeat(3,1fr);
-            }
+        flex-direction: column;
+        align-items: flex-start;
 
-            .hero {
+        gap: 18px;
 
-                grid-template-columns:
-                    1fr .7fr;
-            }
+        border-bottom: 1px solid rgba(255,255,255,.07);
 
-            .nav-links {
-                display: none;
-            }
+        box-shadow: 0 20px 40px rgba(0,0,0,.35);
 
-            .mobile-menu {
-                display: block;
-            }
+        z-index: 9999;
+    }
 
-        }
+    .nav-links.mobile-open a {
+        display: block;
+        width: 100%;
+    }
 
+}
 
         /* ==========================================
    TABLET / MOBILE
@@ -3520,60 +3521,16 @@
    MOBILE MENU
 ========================================== */
 
-const mobileMenu =
-    document.querySelector(".mobile-menu");
-
-const navLinks =
-    document.querySelector(".nav-links");
-
+const mobileMenu = document.querySelector(".mobile-menu");
+const navLinks = document.querySelector(".nav-links");
 
 if (mobileMenu && navLinks) {
 
-    mobileMenu.addEventListener(
-        "click",
-        () => {
+    mobileMenu.addEventListener("click", function () {
 
-            if (
-                navLinks.style.display ===
-                "flex"
-            ) {
+        navLinks.classList.toggle("mobile-open");
 
-                navLinks.style.display =
-                    "";
-
-            } else {
-
-                navLinks.style.display =
-                    "flex";
-
-                navLinks.style.position =
-                    "absolute";
-
-                navLinks.style.top =
-                    "74px";
-
-                navLinks.style.left =
-                    "0";
-
-                navLinks.style.right =
-                    "0";
-
-                navLinks.style.padding =
-                    "20px";
-
-                navLinks.style.background =
-                    "rgba(8,10,15,.98)";
-
-                navLinks.style.flexDirection =
-                    "column";
-
-                navLinks.style.borderBottom =
-                    "1px solid rgba(255,255,255,.07)";
-
-            }
-
-        }
-    );
+    });
 
 }
 
@@ -3717,60 +3674,6 @@ const searchInput =
 
         }
     );
-
-
-    /* MOBILE MENU */
-
-    const mobileMenu =
-        document.querySelector(".mobile-menu");
-
-    const navLinks =
-        document.querySelector(".nav-links");
-
-
-    if (mobileMenu && navLinks) {
-
-        mobileMenu.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    navLinks.style.display === "flex"
-                ) {
-
-                    navLinks.style.display = "";
-
-                } else {
-
-                    navLinks.style.display = "flex";
-
-                    navLinks.style.position =
-                        "absolute";
-
-                    navLinks.style.top =
-                        "74px";
-
-                    navLinks.style.left = "0";
-
-                    navLinks.style.right = "0";
-
-                    navLinks.style.padding = "20px";
-
-                    navLinks.style.background =
-                        "rgba(8,10,15,.98)";
-
-                    navLinks.style.flexDirection =
-                        "column";
-
-                    navLinks.style.borderBottom =
-                        "1px solid rgba(255,255,255,.07)";
-
-                }
-
-            }
-        );
-
-    }
 
 
 /* ==========================================
