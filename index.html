@@ -2365,20 +2365,13 @@
        HERO VISUAL
     ================================== */
 
-    .hero-visual {
-
-        min-height: 250px;
-
-        width: 100%;
-
-        transform:
-            scale(.82);
-
-        margin-top: -25px;
-
-        margin-bottom: -35px;
-
-    }
+   .hero-visual {
+    min-height: 180px;
+    width: 100%;
+    transform: scale(.72);
+    margin-top: -35px;
+    margin-bottom: -70px;
+}
 
     .hero-phone {
 
@@ -2741,17 +2734,12 @@
     /* MAKE HERO MUCH SHORTER */
 
     .hero-visual {
-
-        min-height: 185px;
-
-        transform:
-            scale(.62);
-
-        margin-top: -45px;
-
-        margin-bottom: -65px;
-
-    }
+    min-height: 120px;
+    width: 100%;
+    transform: scale(.55);
+    margin-top: -55px;
+    margin-bottom: -85px;
+}
 
     .hero-phone {
 
@@ -3534,64 +3522,14 @@ if (mobileMenu && navLinks) {
 
 }
 
-
 /* ==========================================
-   APKCITY SEARCH
+   SEARCH ENTER → SCROLL TO APPS
 ========================================== */
 
-const searchInput =
-        document.getElementById("searchInput");
+const searchInput = document.getElementById("searchInput");
+const appsSection = document.getElementById("apps");
 
-    const appsSection =
-        document.getElementById("apps");
-
-    const appsGrid =
-        document.getElementById("appsGrid");
-
-
-    function performSearch() {
-
-        const search =
-            searchInput.value
-                .toLowerCase()
-                .trim();
-
-
-        const appCards =
-            appsGrid.querySelectorAll(".app-card");
-
-
-        appCards.forEach(card => {
-
-            const name =
-                card.querySelector(".app-name")
-                    ?.textContent
-                    .toLowerCase() || "";
-
-            const developer =
-                card.querySelector(".app-developer")
-                    ?.textContent
-                    .toLowerCase() || "";
-
-
-            if (
-                search === "" ||
-                name.includes(search) ||
-                developer.includes(search)
-            ) {
-
-                card.style.display = "";
-
-            } else {
-
-                card.style.display = "none";
-
-            }
-
-        });
-
-
-       if (searchInput) {
+if (searchInput && appsSection) {
 
     searchInput.addEventListener("keydown", function (event) {
 
@@ -3599,89 +3537,16 @@ const searchInput =
 
             event.preventDefault();
 
-            const appsSection = document.getElementById("apps");
-
-            if (appsSection) {
-
-                appsSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-
-            }
+            appsSection.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
 
         }
 
     });
 
 }
-
-
-    /* SEARCH WHILE TYPING */
-
-    searchInput.addEventListener(
-        "input",
-        function () {
-
-            const search =
-                this.value
-                    .toLowerCase()
-                    .trim();
-
-
-            const appCards =
-                appsGrid.querySelectorAll(".app-card");
-
-
-            appCards.forEach(card => {
-
-                const name =
-                    card.querySelector(".app-name")
-                        ?.textContent
-                        .toLowerCase() || "";
-
-                const developer =
-                    card.querySelector(".app-developer")
-                        ?.textContent
-                        .toLowerCase() || "";
-
-
-                if (
-                    search === "" ||
-                    name.includes(search) ||
-                    developer.includes(search)
-                ) {
-
-                    card.style.display = "";
-
-                } else {
-
-                    card.style.display = "none";
-
-                }
-
-            });
-
-        }
-    );
-
-
-    /* PRESS ENTER */
-
-    searchInput.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (event.key === "Enter") {
-
-                event.preventDefault();
-
-                performSearch();
-
-            }
-
-        }
-    );
 
 
 /* ==========================================
