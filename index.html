@@ -92,8 +92,6 @@
                 document.getElementById("gamesGrid");
 
 
-            /* Safety check */
-
             if (!gamesGrid) {
 
                 console.error(
@@ -105,7 +103,7 @@
             }
 
 
-            /* Show loading */
+            /* Loading state */
 
             gamesGrid.innerHTML = `
 
@@ -114,7 +112,7 @@
                     <i class="fa-solid fa-spinner fa-spin"></i>
 
                     <span>
-                        Loading games...
+                        Loading apps & games...
                     </span>
 
                 </div>
@@ -129,7 +127,7 @@
 
                 /* =================================================
                    FIRST TRY:
-                   Load newest apps first
+                   Newest apps first
                 ================================================= */
 
                 try {
@@ -153,9 +151,8 @@
                 } catch (orderError) {
 
                     /*
-                     * If createdAt is missing or the query
-                     * cannot be used, load the collection
-                     * without ordering.
+                     * If createdAt does not exist or
+                     * ordering fails, load normally.
                      */
 
                     console.warn(
@@ -176,7 +173,7 @@
 
 
                 /* =================================================
-                   CONVERT FIRESTORE DOCUMENTS TO APP OBJECTS
+                   CONVERT FIRESTORE DOCUMENTS
                 ================================================= */
 
                 const apps = [];
@@ -194,51 +191,41 @@
                             id:
                                 doc.id,
 
-
                             name:
                                 data.name ||
                                 "Unnamed App",
-
 
                             developer:
                                 data.developer ||
                                 "APKCity Developer",
 
-
                             category:
                                 data.category ||
                                 "Apps",
-
 
                             rating:
                                 data.rating ??
                                 "4.8",
 
-
                             downloads:
                                 data.downloads ??
                                 "New",
-
 
                             icon:
                                 data.icon ||
                                 "assets/logo.png",
 
-
                             apk:
                                 data.apk ||
                                 "#",
-
 
                             version:
                                 data.version ||
                                 "",
 
-
                             size:
                                 data.size ||
                                 "",
-
 
                             tags:
                                 Array.isArray(
@@ -254,64 +241,31 @@
 
 
                 console.log(
-                    "APKCity apps loaded:",
+                    "APKCity: Total apps loaded from Firestore:",
+                    apps.length
+                );
+
+                console.log(
+                    "APKCity: Apps:",
                     apps
                 );
 
 
                 /* =================================================
-                   SPLIT GAMES
-                ================================================= */
-
-                const games =
-                    apps.filter(
-                        function (app) {
-
-                            const category =
-                                String(
-                                    app.category
-                                )
-                                .toLowerCase()
-                                .trim();
-
-
-                            const tags =
-                                Array.isArray(
-                                    app.tags
-                                )
-                                    ? app.tags
-                                        .join(" ")
-                                        .toLowerCase()
-                                    : "";
-
-
-                            return (
-                                category.includes("game") ||
-                                tags.includes("game")
-                            );
-
-                        }
-                    );
-
-
-                console.log(
-                    "APKCity games:",
-                    games
-                );
-
-
-                /* =================================================
-                   RENDER GAMES
+                   RENDER ALL APPS AND GAMES
+                   
+                   IMPORTANT:
+                   We DO NOT filter by category anymore.
                 ================================================= */
 
                 renderApps(
                     gamesGrid,
-                    games
+                    apps
                 );
 
 
                 /* =================================================
-                   UPDATE APP COUNT IF ELEMENT EXISTS
+                   UPDATE APP COUNT
                 ================================================= */
 
                 const count =
@@ -358,11 +312,12 @@
                         <i class="fa-solid fa-triangle-exclamation"></i>
 
                         <h3>
-                            Unable to load games
+                            Unable to load apps
                         </h3>
 
                         <p>
-                            Please try again later.
+                            Please check your Firebase connection
+                            and try again later.
                         </p>
 
                     </div>
@@ -690,7 +645,7 @@
 
 
         /* =====================================================
-           RENDER APPS
+           RENDER ALL APPS
         ====================================================== */
 
         function renderApps(
@@ -709,22 +664,25 @@
                 "";
 
 
-            /* No games */
+            /* No apps */
 
-            if (!apps || !apps.length) {
+            if (
+                !apps ||
+                !apps.length
+            ) {
 
                 container.innerHTML = `
 
                     <div class="empty-state">
 
-                        <i class="fa-solid fa-gamepad"></i>
+                        <i class="fa-solid fa-mobile-screen-button"></i>
 
                         <h3>
-                            No games available
+                            No apps available
                         </h3>
 
                         <p>
-                            New games will appear here
+                            Apps and games will appear here
                             when they are published.
                         </p>
 
@@ -737,7 +695,7 @@
             }
 
 
-            /* Render every game */
+            /* Render every app */
 
             apps.forEach(
                 function (app) {
@@ -796,8 +754,8 @@
 
 
             /*
-             * Clone the input to remove any
-             * previous Firebase search listener.
+             * Clone input to remove any
+             * previous listener.
              */
 
             const newInput =
@@ -828,9 +786,7 @@
                         );
 
 
-                    /* =================================================
-                       EMPTY SEARCH
-                    ================================================= */
+                    /* EMPTY SEARCH */
 
                     if (!search) {
 
@@ -848,9 +804,7 @@
                     }
 
 
-                    /* =================================================
-                       SEARCH EACH CARD
-                    ================================================= */
+                    /* SEARCH EACH CARD */
 
                     cards.forEach(
                         function (card) {
@@ -1006,6 +960,7 @@
 
         html {
             scroll-behavior: smooth;
+            scroll-padding-top: 90px;
         }
 
         body {
@@ -1212,16 +1167,77 @@
 
 
         /* ================================
-           SEARCH
+           SEARCH WRAPPER
+        ================================= */
+
+        .search-wrapper {
+
+            margin-left: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        /* ================================
+           SEARCH BUTTON
+        ================================= */
+
+        .search-button {
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 12px;
+
+            background: #11151d;
+
+            color: #9299a8;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+            transition: .25s;
+        }
+
+
+        .search-button:hover {
+
+            color: white;
+
+            background: #181d29;
+
+            border-color:
+                rgba(124,92,255,.45);
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* ================================
+           SEARCH BAR
         ================================= */
 
         .nav-search {
-            margin-left: auto;
+
+            display: none;
 
             width: 280px;
             height: 43px;
 
-            display: flex;
             align-items: center;
 
             padding: 0 14px;
@@ -1238,6 +1254,14 @@
             transition: .25s;
         }
 
+
+        .search-wrapper.search-open .nav-search {
+
+            display: flex;
+
+        }
+
+
         .nav-search:focus-within {
 
             border-color:
@@ -1248,9 +1272,13 @@
                 rgba(124,92,255,.08);
         }
 
+
         .nav-search i {
+
             color: var(--muted);
+
         }
+
 
         .nav-search input {
 
@@ -1266,83 +1294,12 @@
             font-size: 13px;
         }
 
+
         .nav-search input::placeholder {
+
             color: #737987;
+
         }
-
-        /* ================================
-   SEARCH BUTTON
-================================ */
-
-.search-wrapper {
-    margin-left: auto;
-
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-}
-
-
-/* SMALL SEARCH BUTTON */
-
-.search-button {
-
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 1px solid var(--border);
-
-    border-radius: 12px;
-
-    background: #11151d;
-
-    color: #9299a8;
-
-    cursor: pointer;
-
-    font-size: 14px;
-
-    transition: .25s;
-}
-
-
-.search-button:hover {
-
-    color: white;
-
-    background: #181d29;
-
-    border-color:
-        rgba(124,92,255,.45);
-
-    transform:
-        translateY(-1px);
-}
-
-
-/* SEARCH BAR */
-
-.nav-search {
-
-    display: none;
-
-    margin-left: 0;
-
-    width: 280px;
-
-}
-
-
-.search-wrapper.search-open .nav-search {
-
-    display: flex;
-
-}
 
 
         /* ================================
@@ -1541,20 +1498,6 @@
             box-shadow:
                 0 15px 40px
                 rgba(124,92,255,.32);
-        }
-
-        .btn-secondary {
-
-            background: #151922;
-
-            border:
-                1px solid var(--border);
-
-            color: #e4e7ed;
-        }
-
-        .btn-secondary:hover {
-            background: #1c212c;
         }
 
 
@@ -1819,85 +1762,6 @@
             font-size: 12px;
 
             font-weight: 700;
-        }
-
-
-        /* ================================
-           CATEGORIES
-        ================================= */
-
-        .categories {
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(6,1fr);
-
-            gap: 12px;
-        }
-
-        .category {
-
-            min-height: 105px;
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-            justify-content: center;
-
-            gap: 10px;
-
-            background:
-                var(--card);
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            transition: .25s;
-
-            cursor: pointer;
-        }
-
-        .category:hover {
-
-            transform:
-                translateY(-4px);
-
-            background:
-                var(--card-hover);
-
-            border-color:
-                rgba(124,92,255,.3);
-        }
-
-        .category-icon {
-
-            width: 40px;
-            height: 40px;
-
-            border-radius: 12px;
-
-            display: grid;
-
-            place-items: center;
-
-            background: #1b2030;
-
-            color: #a994ff;
-        }
-
-        .category span {
-
-            color: #dce0e8;
-
-            font-size: 11px;
-
-            font-weight: 600;
         }
 
 
@@ -2425,17 +2289,20 @@
                 flex-shrink: 0;
             }
 
+            .search-wrapper {
+
+                margin-left: auto;
+
+            }
+
             .nav-search {
 
-                width: auto;
+                width: 220px;
 
-                max-width: none;
-
-                flex: 1;
+                max-width: 55vw;
 
                 height: 40px;
 
-                margin-left: auto;
             }
 
 
@@ -2606,44 +2473,6 @@
             }
 
 
-            /* CATEGORIES */
-
-            .categories {
-
-                display: grid;
-
-                grid-template-columns:
-                    repeat(3, 1fr);
-
-                gap: 8px;
-            }
-
-            .category {
-
-                min-height: 75px;
-
-                border-radius: 13px;
-
-                gap: 6px;
-            }
-
-            .category-icon {
-
-                width: 32px;
-
-                height: 32px;
-
-                border-radius: 9px;
-
-                font-size: 12px;
-            }
-
-            .category span {
-
-                font-size: 9px;
-            }
-
-
             /* APPS */
 
             .apps-grid {
@@ -2783,7 +2612,23 @@
                 font-size: 15px;
             }
 
+            .search-button {
+
+                width: 38px;
+
+                height: 38px;
+
+            }
+
             .nav-search {
+
+                position: absolute;
+
+                right: 52px;
+
+                width: 200px;
+
+                max-width: 58vw;
 
                 height: 38px;
 
@@ -2901,38 +2746,6 @@
 
                 padding:
                     20px 0;
-            }
-
-
-            /* CATEGORIES */
-
-            .categories {
-
-                grid-template-columns:
-                    repeat(3, 1fr);
-
-                gap: 6px;
-            }
-
-            .category {
-
-                min-height: 70px;
-
-                border-radius: 11px;
-            }
-
-            .category-icon {
-
-                width: 29px;
-
-                height: 29px;
-
-                font-size: 11px;
-            }
-
-            .category span {
-
-                font-size: 8px;
             }
 
 
@@ -3089,28 +2902,34 @@
 
         <div class="search-wrapper">
 
-    <button
-        class="search-button"
-        id="searchButton"
-        type="button"
-        aria-label="Search"
-        title="Search"
-    >
-        <i class="fa-solid fa-magnifying-glass"></i>
-    </button>
+            <button
+                class="search-button"
+                id="searchButton"
+                type="button"
+                aria-label="Search"
+                title="Search"
+            >
 
-    <div class="nav-search" id="navSearch">
+                <i class="fa-solid fa-magnifying-glass"></i>
 
-        <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
 
-        <input
-            type="text"
-            id="searchInput"
-            placeholder="Search apps & games..."
-            autocomplete="off"
-        >
 
-    </div>
+            <div
+                class="nav-search"
+                id="navSearch"
+            >
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search apps & games..."
+                    autocomplete="off"
+                >
+
+            </div>
 
         </div>
 
@@ -3307,7 +3126,7 @@
 
 
     <!-- =================================================
-         TRENDING GAMES
+         ALL APPS & GAMES
     ================================================== -->
 
     <section
@@ -3322,11 +3141,11 @@
             <div class="section-title">
 
                 <h2>
-                    Trending Games
+                    Apps & Games
                 </h2>
 
                 <p>
-                    Popular games users are checking out
+                    Discover the latest apps and games
                 </p>
 
             </div>
@@ -3337,14 +3156,14 @@
                 class="view-all"
             >
 
-                View games →
+                View all →
 
             </a>
 
         </div>
 
 
-        <!-- FIRESTORE GAMES -->
+        <!-- FIRESTORE APPS -->
 
         <div
             class="apps-grid"
@@ -3358,7 +3177,7 @@
                 ></i>
 
                 <span>
-                    Loading games...
+                    Loading apps & games...
                 </span>
 
             </div>
@@ -3681,10 +3500,15 @@
 
 
 <!-- =====================================================
-     MOBILE MENU JAVASCRIPT
+     JAVASCRIPT
 ====================================================== -->
 
 <script>
+
+
+    /* =====================================================
+       MOBILE MENU
+    ====================================================== */
 
     const mobileMenu =
         document.querySelector(
@@ -3738,64 +3562,80 @@
 
     }
 
-    /* ================================
-   SEARCH BUTTON
-================================ */
 
-const searchButton =
-    document.getElementById("searchButton");
+    /* =====================================================
+       SEARCH BUTTON
+    ====================================================== */
 
-const searchWrapper =
-    document.querySelector(".search-wrapper");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const gamesSection =
-    document.getElementById("games");
+    const searchButton =
+        document.getElementById(
+            "searchButton"
+        );
 
 
-if (
-    searchButton &&
-    searchWrapper &&
-    searchInput &&
-    gamesSection
-) {
-
-    searchButton.addEventListener(
-        "click",
-        function () {
-
-            /* Open search */
-
-            searchWrapper.classList.add(
-                "search-open"
-            );
+    const searchWrapper =
+        document.querySelector(
+            ".search-wrapper"
+        );
 
 
-            /* Scroll to apps/games */
-
-            gamesSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+    const searchInput =
+        document.getElementById(
+            "searchInput"
+        );
 
 
-            /* Focus search */
+    const gamesSection =
+        document.getElementById(
+            "games"
+        );
 
-            setTimeout(
-                function () {
 
-                    searchInput.focus();
+    if (
+        searchButton &&
+        searchWrapper &&
+        searchInput &&
+        gamesSection
+    ) {
 
-                },
-                400
-            );
+        searchButton.addEventListener(
+            "click",
+            function () {
 
-        }
-    );
 
-}
+                /* Open search */
+
+                searchWrapper.classList.add(
+                    "search-open"
+                );
+
+
+                /* Scroll to Apps & Games */
+
+                gamesSection.scrollIntoView({
+
+                    behavior: "smooth",
+
+                    block: "start"
+
+                });
+
+
+                /* Focus search */
+
+                setTimeout(
+                    function () {
+
+                        searchInput.focus();
+
+                    },
+                    400
+                );
+
+            }
+        );
+
+    }
 
 </script>
 
