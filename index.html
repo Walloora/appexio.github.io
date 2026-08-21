@@ -2232,153 +2232,684 @@
         }
 
 
-        @media(max-width:800px) {
+        /* ==========================================
+   TABLET / MOBILE
+========================================== */
 
-            .header {
-                padding: 0 4%;
-            }
+@media (max-width: 800px) {
 
-            .nav-search {
+    /* HEADER */
 
-                width: auto;
+    .header {
+        height: 64px;
+        padding: 0 4%;
+    }
 
-                flex: 1;
+    .nav {
+        gap: 10px;
+    }
 
-                max-width: 240px;
-            }
+    .nav-links {
+        display: none;
+    }
 
-            .hero {
+    .mobile-menu {
+        display: block;
+        flex-shrink: 0;
+    }
 
-                grid-template-columns: 1fr;
-
-                text-align: center;
-
-                padding-top: 45px;
-            }
-
-            .hero-content {
-                margin: auto;
-            }
-
-            .hero p {
-
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .hero-buttons {
-
-                justify-content: center;
-            }
-
-            .hero-visual {
-                min-height: 330px;
-            }
-
-            .apps-grid {
-
-                grid-template-columns:
-                    repeat(3,1fr);
-            }
-
-            .featured-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-            .footer-grid {
-
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-        }
+    .nav-search {
+        width: auto;
+        max-width: none;
+        flex: 1;
+        height: 40px;
+        margin-left: auto;
+    }
 
 
-        @media(max-width:560px) {
+    /* MAIN */
 
-            main {
-                width: 92%;
-            }
+    main {
+        width: 92%;
+        max-width: none;
+    }
 
-            .logo {
-                font-size: 17px;
-            }
 
-            .logo-icon {
+    /* ==================================
+       HERO
+    ================================== */
 
-                width: 35px;
-                height: 35px;
-            }
+    .hero {
 
-            .nav-search {
-                max-width: none;
-            }
+        min-height: auto;
 
-            .hero h1 {
+        display: flex;
+        flex-direction: column;
 
-                font-size: 42px;
+        gap: 20px;
 
-                letter-spacing: -2px;
-            }
+        padding:
+            30px 0
+            10px;
 
-            .hero p {
-                font-size: 13px;
-            }
+    }
 
-            .hero-phone {
+    .hero-content {
 
-                width: 220px;
-                height: 330px;
-            }
+        width: 100%;
+        max-width: 100%;
 
-            .floating-card {
-                right: 0;
-            }
+        text-align: center;
 
-            .categories {
+    }
 
-                grid-template-columns:
-                    repeat(3,1fr);
-            }
+    .hero-badge {
 
-            .category {
-                min-height: 90px;
-            }
+        margin-bottom: 15px;
 
-            .apps-grid {
+        font-size: 10px;
 
-                grid-template-columns:
-                    repeat(2,1fr);
-            }
+        padding:
+            7px 11px;
 
-            .app-card {
-                padding: 13px;
-            }
+    }
 
-            .app-icon {
+    .hero h1 {
 
-                width: 58px;
-                height: 58px;
-            }
+        font-size:
+            clamp(36px, 9vw, 52px);
 
-            .footer-grid {
+        line-height: 1.04;
 
-                grid-template-columns:
-                    1fr;
+        letter-spacing: -2px;
 
-                gap: 30px;
-            }
+        margin-bottom: 15px;
 
-            .copyright {
+    }
 
-                flex-direction: column;
+    .hero p {
 
-                gap: 8px;
-            }
+        font-size: 13px;
 
-        }
+        line-height: 1.6;
+
+        max-width: 500px;
+
+        margin:
+            0 auto 18px;
+
+    }
+
+    .hero-buttons {
+
+        justify-content: center;
+
+        gap: 8px;
+
+    }
+
+    .btn {
+
+        height: 43px;
+
+        padding:
+            0 15px;
+
+        font-size: 11px;
+
+    }
+
+
+    /* ==================================
+       HERO VISUAL
+    ================================== */
+
+    .hero-visual {
+
+        min-height: 250px;
+
+        width: 100%;
+
+        transform:
+            scale(.82);
+
+        margin-top: -25px;
+
+        margin-bottom: -35px;
+
+    }
+
+    .hero-phone {
+
+        width: 190px;
+
+        height: 285px;
+
+        border-radius: 28px;
+
+        transform:
+            rotate(5deg);
+
+    }
+
+    .phone-screen {
+
+        border-radius: 20px;
+
+    }
+
+    .floating-card {
+
+        width: 160px;
+
+        right: 2%;
+
+        bottom: 10px;
+
+        padding: 11px;
+
+    }
+
+
+    /* ==================================
+       SECTIONS
+    ================================== */
+
+    .section {
+
+        padding:
+            25px 0;
+
+    }
+
+    .section-header {
+
+        margin-bottom: 15px;
+
+    }
+
+    .section-title h2 {
+
+        font-size: 20px;
+
+    }
+
+    .section-title p {
+
+        font-size: 10px;
+
+        margin-top: 5px;
+
+    }
+
+    .view-all {
+
+        font-size: 10px;
+
+    }
+
+
+    /* ==================================
+       CATEGORIES
+    ================================== */
+
+    .categories {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 8px;
+
+    }
+
+    .category {
+
+        min-height: 75px;
+
+        border-radius: 13px;
+
+        gap: 6px;
+
+    }
+
+    .category-icon {
+
+        width: 32px;
+
+        height: 32px;
+
+        border-radius: 9px;
+
+        font-size: 12px;
+
+    }
+
+    .category span {
+
+        font-size: 9px;
+
+    }
+
+
+    /* ==================================
+       APPS
+    ================================== */
+
+    .apps-grid {
+
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
+
+        width: 100%;
+
+    }
+
+
+    .app-card {
+
+        width: 100%;
+
+        min-width: 0;
+
+        padding: 12px;
+
+        border-radius: 14px;
+
+    }
+
+
+    .app-icon {
+
+        width: 55px;
+
+        height: 55px;
+
+        border-radius: 14px;
+
+        margin-bottom: 10px;
+
+    }
+
+
+    .app-name {
+
+        font-size: 12px;
+
+        margin-bottom: 4px;
+
+    }
+
+
+    .app-developer {
+
+        font-size: 9px;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    .rating {
+
+        font-size: 9px;
+
+    }
+
+
+    .downloads {
+
+        font-size: 8px;
+
+    }
+
+
+    .verified {
+
+        top: 10px;
+
+        right: 10px;
+
+        width: 17px;
+
+        height: 17px;
+
+        font-size: 8px;
+
+    }
+
+
+    /* ==================================
+       FEATURED
+    ================================== */
+
+    .featured-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 10px;
+
+    }
+
+    .featured-card {
+
+        min-height: 150px;
+
+        padding: 18px;
+
+        border-radius: 15px;
+
+    }
+
+
+    /* ==================================
+       FOOTER
+    ================================== */
+
+    .footer-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 25px;
+
+    }
+
+}
+
+
+/* ==========================================
+   SMALL PHONES
+========================================== */
+
+@media (max-width: 560px) {
+
+    .header {
+
+        height: 60px;
+
+    }
+
+    .logo {
+
+        font-size: 16px;
+
+        gap: 7px;
+
+    }
+
+    .logo-icon {
+
+        width: 33px;
+
+        height: 33px;
+
+        border-radius: 10px;
+
+        font-size: 15px;
+
+    }
+
+    .nav-search {
+
+        height: 38px;
+
+        padding:
+            0 10px;
+
+    }
+
+    .nav-search input {
+
+        font-size: 11px;
+
+    }
+
+    .mobile-menu {
+
+        width: 38px;
+
+        height: 38px;
+
+    }
+
+
+    /* HERO */
+
+    .hero {
+
+        padding-top: 22px;
+
+        gap: 5px;
+
+    }
+
+    .hero-badge {
+
+        font-size: 9px;
+
+        margin-bottom: 12px;
+
+    }
+
+    .hero h1 {
+
+        font-size: 38px;
+
+        letter-spacing:
+            -1.8px;
+
+        margin-bottom: 12px;
+
+    }
+
+    .hero p {
+
+        font-size: 11px;
+
+        line-height: 1.55;
+
+        margin-bottom: 14px;
+
+    }
+
+    .hero-buttons {
+
+        gap: 7px;
+
+    }
+
+    .btn {
+
+        height: 39px;
+
+        padding:
+            0 12px;
+
+        font-size: 10px;
+
+    }
+
+
+    /* MAKE HERO MUCH SHORTER */
+
+    .hero-visual {
+
+        min-height: 185px;
+
+        transform:
+            scale(.62);
+
+        margin-top: -45px;
+
+        margin-bottom: -65px;
+
+    }
+
+    .hero-phone {
+
+        width: 190px;
+
+        height: 285px;
+
+    }
+
+    .floating-card {
+
+        width: 145px;
+
+        right: 0;
+
+        bottom: 0;
+
+    }
+
+
+    /* SECTIONS */
+
+    .section {
+
+        padding:
+            20px 0;
+
+    }
+
+
+    /* CATEGORIES */
+
+    .categories {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 6px;
+
+    }
+
+    .category {
+
+        min-height: 70px;
+
+        border-radius: 11px;
+
+    }
+
+    .category-icon {
+
+        width: 29px;
+
+        height: 29px;
+
+        font-size: 11px;
+
+    }
+
+    .category span {
+
+        font-size: 8px;
+
+    }
+
+
+    /* APP GRID */
+
+    .apps-grid {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 8px;
+
+    }
+
+
+    .app-card {
+
+        padding: 10px;
+
+        border-radius: 13px;
+
+    }
+
+
+    .app-icon {
+
+        width: 52px;
+
+        height: 52px;
+
+        border-radius: 13px;
+
+        margin-bottom: 9px;
+
+    }
+
+
+    .app-name {
+
+        font-size: 11px;
+
+    }
+
+
+    .app-developer {
+
+        font-size: 8px;
+
+    }
+
+
+    .rating {
+
+        font-size: 8px;
+
+    }
+
+
+    .downloads {
+
+        font-size: 7px;
+
+    }
+
+
+    /* FEATURED */
+
+    .featured-card {
+
+        min-height: 140px;
+
+        padding: 16px;
+
+    }
+
+
+    /* FOOTER */
+
+    .footer-grid {
+
+        grid-template-columns:
+            1fr;
+
+        gap: 25px;
+
+    }
+
+    .copyright {
+
+        flex-direction: column;
+
+        gap: 7px;
+
+    }
+
+}
 
     </style>
 
