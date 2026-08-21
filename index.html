@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -25,7 +26,10 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 
-    <!-- Firebase -->
+    <!-- =====================================================
+         FIREBASE
+    ====================================================== -->
+
     <script type="module">
 
         import { initializeApp }
@@ -41,143 +45,212 @@
         from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
-        /* =========================================
+        /* =====================================================
            FIREBASE CONFIG
-        ========================================= */
+        ====================================================== */
 
         const firebaseConfig = {
 
-            apiKey: "AIzaSyABU60kwZik2S1_8Dx7sfT6HfGBIr935Bw",
-  authDomain: "apkcity-30fa1.firebaseapp.com",
-  projectId: "apkcity-30fa1",
-  storageBucket: "apkcity-30fa1.firebasestorage.app",
-  messagingSenderId: "965202080311",
-  appId: "1:965202080311:web:6419bf702de3dcf024c5b2"
+            apiKey: "AIzaSyABU60kwZikS2_1Dx8D7sfT6HfGBIr935Bw",
+
+            authDomain:
+                "apkcity-30fa1.firebaseapp.com",
+
+            projectId:
+                "apkcity-30fa1",
+
+            storageBucket:
+                "apkcity-30fa1.firebasestorage.app",
+
+            messagingSenderId:
+                "965202080311",
+
+            appId:
+                "1:965202080311:web:6419bf702de3dcf024c5b2"
 
         };
 
 
-        /* =========================================
+        /* =====================================================
            INITIALIZE FIREBASE
-        ========================================= */
+        ====================================================== */
 
-        const app = initializeApp(firebaseConfig);
+        const app =
+            initializeApp(firebaseConfig);
 
-        const db = getFirestore(app);
+        const db =
+            getFirestore(app);
 
 
-        /* =========================================
-           LOAD APPS
-        ========================================= */
+        /* =====================================================
+           LOAD APPS FROM FIRESTORE
+        ====================================================== */
 
         async function loadApps() {
 
-    const gamesGrid =
-        document.getElementById("gamesGrid");
+            const gamesGrid =
+                document.getElementById("gamesGrid");
 
-    try {
 
-        gamesGrid.innerHTML = `
-            <div class="loading-state">
-                <i class="fa-solid fa-spinner fa-spin"></i>
-                <span>Loading games...</span>
-            </div>
-        `;
+            /* Safety check */
 
-                /*
-                 * Get apps from Firestore
-                 *
-                 * Collection:
-                 * apps
-                 *
-                 * Newest apps first
-                 */
+            if (!gamesGrid) {
+
+                console.error(
+                    "APKCity: gamesGrid element was not found."
+                );
+
+                return;
+
+            }
+
+
+            /* Show loading */
+
+            gamesGrid.innerHTML = `
+
+                <div class="loading-state">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    <span>
+                        Loading games...
+                    </span>
+
+                </div>
+
+            `;
+
+
+            try {
 
                 let snapshot;
 
 
+                /* =================================================
+                   FIRST TRY:
+                   Load newest apps first
+                ================================================= */
+
                 try {
 
-                    const appsQuery = query(
-                        collection(db, "apps"),
-                        orderBy("createdAt", "desc")
-                    );
+                    const appsQuery =
+                        query(
+                            collection(db, "apps"),
+                            orderBy(
+                                "createdAt",
+                                "desc"
+                            )
+                        );
 
-                    snapshot = await getDocs(appsQuery);
-
-                } catch (error) {
-
-                    /*
-                     * If some old documents do not have
-                     * createdAt, load the collection normally.
-                     */
-
-                    console.warn(
-                        "createdAt ordering failed. Loading apps normally.",
-                        error
-                    );
 
                     snapshot =
                         await getDocs(
-                            collection(db, "apps")
+                            appsQuery
+                        );
+
+
+                } catch (orderError) {
+
+                    /*
+                     * If createdAt is missing or the query
+                     * cannot be used, load the collection
+                     * without ordering.
+                     */
+
+                    console.warn(
+                        "APKCity: createdAt ordering failed. Loading apps without ordering.",
+                        orderError
+                    );
+
+
+                    snapshot =
+                        await getDocs(
+                            collection(
+                                db,
+                                "apps"
+                            )
                         );
 
                 }
 
 
+                /* =================================================
+                   CONVERT FIRESTORE DOCUMENTS TO APP OBJECTS
+                ================================================= */
+
                 const apps = [];
 
 
-                snapshot.forEach(doc => {
+                snapshot.forEach(
+                    function (doc) {
 
-                    const data = doc.data();
+                        const data =
+                            doc.data();
 
-                    apps.push({
 
-                        id: doc.id,
+                        apps.push({
 
-                        name: data.name || "Unnamed App",
+                            id:
+                                doc.id,
 
-                        developer:
-                            data.developer ||
-                            "APKCity Developer",
 
-                        category:
-                            data.category ||
-                            "Apps",
+                            name:
+                                data.name ||
+                                "Unnamed App",
 
-                        rating:
-                            data.rating ||
-                            "4.8",
 
-                        downloads:
-                            data.downloads ||
-                            "New",
+                            developer:
+                                data.developer ||
+                                "APKCity Developer",
 
-                        icon:
-                            data.icon ||
-                            "assets/logo.png",
 
-                        apk:
-                            data.apk ||
-                            "#",
+                            category:
+                                data.category ||
+                                "Apps",
 
-                        version:
-                            data.version ||
-                            "",
 
-                        size:
-                            data.size ||
-                            "",
+                            rating:
+                                data.rating ??
+                                "4.8",
 
-                        tags:
-                            Array.isArray(data.tags)
-                                ? data.tags
-                                : []
 
-                    });
+                            downloads:
+                                data.downloads ??
+                                "New",
 
-                });
+
+                            icon:
+                                data.icon ||
+                                "assets/logo.png",
+
+
+                            apk:
+                                data.apk ||
+                                "#",
+
+
+                            version:
+                                data.version ||
+                                "",
+
+
+                            size:
+                                data.size ||
+                                "",
+
+
+                            tags:
+                                Array.isArray(
+                                    data.tags
+                                )
+                                    ? data.tags
+                                    : []
+
+                        });
+
+                    }
+                );
 
 
                 console.log(
@@ -186,56 +259,50 @@
                 );
 
 
-                /*
-                 * Split apps and games
-                 */
+                /* =================================================
+                   SPLIT GAMES
+                ================================================= */
 
                 const games =
-                    apps.filter(app => {
+                    apps.filter(
+                        function (app) {
 
-                        const category =
-                            String(app.category)
-                            .toLowerCase();
-
-                        const tags =
-                            app.tags
-                            .join(" ")
-                            .toLowerCase();
-
-
-                        return (
-                            category.includes("game") ||
-                            tags.includes("game")
-                        );
-
-                    });
+                            const category =
+                                String(
+                                    app.category
+                                )
+                                .toLowerCase()
+                                .trim();
 
 
-                const normalApps =
-                    apps.filter(app => {
-
-                        const category =
-                            String(app.category)
-                            .toLowerCase();
-
-                        const tags =
-                            app.tags
-                            .join(" ")
-                            .toLowerCase();
+                            const tags =
+                                Array.isArray(
+                                    app.tags
+                                )
+                                    ? app.tags
+                                        .join(" ")
+                                        .toLowerCase()
+                                    : "";
 
 
-                        const games = apps.filter(app => {
+                            return (
+                                category.includes("game") ||
+                                tags.includes("game")
+                            );
 
-    return String(app.category)
-        .toLowerCase()
-        .trim() === "games";
-
-      });
+                        }
+                    );
 
 
-                /*
-                 * Render games
-                 */
+                console.log(
+                    "APKCity games:",
+                    games
+                );
+
+
+                /* =================================================
+                   RENDER GAMES
+                ================================================= */
 
                 renderApps(
                     gamesGrid,
@@ -243,14 +310,15 @@
                 );
 
 
-                /*
-                 * Update app count
-                 */
+                /* =================================================
+                   UPDATE APP COUNT IF ELEMENT EXISTS
+                ================================================= */
 
                 const count =
                     document.getElementById(
                         "appCount"
                     );
+
 
                 if (count) {
 
@@ -260,13 +328,17 @@
                 }
 
 
-                /*
-                 * Re-enable search
-                 */
+                /* =================================================
+                   SAVE GLOBAL APP DATA
+                ================================================= */
 
                 window.apkCityApps =
                     apps;
 
+
+                /* =================================================
+                   ENABLE SEARCH
+                ================================================= */
 
                 setupSearch(apps);
 
@@ -274,24 +346,27 @@
             } catch (error) {
 
                 console.error(
-                    "Error loading apps:",
+                    "APKCity: Error loading apps from Firestore:",
                     error
                 );
 
 
                 gamesGrid.innerHTML = `
+
                     <div class="empty-state">
 
-                        <i class="fa-solid fa-gamepad"></i>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
 
-                        <h3>No games available</h3>
+                        <h3>
+                            Unable to load games
+                        </h3>
 
                         <p>
-                            Games will appear here when
-                            they are added.
+                            Please try again later.
                         </p>
 
                     </div>
+
                 `;
 
             }
@@ -299,9 +374,9 @@
         }
 
 
-        /* =========================================
+        /* =====================================================
            CREATE APP CARD
-        ========================================= */
+        ====================================================== */
 
         function createAppCard(app) {
 
@@ -313,11 +388,9 @@
                 "app-card";
 
 
-            /*
-             * Clicking the card
-             *
-             * If an APK exists, download it.
-             */
+            /* =================================================
+               APK LINK
+            ================================================= */
 
             if (
                 app.apk &&
@@ -338,9 +411,10 @@
                 card.href =
                     "#";
 
+
                 card.addEventListener(
                     "click",
-                    event => {
+                    function (event) {
 
                         event.preventDefault();
 
@@ -350,48 +424,58 @@
             }
 
 
-            /*
-             * VERIFIED BADGE
-             */
+            /* =================================================
+               VERIFIED BADGE
+            ================================================= */
 
             const verified =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             verified.className =
                 "verified";
 
-            verified.innerHTML =
-                `<i class="fa-solid fa-check"></i>`;
+
+            verified.innerHTML = `
+                <i class="fa-solid fa-check"></i>
+            `;
 
 
-            /*
-             * ICON
-             */
+            /* =================================================
+               APP ICON
+            ================================================= */
 
             const icon =
-                document.createElement("img");
+                document.createElement(
+                    "img"
+                );
+
 
             icon.className =
                 "app-icon";
 
+
             icon.src =
                 app.icon;
 
+
             icon.alt =
                 app.name;
+
 
             icon.loading =
                 "lazy";
 
 
-            /*
-             * Broken image fallback
-             */
+            /* Broken image fallback */
 
             icon.onerror =
                 function () {
 
-                    this.onerror = null;
+                    this.onerror =
+                        null;
 
                     this.src =
                         "assets/logo.png";
@@ -399,63 +483,90 @@
                 };
 
 
-            /*
-             * NAME
-             */
+            /* =================================================
+               APP NAME
+            ================================================= */
 
             const name =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             name.className =
                 "app-name";
+
 
             name.textContent =
                 app.name;
 
 
-            /*
-             * DEVELOPER
-             */
+            /* =================================================
+               DEVELOPER
+            ================================================= */
 
             const developer =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             developer.className =
                 "app-developer";
+
 
             developer.textContent =
                 app.developer;
 
 
-            /*
-             * META
-             */
+            /* =================================================
+               META
+            ================================================= */
 
             const meta =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             meta.className =
                 "app-meta";
 
 
+            /* Rating */
+
             const rating =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             rating.className =
                 "rating";
 
-            rating.innerHTML =
-                `
-                    <i class="fa-solid fa-star"></i>
-                    ${escapeHTML(String(app.rating))}
-                `;
 
+            rating.innerHTML = `
+
+                <i class="fa-solid fa-star"></i>
+
+                ${escapeHTML(
+                    String(app.rating)
+                )}
+
+            `;
+
+
+            /* Downloads */
 
             const downloads =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             downloads.className =
                 "downloads";
+
 
             downloads.textContent =
                 formatDownloads(
@@ -463,64 +574,114 @@
                 );
 
 
+            /* Add meta */
+
             meta.appendChild(
                 rating
             );
+
 
             meta.appendChild(
                 downloads
             );
 
 
-            /*
-             * ADD EVERYTHING
-             */
+            /* =================================================
+               ADD CARD CONTENT
+            ================================================= */
 
             card.appendChild(
                 verified
             );
 
+
             card.appendChild(
                 icon
             );
+
 
             card.appendChild(
                 name
             );
 
+
             card.appendChild(
                 developer
             );
+
 
             card.appendChild(
                 meta
             );
 
 
-            /*
-             * Extra information tooltip
-             */
+            /* =================================================
+               EXTRA INFORMATION
+            ================================================= */
 
             const extra = [];
 
-            if (app.version)
+
+            if (app.version) {
+
                 extra.push(
                     "Version: " +
                     app.version
                 );
 
-            if (app.size)
+            }
+
+
+            if (app.size) {
+
                 extra.push(
                     "Size: " +
                     app.size
                 );
 
+            }
+
+
             if (extra.length) {
 
                 card.title =
-                    extra.join(" • ");
+                    extra.join(
+                        " • "
+                    );
 
             }
+
+
+            /* =================================================
+               SEARCH DATA
+            ================================================= */
+
+            card.dataset.name =
+                String(
+                    app.name
+                ).toLowerCase();
+
+
+            card.dataset.developer =
+                String(
+                    app.developer
+                ).toLowerCase();
+
+
+            card.dataset.category =
+                String(
+                    app.category
+                ).toLowerCase();
+
+
+            card.dataset.keywords =
+                Array.isArray(
+                    app.tags
+                )
+                    ? app.tags
+                        .join(" ")
+                        .toLowerCase()
+                    : "";
 
 
             return card;
@@ -528,31 +689,42 @@
         }
 
 
-        /* =========================================
+        /* =====================================================
            RENDER APPS
-        ========================================= */
+        ====================================================== */
 
         function renderApps(
             container,
             apps
         ) {
 
+            if (!container) {
+
+                return;
+
+            }
+
+
             container.innerHTML =
                 "";
 
 
-            if (!apps.length) {
+            /* No games */
+
+            if (!apps || !apps.length) {
 
                 container.innerHTML = `
 
                     <div class="empty-state">
 
-                        <i class="fa-solid fa-box-open"></i>
+                        <i class="fa-solid fa-gamepad"></i>
 
-                        <h3>No apps available</h3>
+                        <h3>
+                            No games available
+                        </h3>
 
                         <p>
-                            New apps will appear here
+                            New games will appear here
                             when they are published.
                         </p>
 
@@ -565,24 +737,24 @@
             }
 
 
-            /*
-             * Show all apps
-             */
+            /* Render every game */
 
-            apps.forEach(app => {
+            apps.forEach(
+                function (app) {
 
-                container.appendChild(
-                    createAppCard(app)
-                );
+                    container.appendChild(
+                        createAppCard(app)
+                    );
 
-            });
+                }
+            );
 
         }
 
 
-        /* =========================================
+        /* =====================================================
            DOWNLOAD FORMATTER
-        ========================================= */
+        ====================================================== */
 
         function formatDownloads(value) {
 
@@ -597,14 +769,16 @@
             }
 
 
-            return String(value);
+            return String(
+                value
+            );
 
         }
 
 
-        /* =========================================
+        /* =====================================================
            SEARCH
-        ========================================= */
+        ====================================================== */
 
         function setupSearch(apps) {
 
@@ -614,16 +788,23 @@
                 );
 
 
-            if (!searchInput)
+            if (!searchInput) {
+
                 return;
+
+            }
 
 
             /*
-             * Remove old listener by cloning
+             * Clone the input to remove any
+             * previous Firebase search listener.
              */
 
             const newInput =
-                searchInput.cloneNode(true);
+                searchInput.cloneNode(
+                    true
+                );
+
 
             searchInput.parentNode.replaceChild(
                 newInput,
@@ -637,20 +818,24 @@
 
                     const search =
                         this.value
-                        .toLowerCase()
-                        .trim();
+                            .toLowerCase()
+                            .trim();
 
 
-                    const appCards =
+                    const cards =
                         document.querySelectorAll(
                             ".app-card"
                         );
 
 
+                    /* =================================================
+                       EMPTY SEARCH
+                    ================================================= */
+
                     if (!search) {
 
-                        appCards.forEach(
-                            card => {
+                        cards.forEach(
+                            function (card) {
 
                                 card.style.display =
                                     "";
@@ -663,142 +848,50 @@
                     }
 
 
-                    apps.forEach(
-                        (app, index) => {
+                    /* =================================================
+                       SEARCH EACH CARD
+                    ================================================= */
 
-                            /*
-                             * Search by:
-                             *
-                             * name
-                             * developer
-                             * category
-                             * tags
-                             */
+                    cards.forEach(
+                        function (card) {
 
-                            const searchable = [
-
-                                app.name,
-
-                                app.developer,
-
-                                app.category,
-
-                                ...(app.tags || [])
-
-                            ]
-                            .join(" ")
-                            .toLowerCase();
+                            const name =
+                                card.dataset.name ||
+                                "";
 
 
-                            /*
-                             * Find cards by data
-                             */
-
-                            const cards =
-                                document.querySelectorAll(
-                                    ".app-card"
-                                );
+                            const developer =
+                                card.dataset.developer ||
+                                "";
 
 
-                            /*
-                             * Cards are rendered
-                             * in app/game sections.
-                             */
-
-                            cards.forEach(card => {
-
-                                const name =
-                                    card
-                                    .querySelector(
-                                        ".app-name"
-                                    )
-                                    ?.textContent
-                                    .toLowerCase()
-                                    || "";
+                            const category =
+                                card.dataset.category ||
+                                "";
 
 
-                                const developer =
-                                    card
-                                    .querySelector(
-                                        ".app-developer"
-                                    )
-                                    ?.textContent
-                                    .toLowerCase()
-                                    || "";
+                            const keywords =
+                                card.dataset.keywords ||
+                                "";
 
 
-                                if (
-                                    name.includes(search) ||
-                                    developer.includes(search) ||
-                                    searchable.includes(search)
-                                ) {
-
-                                    card.style.display =
-                                        "";
-
-                                }
-
-                            });
-
-                        }
-                    );
+                            const searchableText =
+                                name + " " +
+                                developer + " " +
+                                category + " " +
+                                keywords;
 
 
-                    /*
-                     * Hide cards that don't match
-                     */
+                            if (
+                                searchableText.includes(
+                                    search
+                                )
+                            ) {
 
-                    const allCards =
-                        document.querySelectorAll(
-                            ".app-card"
-                        );
+                                card.style.display =
+                                    "";
 
-
-                    allCards.forEach(card => {
-
-                        const name =
-                            card
-                            .querySelector(
-                                ".app-name"
-                            )
-                            ?.textContent
-                            .toLowerCase()
-                            || "";
-
-
-                        const developer =
-                            card
-                            .querySelector(
-                                ".app-developer"
-                            )
-                            ?.textContent
-                            .toLowerCase()
-                            || "";
-
-
-                        if (
-                            !name.includes(search) &&
-                            !developer.includes(search)
-                        ) {
-
-                            /*
-                             * Check whether the
-                             * full app data matches.
-                             */
-
-                            const matchingApp =
-                                apps.find(
-                                    app =>
-                                        app.name
-                                        .toLowerCase()
-                                        .includes(search) &&
-                                        app.name
-                                        .toLowerCase()
-                                        === name
-                                );
-
-
-                            if (!matchingApp) {
+                            } else {
 
                                 card.style.display =
                                     "none";
@@ -806,8 +899,7 @@
                             }
 
                         }
-
-                    });
+                    );
 
                 }
             );
@@ -815,30 +907,43 @@
         }
 
 
-        /* =========================================
+        /* =====================================================
            ESCAPE HTML
-        ========================================= */
+        ====================================================== */
 
         function escapeHTML(value) {
 
-            return value
+            return String(value)
                 .replace(
                     /[&<>"']/g,
-                    character => {
+                    function (character) {
 
                         const entities = {
 
-                            "&": "&amp;",
-                            "<": "&lt;",
-                            ">": "&gt;",
-                            '"': "&quot;",
-                            "'": "&#039;"
+                            "&":
+                                "&amp;",
+
+                            "<":
+                                "&lt;",
+
+                            ">":
+                                "&gt;",
+
+                            '"':
+                                "&quot;",
+
+                            "'":
+                                "&#039;"
 
                         };
 
-                        return entities[
+
+                        return (
+                            entities[
+                                character
+                            ] ||
                             character
-                        ];
+                        );
 
                     }
                 );
@@ -846,14 +951,25 @@
         }
 
 
-        /* =========================================
-           START
-        ========================================= */
+        /* =====================================================
+           START APKCITY
+        ====================================================== */
 
-        document.addEventListener(
-            "DOMContentLoaded",
-            loadApps
-        );
+        if (
+            document.readyState ===
+            "loading"
+        ) {
+
+            document.addEventListener(
+                "DOMContentLoaded",
+                loadApps
+            );
+
+        } else {
+
+            loadApps();
+
+        }
 
     </script>
 
@@ -1006,7 +1122,6 @@
 
             transition:
                 .2s ease;
-
         }
 
         .admin-lock:hover {
@@ -1021,7 +1136,6 @@
 
             transform:
                 translateY(-1px);
-
         }
 
 
@@ -1132,7 +1246,6 @@
             box-shadow:
                 0 0 0 4px
                 rgba(124,92,255,.08);
-
         }
 
         .nav-search i {
@@ -1192,7 +1305,6 @@
             max-width: 1450px;
 
             margin: auto;
-
         }
 
 
@@ -2165,701 +2277,671 @@
 
         @media(max-width:1100px) {
 
-    .nav-links.mobile-open {
-        display: flex !important;
-        position: absolute;
-        top: 74px;
-        left: 0;
-        right: 0;
+            .nav-links.mobile-open {
 
-        padding: 20px;
+                display: flex !important;
 
-        background: rgba(8,10,15,.98);
+                position: absolute;
 
-        flex-direction: column;
-        align-items: flex-start;
+                top: 74px;
 
-        gap: 18px;
+                left: 0;
 
-        border-bottom: 1px solid rgba(255,255,255,.07);
+                right: 0;
 
-        box-shadow: 0 20px 40px rgba(0,0,0,.35);
+                padding: 20px;
 
-        z-index: 9999;
-    }
+                background:
+                    rgba(8,10,15,.98);
 
-    .nav-links.mobile-open a {
-        display: block;
-        width: 100%;
-    }
+                flex-direction: column;
 
-}
+                align-items: flex-start;
+
+                gap: 18px;
+
+                border-bottom:
+                    1px solid
+                    rgba(255,255,255,.07);
+
+                box-shadow:
+                    0 20px 40px
+                    rgba(0,0,0,.35);
+
+                z-index: 9999;
+            }
+
+            .nav-links.mobile-open a {
+
+                display: block;
+
+                width: 100%;
+            }
+
+        }
+
 
         /* ==========================================
-   TABLET / MOBILE
-========================================== */
+           TABLET / MOBILE
+        ========================================== */
 
-@media (max-width: 800px) {
+        @media (max-width: 800px) {
 
-    /* HEADER */
+            .header {
 
-    .header {
-        height: 64px;
-        padding: 0 4%;
-    }
+                height: 64px;
 
-    .nav {
-        gap: 10px;
-    }
+                padding: 0 4%;
+            }
 
-    .nav-links {
-        display: none;
-    }
+            .nav {
 
-    .mobile-menu {
-        display: block;
-        flex-shrink: 0;
-    }
+                gap: 10px;
+            }
 
-    .nav-search {
-        width: auto;
-        max-width: none;
-        flex: 1;
-        height: 40px;
-        margin-left: auto;
-    }
+            .nav-links {
 
+                display: none;
+            }
 
-    /* MAIN */
+            .mobile-menu {
 
-    main {
-        width: 92%;
-        max-width: none;
-    }
+                display: block;
 
+                flex-shrink: 0;
+            }
 
-    /* ==================================
-       HERO
-    ================================== */
+            .nav-search {
 
-    .hero {
-    min-height: auto;
+                width: auto;
 
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+                max-width: none;
 
-    align-items: center;
-    gap: 10px;
+                flex: 1;
 
-    padding: 25px 0 10px;
-}
-    
-   .hero-content {
-    width: 100%;
-    max-width: 100%;
-    text-align: left;
-}
+                height: 40px;
 
-    .hero-badge {
+                margin-left: auto;
+            }
 
-        margin-bottom: 15px;
 
-        font-size: 10px;
+            main {
 
-        padding:
-            7px 11px;
+                width: 92%;
 
-    }
+                max-width: none;
+            }
 
-    .hero h1 {
 
-        font-size:
-            clamp(36px, 9vw, 52px);
+            /* HERO */
 
-        line-height: 1.04;
+            .hero {
 
-        letter-spacing: -2px;
+                min-height: auto;
 
-        margin-bottom: 15px;
+                display: grid;
 
-    }
+                grid-template-columns:
+                    1fr 1fr;
 
-    .hero p {
+                align-items: center;
 
-        font-size: 13px;
+                gap: 10px;
 
-        line-height: 1.6;
+                padding:
+                    25px 0 10px;
+            }
 
-        max-width: 500px;
+            .hero-content {
 
-        margin:
-            0 auto 18px;
+                width: 100%;
 
-    }
+                max-width: 100%;
 
-   .hero-buttons {
-    justify-content: flex-start;
-    gap: 8px;
-}
+                text-align: left;
+            }
 
-    .btn {
+            .hero-badge {
 
-        height: 43px;
+                margin-bottom: 15px;
 
-        padding:
-            0 15px;
+                font-size: 10px;
 
-        font-size: 11px;
+                padding:
+                    7px 11px;
+            }
 
-    }
+            .hero h1 {
 
+                font-size:
+                    clamp(36px, 9vw, 52px);
 
-    /* ==================================
-       HERO VISUAL
-    ================================== */
+                line-height: 1.04;
 
-   .hero-visual {
-    min-height: 220px;
-    width: 100%;
+                letter-spacing: -2px;
 
-    display: grid;
-    place-items: center;
+                margin-bottom: 15px;
+            }
 
-    transform: scale(.75);
+            .hero p {
 
-    margin: 0;
-}
-    
-    .hero-phone {
+                font-size: 13px;
 
-        width: 190px;
+                line-height: 1.6;
 
-        height: 285px;
+                max-width: 500px;
 
-        border-radius: 28px;
+                margin:
+                    0 auto 18px;
+            }
 
-        transform:
-            rotate(5deg);
+            .hero-buttons {
 
-    }
+                justify-content:
+                    flex-start;
 
-    .phone-screen {
+                gap: 8px;
+            }
 
-        border-radius: 20px;
+            .btn {
 
-    }
+                height: 43px;
 
-    .floating-card {
+                padding:
+                    0 15px;
 
-        width: 160px;
+                font-size: 11px;
+            }
 
-        right: 2%;
 
-        bottom: 10px;
+            /* HERO VISUAL */
 
-        padding: 11px;
+            .hero-visual {
 
-    }
+                min-height: 220px;
 
+                width: 100%;
 
-    /* ==================================
-       SECTIONS
-    ================================== */
+                display: grid;
 
-    .section {
+                place-items: center;
 
-        padding:
-            25px 0;
+                transform:
+                    scale(.75);
 
-    }
+                margin: 0;
+            }
 
-    .section-header {
+            .hero-phone {
 
-        margin-bottom: 15px;
+                width: 190px;
 
-    }
+                height: 285px;
 
-    .section-title h2 {
+                border-radius: 28px;
 
-        font-size: 20px;
+                transform:
+                    rotate(5deg);
+            }
 
-    }
+            .phone-screen {
 
-    .section-title p {
+                border-radius: 20px;
+            }
 
-        font-size: 10px;
+            .floating-card {
 
-        margin-top: 5px;
+                width: 160px;
 
-    }
+                right: 2%;
 
-    .view-all {
+                bottom: 10px;
 
-        font-size: 10px;
+                padding: 11px;
+            }
 
-    }
 
+            /* SECTIONS */
 
-    /* ==================================
-       CATEGORIES
-    ================================== */
+            .section {
 
-    .categories {
+                padding:
+                    25px 0;
+            }
 
-        display: grid;
+            .section-header {
 
-        grid-template-columns:
-            repeat(3, 1fr);
+                margin-bottom: 15px;
+            }
 
-        gap: 8px;
+            .section-title h2 {
 
-    }
+                font-size: 20px;
+            }
 
-    .category {
+            .section-title p {
 
-        min-height: 75px;
+                font-size: 10px;
 
-        border-radius: 13px;
+                margin-top: 5px;
+            }
 
-        gap: 6px;
+            .view-all {
 
-    }
+                font-size: 10px;
+            }
 
-    .category-icon {
 
-        width: 32px;
+            /* CATEGORIES */
 
-        height: 32px;
+            .categories {
 
-        border-radius: 9px;
+                display: grid;
 
-        font-size: 12px;
+                grid-template-columns:
+                    repeat(3, 1fr);
 
-    }
+                gap: 8px;
+            }
 
-    .category span {
+            .category {
 
-        font-size: 9px;
+                min-height: 75px;
 
-    }
+                border-radius: 13px;
 
+                gap: 6px;
+            }
 
-    /* ==================================
-       APPS
-    ================================== */
+            .category-icon {
 
-    .apps-grid {
+                width: 32px;
 
-        display: grid;
+                height: 32px;
 
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+                border-radius: 9px;
 
-        gap: 10px;
+                font-size: 12px;
+            }
 
-        width: 100%;
+            .category span {
 
-    }
+                font-size: 9px;
+            }
 
 
-    .app-card {
+            /* APPS */
 
-        width: 100%;
+            .apps-grid {
 
-        min-width: 0;
+                display: grid;
 
-        padding: 12px;
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
 
-        border-radius: 14px;
+                gap: 10px;
 
-    }
+                width: 100%;
+            }
 
+            .app-card {
 
-    .app-icon {
+                width: 100%;
 
-        width: 55px;
+                min-width: 0;
 
-        height: 55px;
+                padding: 12px;
 
-        border-radius: 14px;
+                border-radius: 14px;
+            }
 
-        margin-bottom: 10px;
+            .app-icon {
 
-    }
+                width: 55px;
 
+                height: 55px;
 
-    .app-name {
+                border-radius: 14px;
 
-        font-size: 12px;
+                margin-bottom: 10px;
+            }
 
-        margin-bottom: 4px;
+            .app-name {
 
-    }
+                font-size: 12px;
 
+                margin-bottom: 4px;
+            }
 
-    .app-developer {
+            .app-developer {
 
-        font-size: 9px;
+                font-size: 9px;
 
-        margin-bottom: 8px;
+                margin-bottom: 8px;
+            }
 
-    }
+            .rating {
 
+                font-size: 9px;
+            }
 
-    .rating {
+            .downloads {
 
-        font-size: 9px;
+                font-size: 8px;
+            }
 
-    }
+            .verified {
 
+                top: 10px;
 
-    .downloads {
+                right: 10px;
 
-        font-size: 8px;
+                width: 17px;
 
-    }
+                height: 17px;
 
+                font-size: 8px;
+            }
 
-    .verified {
 
-        top: 10px;
+            /* FEATURED */
 
-        right: 10px;
+            .featured-grid {
 
-        width: 17px;
+                grid-template-columns:
+                    1fr;
 
-        height: 17px;
+                gap: 10px;
+            }
 
-        font-size: 8px;
+            .featured-card {
 
-    }
+                min-height: 150px;
 
+                padding: 18px;
 
-    /* ==================================
-       FEATURED
-    ================================== */
+                border-radius: 15px;
+            }
 
-    .featured-grid {
 
-        grid-template-columns:
-            1fr;
+            /* FOOTER */
 
-        gap: 10px;
+            .footer-grid {
 
-    }
+                grid-template-columns:
+                    1fr 1fr;
 
-    .featured-card {
+                gap: 25px;
+            }
 
-        min-height: 150px;
+        }
 
-        padding: 18px;
 
-        border-radius: 15px;
+        /* ==========================================
+           SMALL PHONES
+        ========================================== */
 
-    }
+        @media (max-width: 560px) {
 
+            .header {
 
-    /* ==================================
-       FOOTER
-    ================================== */
+                height: 60px;
+            }
 
-    .footer-grid {
+            .logo {
 
-        grid-template-columns:
-            1fr 1fr;
+                font-size: 16px;
 
-        gap: 25px;
+                gap: 7px;
+            }
 
-    }
+            .logo-icon {
 
-}
+                width: 33px;
 
+                height: 33px;
 
-/* ==========================================
-   SMALL PHONES
-========================================== */
+                border-radius: 10px;
 
-@media (max-width: 560px) {
+                font-size: 15px;
+            }
 
-    .header {
+            .nav-search {
 
-        height: 60px;
+                height: 38px;
 
-    }
+                padding:
+                    0 10px;
+            }
 
-    .logo {
+            .nav-search input {
 
-        font-size: 16px;
+                font-size: 11px;
+            }
 
-        gap: 7px;
+            .mobile-menu {
 
-    }
+                width: 38px;
 
-    .logo-icon {
+                height: 38px;
+            }
 
-        width: 33px;
 
-        height: 33px;
+            /* HERO */
 
-        border-radius: 10px;
+            .hero {
 
-        font-size: 15px;
+                display: grid;
 
-    }
+                grid-template-columns:
+                    1fr 1fr;
 
-    .nav-search {
+                align-items: center;
 
-        height: 38px;
+                gap: 4px;
 
-        padding:
-            0 10px;
+                padding-top: 20px;
 
-    }
+                padding-bottom: 5px;
+            }
 
-    .nav-search input {
+            .hero-badge {
 
-        font-size: 11px;
+                font-size: 9px;
 
-    }
+                margin-bottom: 12px;
+            }
 
-    .mobile-menu {
+            .hero h1 {
 
-        width: 38px;
+                font-size: 38px;
 
-        height: 38px;
+                letter-spacing:
+                    -1.8px;
 
-    }
+                margin-bottom: 12px;
+            }
 
+            .hero p {
 
-    /* HERO */
+                font-size: 11px;
 
-   .hero {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+                line-height: 1.55;
 
-    align-items: center;
-    gap: 4px;
+                margin-bottom: 14px;
+            }
 
-    padding-top: 20px;
-    padding-bottom: 5px;
-}
+            .hero-buttons {
 
-    .hero-badge {
+                gap: 7px;
+            }
 
-        font-size: 9px;
+            .btn {
 
-        margin-bottom: 12px;
+                height: 39px;
 
-    }
+                padding:
+                    0 12px;
 
-    .hero h1 {
+                font-size: 10px;
+            }
 
-        font-size: 38px;
 
-        letter-spacing:
-            -1.8px;
+            /* HERO VISUAL */
 
-        margin-bottom: 12px;
+            .hero-visual {
 
-    }
+                min-height: 180px;
 
-    .hero p {
+                width: 100%;
 
-        font-size: 11px;
+                transform:
+                    scale(.58);
 
-        line-height: 1.55;
+                margin: 0;
+            }
 
-        margin-bottom: 14px;
+            .hero-phone {
 
-    }
+                width: 190px;
 
-    .hero-buttons {
+                height: 285px;
+            }
 
-        gap: 7px;
+            .floating-card {
 
-    }
+                width: 145px;
 
-    .btn {
+                right: 0;
 
-        height: 39px;
+                bottom: 0;
+            }
 
-        padding:
-            0 12px;
 
-        font-size: 10px;
+            /* SECTIONS */
 
-    }
+            .section {
 
+                padding:
+                    20px 0;
+            }
 
-    /* MAKE HERO MUCH SHORTER */
 
-   .hero-visual {
-    min-height: 180px;
-    width: 100%;
+            /* CATEGORIES */
 
-    transform: scale(.58);
+            .categories {
 
-    margin: 0;
-}
+                grid-template-columns:
+                    repeat(3, 1fr);
 
-    .hero-phone {
+                gap: 6px;
+            }
 
-        width: 190px;
+            .category {
 
-        height: 285px;
+                min-height: 70px;
 
-    }
+                border-radius: 11px;
+            }
 
-    .floating-card {
+            .category-icon {
 
-        width: 145px;
+                width: 29px;
 
-        right: 0;
+                height: 29px;
 
-        bottom: 0;
+                font-size: 11px;
+            }
 
-    }
+            .category span {
 
+                font-size: 8px;
+            }
 
-    /* SECTIONS */
 
-    .section {
+            /* APP GRID */
 
-        padding:
-            20px 0;
+            .apps-grid {
 
-    }
+                grid-template-columns:
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
 
+                gap: 8px;
+            }
 
-    /* CATEGORIES */
+            .app-card {
 
-    .categories {
+                padding: 10px;
 
-        grid-template-columns:
-            repeat(3, 1fr);
+                border-radius: 13px;
+            }
 
-        gap: 6px;
+            .app-icon {
 
-    }
+                width: 52px;
 
-    .category {
+                height: 52px;
 
-        min-height: 70px;
+                border-radius: 13px;
 
-        border-radius: 11px;
+                margin-bottom: 9px;
+            }
 
-    }
+            .app-name {
 
-    .category-icon {
+                font-size: 11px;
+            }
 
-        width: 29px;
+            .app-developer {
 
-        height: 29px;
+                font-size: 8px;
+            }
 
-        font-size: 11px;
+            .rating {
 
-    }
+                font-size: 8px;
+            }
 
-    .category span {
+            .downloads {
 
-        font-size: 8px;
+                font-size: 7px;
+            }
 
-    }
 
+            /* FEATURED */
 
-    /* APP GRID */
+            .featured-card {
 
-    .apps-grid {
+                min-height: 140px;
 
-        grid-template-columns:
-            repeat(2, minmax(0, 1fr));
+                padding: 16px;
+            }
 
-        gap: 8px;
 
-    }
+            /* FOOTER */
 
+            .footer-grid {
 
-    .app-card {
+                grid-template-columns:
+                    1fr;
 
-        padding: 10px;
+                gap: 25px;
+            }
 
-        border-radius: 13px;
+            .copyright {
 
-    }
+                flex-direction: column;
 
+                gap: 7px;
+            }
 
-    .app-icon {
-
-        width: 52px;
-
-        height: 52px;
-
-        border-radius: 13px;
-
-        margin-bottom: 9px;
-
-    }
-
-
-    .app-name {
-
-        font-size: 11px;
-
-    }
-
-
-    .app-developer {
-
-        font-size: 8px;
-
-    }
-
-
-    .rating {
-
-        font-size: 8px;
-
-    }
-
-
-    .downloads {
-
-        font-size: 7px;
-
-    }
-
-
-    /* FEATURED */
-
-    .featured-card {
-
-        min-height: 140px;
-
-        padding: 16px;
-
-    }
-
-
-    /* FOOTER */
-
-    .footer-grid {
-
-        grid-template-columns:
-            1fr;
-
-        gap: 25px;
-
-    }
-
-    .copyright {
-
-        flex-direction: column;
-
-        gap: 7px;
-
-    }
-
-}
+        }
 
     </style>
 
@@ -2869,15 +2951,21 @@
 <body>
 
 
-<!-- ================================
+<!-- =====================================================
      HEADER
-================================= -->
+====================================================== -->
 
 <header class="header">
 
     <nav class="nav">
 
-        <a href="index.html" class="logo">
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
 
             <div class="logo-icon">
 
@@ -2890,15 +2978,24 @@
         </a>
 
 
+        <!-- NAVIGATION -->
+
         <div class="nav-links">
 
-            <a href="#" class="active">
+            <a
+                href="#"
+                class="active"
+            >
                 Home
             </a>
 
-            <a href="#apps">
-                Apps|Games
+
+            <a
+                href="#games"
+            >
+                Apps | Games
             </a>
+
 
             <a
                 href="login.html"
@@ -2914,9 +3011,14 @@
         </div>
 
 
+        <!-- SEARCH -->
+
         <div class="nav-search">
 
-            <i class="fa-solid fa-magnifying-glass"></i>
+            <i
+                class="fa-solid fa-magnifying-glass"
+            ></i>
+
 
             <input
                 type="text"
@@ -2928,13 +3030,17 @@
         </div>
 
 
+        <!-- MOBILE MENU -->
+
         <button
             class="mobile-menu"
             type="button"
             aria-label="Open menu"
         >
 
-            <i class="fa-solid fa-bars"></i>
+            <i
+                class="fa-solid fa-bars"
+            ></i>
 
         </button>
 
@@ -2943,334 +3049,391 @@
 </header>
 
 
+<!-- =====================================================
+     MAIN
+====================================================== -->
+
 <main>
 
 
-<!-- ================================
-     HERO
-================================= -->
+    <!-- =================================================
+         HERO
+    ================================================== -->
 
-<section class="hero">
+    <section class="hero">
 
-    <div class="hero-content">
 
-        <div class="hero-badge">
+        <div class="hero-content">
 
-            <i class="fa-solid fa-circle"></i>
 
-            Discover the latest Android apps
+            <div class="hero-badge">
+
+                <i
+                    class="fa-solid fa-circle"
+                ></i>
+
+                Discover the latest Android apps
+
+            </div>
+
+
+            <h1>
+
+                Your Android.<br>
+
+                <span>Your City.</span>
+
+            </h1>
+
+
+            <p>
+
+                Discover apps, games and essential Android tools
+                in one beautifully designed marketplace.
+                Find what you need, explore what's new and
+                download with ease.
+
+            </p>
+
+
+            <div class="hero-buttons">
+
+                <a
+                    href="#games"
+                    class="btn btn-primary"
+                >
+
+                    <i
+                        class="fa-solid fa-compass"
+                    ></i>
+
+                    Explore Apps
+
+                </a>
+
+            </div>
 
         </div>
 
 
-        <h1>
+        <!-- HERO VISUAL -->
 
-            Your Android.<br>
-
-            <span>Your City.</span>
-
-        </h1>
+        <div class="hero-visual">
 
 
-        <p>
+            <div class="hero-phone">
 
-            Discover apps, games and essential Android tools
-            in one beautifully designed marketplace.
-            Find what you need, explore what's new and
-            download with ease.
-
-        </p>
+                <div class="phone-screen">
 
 
-        <div class="hero-buttons">
+                    <div class="phone-top">
+
+                        <span>
+                            APKCity
+                        </span>
+
+                        <i
+                            class="fa-solid fa-wifi"
+                        ></i>
+
+                    </div>
+
+
+                    <div class="phone-app">
+
+
+                        <div class="phone-app-icon">
+
+                            <i
+                                class="fa-brands fa-android"
+                            ></i>
+
+                        </div>
+
+
+                        <h3>
+                            APKCity
+                        </h3>
+
+
+                        <small>
+                            Android Marketplace
+                        </small>
+
+
+                        <div class="phone-download">
+
+                            DOWNLOAD
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- FLOATING CARD -->
+
+            <div class="floating-card">
+
+
+                <div class="floating-card-top">
+
+
+                    <div class="floating-icon">
+
+                        <i
+                            class="fa-solid fa-shield-halved"
+                        ></i>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            Trusted Downloads
+                        </strong>
+
+                        <br>
+
+                        <small>
+                            APKCity Verified
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stars">
+
+                    ★★★★★
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         TRENDING GAMES
+    ================================================== -->
+
+    <section
+        class="section"
+        id="games"
+    >
+
+
+        <div class="section-header">
+
+
+            <div class="section-title">
+
+                <h2>
+                    Trending Games
+                </h2>
+
+                <p>
+                    Popular games users are checking out
+                </p>
+
+            </div>
+
 
             <a
-                href="#apps"
-                class="btn btn-primary"
+                href="#games"
+                class="view-all"
             >
 
-                <i class="fa-solid fa-compass"></i>
-
-                Explore Apps
+                View games →
 
             </a>
 
         </div>
 
-    </div>
 
+        <!-- FIRESTORE GAMES -->
 
-    <div class="hero-visual">
-
-        <div class="hero-phone">
-
-            <div class="phone-screen">
-
-                <div class="phone-top">
-
-                    <span>APKCity</span>
-
-                    <i class="fa-solid fa-wifi"></i>
-
-                </div>
-
-
-                <div class="phone-app">
-
-                    <div class="phone-app-icon">
-
-                        <i class="fa-brands fa-android"></i>
-
-                    </div>
-
-
-                    <h3>
-                        APKCity
-                    </h3>
-
-
-                    <small>
-                        Android Marketplace
-                    </small>
-
-
-                    <div class="phone-download">
-
-                        DOWNLOAD
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="floating-card">
-
-            <div class="floating-card-top">
-
-                <div class="floating-icon">
-
-                    <i class="fa-solid fa-shield-halved"></i>
-
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        Trusted Downloads
-                    </strong>
-
-                    <br>
-
-                    <small>
-                        APKCity Verified
-                    </small>
-
-                </div>
-
-            </div>
-
-
-            <div class="stars">
-
-                ★★★★★
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- ================================
-     GAMES
-================================= -->
-<section
-    class="section"
-    id="games"
->
-
-    <div class="section-header">
-
-        <div class="section-title">
-
-            <h2>
-                Trending Games
-            </h2>
-
-            <p>
-                Popular games users are checking out
-            </p>
-
-        </div>
-
-
-        <a
-            href="#games"
-            class="view-all"
+        <div
+            class="apps-grid"
+            id="gamesGrid"
         >
-            View games →
-        </a>
 
-    </div>
+            <div class="loading-state">
 
+                <i
+                    class="fa-solid fa-spinner fa-spin"
+                ></i>
 
-    <div
-        class="apps-grid"
-        id="gamesGrid"
-    >
+                <span>
+                    Loading games...
+                </span>
 
-        <div class="loading-state">
-
-            <i class="fa-solid fa-spinner fa-spin"></i>
-
-            <span>
-                Loading games...
-            </span>
-
-         </div>
-
-      </div>
-
-    </div>
-
-</section>
-
-
-<!-- ================================
-     FEATURED
-================================= -->
-<section class="section">
-
-    <div class="section-header">
-
-        <div class="section-title">
-
-            <h2>
-                Why APKCity?
-            </h2>
-
-            <p>
-                Built for a better Android experience
-            </p>
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <div class="featured-grid">
+    <!-- =================================================
+         FEATURED
+    ================================================== -->
+
+    <section class="section">
 
 
-        <div class="featured-card">
-
-            <h3>
-
-                <i class="fa-solid fa-bolt"></i>
-
-                Fresh Releases
-
-            </h3>
+        <div class="section-header">
 
 
-            <p>
+            <div class="section-title">
 
-                Discover newly released applications
-                and updates without digging through
-                endless pages.
+                <h2>
+                    Why APKCity?
+                </h2>
 
-            </p>
-
-
-            <div class="mini-btn">
-
-                Explore New Apps →
+                <p>
+                    Built for a better Android experience
+                </p>
 
             </div>
 
         </div>
 
 
-        <div class="featured-card">
-
-            <h3>
-
-                <i class="fa-solid fa-shield-halved"></i>
-
-                Organized Library
-
-            </h3>
+        <div class="featured-grid">
 
 
-            <p>
+            <!-- CARD 1 -->
 
-                Apps are organized into clear categories
-                so you can quickly find the software
-                you're looking for.
+            <div class="featured-card">
 
-            </p>
+                <h3>
+
+                    <i
+                        class="fa-solid fa-bolt"
+                    ></i>
+
+                    Fresh Releases
+
+                </h3>
 
 
-            <div class="mini-btn">
+                <p>
 
-                Browse Library →
+                    Discover newly released applications
+                    and updates without digging through
+                    endless pages.
+
+                </p>
+
+
+                <div class="mini-btn">
+
+                    Explore New Apps →
+
+                </div>
 
             </div>
+
+
+            <!-- CARD 2 -->
+
+            <div class="featured-card">
+
+                <h3>
+
+                    <i
+                        class="fa-solid fa-shield-halved"
+                    ></i>
+
+                    Organized Library
+
+                </h3>
+
+
+                <p>
+
+                    Apps are organized into clear categories
+                    so you can quickly find the software
+                    you're looking for.
+
+                </p>
+
+
+                <div class="mini-btn">
+
+                    Browse Library →
+
+                </div>
+
+            </div>
+
+
+            <!-- CARD 3 -->
+
+            <div class="featured-card">
+
+                <h3>
+
+                    <i
+                        class="fa-solid fa-mobile-screen"
+                    ></i>
+
+                    Built for Android
+
+                </h3>
+
+
+                <p>
+
+                    A fast, responsive experience designed
+                    specifically for Android users.
+
+                </p>
+
+
+                <div class="mini-btn">
+
+                    Discover Apps →
+
+                </div>
+
+            </div>
+
 
         </div>
 
-
-        <div class="featured-card">
-
-            <h3>
-
-                <i class="fa-solid fa-mobile-screen"></i>
-
-                Built for Android
-
-            </h3>
-
-
-            <p>
-
-                A fast, responsive experience designed
-                specifically for Android users.
-
-            </p>
-
-
-            <div class="mini-btn">
-
-                Discover Apps →
-
-            </div>
-
-      </div>
-
-</section>
+    </section>
 
 
 </main>
 
 
-<!-- ================================
+<!-- =====================================================
      FOOTER
-================================= -->
+====================================================== -->
 
 <footer>
 
+
     <div class="footer-inner">
+
 
         <div class="footer-grid">
 
 
+            <!-- BRAND -->
+
             <div class="footer-brand">
+
 
                 <a
                     href="#"
@@ -3279,7 +3442,9 @@
 
                     <div class="logo-icon">
 
-                        <i class="fa-brands fa-android"></i>
+                        <i
+                            class="fa-brands fa-android"
+                        ></i>
 
                     </div>
 
@@ -3299,22 +3464,32 @@
             </div>
 
 
+            <!-- EXPLORE -->
+
             <div class="footer-column">
 
                 <h4>
                     Explore
                 </h4>
 
-                <a href="#apps">
-                    Apps|Games
+
+                <a
+                    href="#games"
+                >
+                    Apps | Games
                 </a>
 
-                <a href="#">
+
+                <a
+                    href="#games"
+                >
                     New Releases
                 </a>
 
             </div>
 
+
+            <!-- APKCITY -->
 
             <div class="footer-column">
 
@@ -3322,17 +3497,21 @@
                     APKCity
                 </h4>
 
+
                 <a href="#">
                     About Us
                 </a>
+
 
                 <a href="#">
                     Contact
                 </a>
 
+
                 <a href="#">
                     Privacy Policy
                 </a>
+
 
                 <a href="#">
                     Terms
@@ -3340,6 +3519,8 @@
 
             </div>
 
+
+            <!-- SOCIAL -->
 
             <div class="footer-column">
 
@@ -3350,7 +3531,9 @@
 
                 <a href="#">
 
-                    <i class="fa-brands fa-telegram"></i>
+                    <i
+                        class="fa-brands fa-telegram"
+                    ></i>
 
                     Telegram
 
@@ -3359,7 +3542,9 @@
 
                 <a href="#">
 
-                    <i class="fa-brands fa-x-twitter"></i>
+                    <i
+                        class="fa-brands fa-x-twitter"
+                    ></i>
 
                     X / Twitter
 
@@ -3368,7 +3553,9 @@
 
                 <a href="#">
 
-                    <i class="fa-brands fa-instagram"></i>
+                    <i
+                        class="fa-brands fa-instagram"
+                    ></i>
 
                     Instagram
 
@@ -3376,10 +3563,14 @@
 
             </div>
 
+
         </div>
 
 
+        <!-- COPYRIGHT -->
+
         <div class="copyright">
+
 
             <span>
 
@@ -3395,166 +3586,72 @@
 
             </span>
 
+
         </div>
+
 
     </div>
 
 </footer>
 
 
-<!-- ================================
+<!-- =====================================================
      MOBILE MENU JAVASCRIPT
-================================= -->
-
-<!-- ================================
-     MOBILE MENU + SEARCH JAVASCRIPT
-================================= -->
+====================================================== -->
 
 <script>
 
-/* ==========================================
-   MOBILE MENU
-========================================== */
-
-const mobileMenu = document.querySelector(".mobile-menu");
-const navLinks = document.querySelector(".nav-links");
-
-if (mobileMenu && navLinks) {
-
-    mobileMenu.addEventListener("click", function () {
-
-        navLinks.classList.toggle("mobile-open");
-
-    });
-
-}
-
-/* ==========================================
-   SEARCH ENTER → SCROLL TO APPS
-========================================== */
-
-const searchInput = document.getElementById("searchInput");
-const appsSection = document.getElementById("apps");
-
-if (searchInput && appsSection) {
-
-    searchInput.addEventListener("keydown", function (event) {
-
-        if (event.key === "Enter") {
-
-            event.preventDefault();
-
-            appsSection.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-
-        }
-
-    });
-
-}
+    const mobileMenu =
+        document.querySelector(
+            ".mobile-menu"
+        );
 
 
-/* ==========================================
-   FIRESTORE / DYNAMIC APP SUPPORT
-========================================== */
+    const navLinks =
+        document.querySelector(
+            ".nav-links"
+        );
 
-if (appsGrid) {
 
-    const searchObserver =
-        new MutationObserver(
+    if (
+        mobileMenu &&
+        navLinks
+    ) {
+
+        mobileMenu.addEventListener(
+            "click",
             function () {
 
-                /*
-                 * This makes sure the search
-                 * continues working when Firestore
-                 * adds new app cards dynamically.
-                 */
-
-                const searchText =
-                    searchInput
-                        ?.value
-                        .toLowerCase()
-                        .trim() || "";
-
-
-                if (!searchText) {
-                    return;
-                }
-
-
-                const appCards =
-                    appsGrid.querySelectorAll(
-                        ".app-card"
-                    );
-
-
-                appCards.forEach(
-                    function (card) {
-
-                        const name =
-                            card.querySelector(
-                                ".app-name"
-                            )
-                            ?.textContent
-                            .toLowerCase() || "";
-
-
-                        const developer =
-                            card.querySelector(
-                                ".app-developer"
-                            )
-                            ?.textContent
-                            .toLowerCase() || "";
-
-
-                        const category =
-                            card.dataset.category
-                                ?.toLowerCase() || "";
-
-
-                        const description =
-                            card.dataset.description
-                                ?.toLowerCase() || "";
-
-
-                        const keywords =
-                            card.dataset.keywords
-                                ?.toLowerCase() || "";
-
-
-                        const searchableText =
-                            name + " " +
-                            developer + " " +
-                            category + " " +
-                            description + " " +
-                            keywords;
-
-
-                        card.style.display =
-                            searchableText.includes(
-                                searchText
-                            )
-                                ? ""
-                                : "none";
-
-                    }
+                navLinks.classList.toggle(
+                    "mobile-open"
                 );
 
             }
         );
 
 
-    searchObserver.observe(
-        appsGrid,
-        {
-            childList: true,
-            subtree: true
-        }
-    );
+        /* Close menu after clicking a link */
 
-}
+        navLinks
+            .querySelectorAll("a")
+            .forEach(
+                function (link) {
+
+                    link.addEventListener(
+                        "click",
+                        function () {
+
+                            navLinks.classList.remove(
+                                "mobile-open"
+                            );
+
+                        }
+                    );
+
+                }
+            );
+
+    }
 
 </script>
 
