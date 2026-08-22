@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Privacy Policy - APKCity</title>
+
+    <meta name="description" content="Read the APKCity Privacy Policy to learn how we handle information, cookies, advertising, and website usage.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: #08090d;
+            color: #f5f5f7;
+            line-height: 1.75;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(8, 9, 13, 0.92);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #aeb0bb;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 90px 20px 75px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            background: #6c63ff;
+            filter: blur(190px);
+            opacity: 0.12;
+            top: -170px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hero h1 {
+            position: relative;
+            font-size: clamp(40px, 7vw, 70px);
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: #6c63ff;
+        }
+
+        .hero p {
+            position: relative;
+            max-width: 680px;
+            margin: 20px auto 0;
+            color: #9ea0ab;
+            font-size: 15px;
+        }
+
+        .updated {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: rgba(108,99,255,0.1);
+            border: 1px solid rgba(108,99,255,0.2);
+            color: #aaa5ff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* CONTENT */
+        .container {
+            width: 86%;
+            max-width: 1050px;
+            margin: auto;
+        }
+
+        .policy-box {
+            background: #101218;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 22px;
+            padding: 45px;
+            margin-bottom: 70px;
+        }
+
+        .policy-section {
+            padding: 5px 0 35px;
+            margin-bottom: 35px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .policy-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .policy-section h2 {
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .policy-section h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 22px 0 8px;
+            color: #e8e8ed;
+        }
+
+        .policy-section p {
+            color: #a5a7b2;
+            font-size: 14px;
+            margin-bottom: 13px;
+        }
+
+        .policy-section ul {
+            margin: 12px 0 15px 20px;
+            color: #a5a7b2;
+        }
+
+        .policy-section li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .highlight {
+            background: rgba(108,99,255,0.07);
+            border-left: 3px solid #6c63ff;
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            margin: 0;
+        }
+
+        .email {
+            color: #8179ff;
+            font-weight: 700;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            padding: 45px 7%;
+            text-align: center;
+            color: #777985;
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        /* MOBILE */
+        @media (max-width: 800px) {
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                padding: 25px;
+                flex-direction: column;
+                gap: 20px;
+                background: #0b0c11;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .policy-box {
+                padding: 28px 22px;
+            }
+
+            .hero {
+                padding-top: 70px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .container {
+                width: 92%;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .policy-section h2 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            APK<span>City</span>
+        </a>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">← back to home</a>
+        </div>
+
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    </nav>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <h1>Privacy <span>Policy</span></h1>
+
+        <p>
+            Your privacy matters to us. This policy explains how APKCity
+            handles information when you visit and use our website.
+        </p>
+
+        <div class="updated">
+            Last Updated: August 22, 2026
+        </div>
+
+    </section>
+
+
+    <!-- POLICY -->
+    <main class="container">
+
+        <div class="policy-box">
+
+            <!-- INTRODUCTION -->
+            <section class="policy-section">
+
+                <h2>1. Introduction</h2>
+
+                <p>
+                    Welcome to APKCity. This Privacy Policy explains how
+                    information may be collected, used, and handled when
+                    you visit or interact with the APKCity website.
+                </p>
+
+                <p>
+                    By using APKCity, you acknowledge that you have read
+                    and understood this Privacy Policy.
+                </p>
+
+            </section>
+
+
+            <!-- INFORMATION -->
+            <section class="policy-section">
+
+                <h2>2. Information We Collect</h2>
+
+                <p>
+                    APKCity is designed primarily as a content discovery
+                    and download platform. We do not require visitors to
+                    create an account simply to browse the website.
+                </p>
+
+                <p>
+                    Depending on how you use the website, certain technical
+                    or usage information may be collected automatically by
+                    our website, hosting provider, analytics services,
+                    advertising partners, or other third-party services.
+                </p>
+
+                <h3>Information may include:</h3>
+
+                <ul>
+                    <li>IP address or approximate location</li>
+                    <li>Browser type and version</li>
+                    <li>Device type and operating system</li>
+                    <li>Pages visited</li>
+                    <li>Referring pages</li>
+                    <li>Date and time of visits</li>
+                    <li>General website usage information</li>
+                </ul>
+
+            </section>
+
+
+            <!-- COOKIES -->
+            <section class="policy-section">
+
+                <h2>3. Cookies</h2>
+
+                <p>
+                    APKCity may use cookies and similar technologies to
+                    improve website functionality, remember preferences,
+                    understand website usage, and support advertising
+                    services.
+                </p>
+
+                <p>
+                    Cookies are small files stored on your device by a
+                    website. You can usually control or disable cookies
+                    through your browser settings.
+                </p>
+
+            </section>
+
+
+            <!-- ADS -->
+            <section class="policy-section">
+
+                <h2>4. Advertising</h2>
+
+                <p>
+                    APKCity may display advertisements provided by
+                    third-party advertising networks.
+                </p>
+
+                <p>
+                    These advertising providers may use cookies,
+                    identifiers, or similar technologies to display
+                    advertisements and measure advertising performance.
+                </p>
+
+                <div class="highlight">
+
+                    <p>
+                        Third-party advertisers may have their own privacy
+                        policies. We recommend reviewing the privacy policy
+                        of any advertising provider whose services appear
+                        on APKCity.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- THIRD PARTY LINKS -->
+            <section class="policy-section">
+
+                <h2>5. Third-Party Websites and Links</h2>
+
+                <p>
+                    APKCity may contain links to external websites,
+                    download hosts, services, advertisements, or other
+                    third-party platforms.
+                </p>
+
+                <p>
+                    Once you leave APKCity and visit a third-party website,
+                    that website's own privacy policy and terms apply.
+                    APKCity is not responsible for the privacy practices,
+                    content, or policies of external websites.
+                </p>
+
+            </section>
+
+
+            <!-- DOWNLOADS -->
+            <section class="policy-section">
+
+                <h2>6. Downloads and External Files</h2>
+
+                <p>
+                    APKCity may provide links to applications, games,
+                    files, ports, or external download locations.
+                </p>
+
+                <p>
+                    Users should exercise appropriate caution before
+                    downloading or installing any file and should verify
+                    compatibility, permissions, file integrity, and the
+                    source of the file where appropriate.
+                </p>
+
+            </section>
+
+
+            <!-- CHILDREN -->
+            <section class="policy-section">
+
+                <h2>7. Children's Privacy</h2>
+
+                <p>
+                    APKCity does not knowingly seek to collect personal
+                    information from children.
+                </p>
+
+                <p>
+                    If you believe that a child has provided personal
+                    information through our website, please contact us so
+                    that the information can be reviewed and appropriate
+                    action can be taken.
+                </p>
+
+            </section>
+
+
+            <!-- SECURITY -->
+            <section class="policy-section">
+
+                <h2>8. Data Security</h2>
+
+                <p>
+                    We take reasonable steps to maintain the security of
+                    information associated with our website. However, no
+                    method of transmission over the internet or electronic
+                    storage system can be guaranteed to be completely
+                    secure.
+                </p>
+
+            </section>
+
+
+            <!-- DATA RETENTION -->
+            <section class="policy-section">
+
+                <h2>9. Data Retention</h2>
+
+                <p>
+                    APKCity generally does not intentionally maintain
+                    personal user profiles for ordinary visitors.
+                    Information collected automatically by hosting,
+                    analytics, advertising, or security services may be
+                    retained according to the policies and retention
+                    practices of those services.
+                </p>
+
+            </section>
+
+
+            <!-- YOUR RIGHTS -->
+            <section class="policy-section">
+
+                <h2>10. Your Choices and Rights</h2>
+
+                <p>
+                    Depending on your location and applicable law, you may
+                    have certain rights regarding personal information,
+                    including rights to access, correct, delete, restrict,
+                    or object to certain processing of your information.
+                </p>
+
+                <p>
+                    Requests can be submitted through our contact method
+                    provided below. We may need additional information to
+                    verify and process a request.
+                </p>
+
+            </section>
+
+
+            <!-- CHANGES -->
+            <section class="policy-section">
+
+                <h2>11. Changes to This Privacy Policy</h2>
+
+                <p>
+                    APKCity may update this Privacy Policy from time to
+                    time as the website, services, technologies, or legal
+                    requirements change.
+                </p>
+
+                <p>
+                    Any updated version will be posted on this page with
+                    a revised "Last Updated" date.
+                </p>
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p>
+            © 2026 <strong>APKCity</strong>. All rights reserved.
+        </p>
+
+        <p style="margin-top:8px;">
+            Apps • Games • MOD Games • PC Games for Android
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        function toggleMenu() {
+            document.getElementById("navLinks").classList.toggle("show");
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,746 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Terms & Conditions - APKCity</title>
+
+    <meta name="description" content="Read the Terms and Conditions governing your use of the APKCity website.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: #08090d;
+            color: #f5f5f7;
+            line-height: 1.75;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(8, 9, 13, 0.92);
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 27px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            color: #6c63ff;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #aeb0bb;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+        }
+
+        .menu-btn {
+            display: none;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        /* HERO */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 90px 20px 75px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            background: #6c63ff;
+            filter: blur(190px);
+            opacity: 0.12;
+            top: -170px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .hero h1 {
+            position: relative;
+            font-size: clamp(40px, 7vw, 70px);
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 1.1;
+        }
+
+        .hero h1 span {
+            color: #6c63ff;
+        }
+
+        .hero p {
+            position: relative;
+            max-width: 700px;
+            margin: 20px auto 0;
+            color: #9ea0ab;
+            font-size: 15px;
+        }
+
+        .updated {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: rgba(108,99,255,0.1);
+            border: 1px solid rgba(108,99,255,0.2);
+            color: #aaa5ff;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* CONTENT */
+        .container {
+            width: 86%;
+            max-width: 1050px;
+            margin: auto;
+        }
+
+        .terms-box {
+            background: #101218;
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 22px;
+            padding: 45px;
+            margin-bottom: 70px;
+        }
+
+        .terms-section {
+            padding: 5px 0 35px;
+            margin-bottom: 35px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .terms-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .terms-section h2 {
+            font-size: 23px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .terms-section h3 {
+            font-size: 17px;
+            font-weight: 700;
+            margin: 22px 0 8px;
+            color: #e8e8ed;
+        }
+
+        .terms-section p {
+            color: #a5a7b2;
+            font-size: 14px;
+            margin-bottom: 13px;
+        }
+
+        .terms-section ul {
+            margin: 12px 0 15px 20px;
+            color: #a5a7b2;
+        }
+
+        .terms-section li {
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .highlight {
+            background: rgba(108,99,255,0.07);
+            border-left: 3px solid #6c63ff;
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .highlight p {
+            margin: 0;
+        }
+
+        .warning {
+            background: rgba(255,170,0,0.06);
+            border-left: 3px solid #d99b22;
+            padding: 18px 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .warning p {
+            margin: 0;
+        }
+
+        .email {
+            color: #8179ff;
+            font-weight: 700;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.07);
+            padding: 45px 7%;
+            text-align: center;
+            color: #777985;
+            font-size: 13px;
+        }
+
+        footer strong {
+            color: #ffffff;
+        }
+
+        /* MOBILE */
+        @media (max-width: 800px) {
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                padding: 25px;
+                flex-direction: column;
+                gap: 20px;
+                background: #0b0c11;
+                border-bottom: 1px solid rgba(255,255,255,0.07);
+            }
+
+            .nav-links.show {
+                display: flex;
+            }
+
+            .menu-btn {
+                display: block;
+            }
+
+            .terms-box {
+                padding: 28px 22px;
+            }
+
+            .hero {
+                padding-top: 70px;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .container {
+                width: 92%;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .terms-section h2 {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            APK<span>City</span>
+        </a>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index.html">← back to home</a>
+        </div>
+
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+    </nav>
+
+
+    <!-- HERO -->
+    <section class="hero">
+
+        <h1>Terms <span>&amp; Conditions</span></h1>
+
+        <p>
+            Please read these Terms and Conditions carefully before
+            using APKCity.
+        </p>
+
+        <div class="updated">
+            Last Updated: August 22, 2026
+        </div>
+
+    </section>
+
+
+    <!-- TERMS -->
+    <main class="container">
+
+        <div class="terms-box">
+
+            <!-- ACCEPTANCE -->
+            <section class="terms-section">
+
+                <h2>1. Acceptance of Terms</h2>
+
+                <p>
+                    Welcome to APKCity. By accessing, browsing, or using
+                    this website, you agree to be bound by these Terms and
+                    Conditions.
+                </p>
+
+                <p>
+                    If you do not agree with any part of these Terms,
+                    please discontinue your use of the website.
+                </p>
+
+                <div class="highlight">
+                    <p>
+                        Your continued use of APKCity after changes are
+                        posted constitutes acceptance of the updated Terms.
+                    </p>
+                </div>
+
+            </section>
+
+
+            <!-- ABOUT APKCITY -->
+            <section class="terms-section">
+
+                <h2>2. About APKCity</h2>
+
+                <p>
+                    APKCity is an online platform that provides information,
+                    descriptions, screenshots, links, and other resources
+                    relating to Android applications, Android games,
+                    modified game releases, and PC games or compatible
+                    gaming experiences for Android devices.
+                </p>
+
+                <p>
+                    APKCity may change, update, remove, or reorganize
+                    website content at any time without prior notice.
+                </p>
+
+            </section>
+
+
+            <!-- ELIGIBILITY -->
+            <section class="terms-section">
+
+                <h2>3. Eligibility</h2>
+
+                <p>
+                    You are responsible for ensuring that your use of
+                    APKCity complies with the laws and regulations applicable
+                    to you in your country or region.
+                </p>
+
+                <p>
+                    If you are not legally permitted to access or use
+                    particular content, you must not use that content.
+                </p>
+
+            </section>
+
+
+            <!-- WEBSITE USE -->
+            <section class="terms-section">
+
+                <h2>4. Acceptable Use</h2>
+
+                <p>
+                    You agree to use APKCity only for lawful purposes and
+                    in a manner that does not interfere with the operation
+                    or security of the website.
+                </p>
+
+                <h3>You must not:</h3>
+
+                <ul>
+                    <li>Attempt to disrupt or damage the website.</li>
+                    <li>Attempt unauthorized access to website systems.</li>
+                    <li>Use automated methods to abuse or overload the website.</li>
+                    <li>Introduce malicious software or harmful code.</li>
+                    <li>Use the website for unlawful activities.</li>
+                    <li>Attempt to bypass security or access restrictions.</li>
+                </ul>
+
+            </section>
+
+
+            <!-- CONTENT -->
+            <section class="terms-section">
+
+                <h2>5. Website Content</h2>
+
+                <p>
+                    APKCity attempts to provide useful and accurate
+                    information about applications and games. However,
+                    information such as versions, file sizes, requirements,
+                    features, compatibility, and availability may change.
+                </p>
+
+                <p>
+                    We do not guarantee that every piece of information on
+                    the website will always be complete, current, or error-free.
+                </p>
+
+                <div class="warning">
+                    <p>
+                        Always verify that an application or game is
+                        compatible with your device and operating system
+                        before installing it.
+                    </p>
+                </div>
+
+            </section>
+
+
+            <!-- DOWNLOADS -->
+            <section class="terms-section">
+
+                <h2>6. Downloads and Installations</h2>
+
+                <p>
+                    APKCity may provide download buttons or links that
+                    direct users to files hosted on APKCity or on external
+                    services.
+                </p>
+
+                <p>
+                    You are responsible for deciding whether a file is
+                    appropriate for your device and circumstances.
+                </p>
+
+                <h3>Before installing any file, we recommend:</h3>
+
+                <ul>
+                    <li>Checking the application's requirements.</li>
+                    <li>Checking the file version.</li>
+                    <li>Reviewing requested permissions.</li>
+                    <li>Using appropriate device security measures.</li>
+                    <li>Maintaining backups of important data.</li>
+                </ul>
+
+            </section>
+
+
+            <!-- MOD CONTENT -->
+            <section class="terms-section">
+
+                <h2>7. Modified Applications and Games</h2>
+
+                <p>
+                    APKCity may list or provide information about modified
+                    applications or games ("MODs").
+                </p>
+
+                <p>
+                    Modified software may behave differently from its
+                    original version and may not be officially supported
+                    by the original developer or publisher.
+                </p>
+
+                <p>
+                    Users should understand the risks associated with
+                    installing modified software and should comply with
+                    all applicable laws and the original software's
+                    licensing terms.
+                </p>
+
+            </section>
+
+
+            <!-- PC GAMES -->
+            <section class="terms-section">
+
+                <h2>8. PC Games and Android Compatibility</h2>
+
+                <p>
+                    APKCity may feature PC games that have been ported,
+                    adapted, or made compatible with Android through
+                    officially available or third-party methods.
+                </p>
+
+                <p>
+                    Compatibility can vary depending on the device,
+                    processor, Android version, available storage, memory,
+                    drivers, emulator, compatibility layer, or other
+                    technical factors.
+                </p>
+
+            </section>
+
+
+            <!-- THIRD PARTY -->
+            <section class="terms-section">
+
+                <h2>9. Third-Party Websites and Services</h2>
+
+                <p>
+                    APKCity may contain links to third-party websites,
+                    file hosts, advertising networks, social platforms,
+                    software services, or other external resources.
+                </p>
+
+                <p>
+                    These third-party services operate independently from
+                    APKCity and may have their own terms, privacy policies,
+                    security practices, and content.
+                </p>
+
+                <p>
+                    APKCity is not responsible for the availability,
+                    accuracy, security, or policies of third-party websites.
+                </p>
+
+            </section>
+
+
+            <!-- ADVERTISING -->
+            <section class="terms-section">
+
+                <h2>10. Advertising</h2>
+
+                <p>
+                    APKCity may display advertisements from third-party
+                    advertising providers.
+                </p>
+
+                <p>
+                    Advertisements may lead to external websites or
+                    services. APKCity does not necessarily endorse the
+                    products, services, or claims displayed in third-party
+                    advertisements.
+                </p>
+
+            </section>
+
+
+            <!-- INTELLECTUAL PROPERTY -->
+            <section class="terms-section">
+
+                <h2>11. Intellectual Property</h2>
+
+                <p>
+                    APKCity respects intellectual property rights.
+                    Application names, logos, trademarks, game titles,
+                    artwork, screenshots, and other materials may belong
+                    to their respective owners.
+                </p>
+
+                <p>
+                    Nothing on APKCity should be interpreted as transferring
+                    ownership of third-party intellectual property to
+                    APKCity or its users.
+                </p>
+
+                <div class="highlight">
+                    <p>
+                        If you believe that content available through
+                        APKCity infringes your copyright or other intellectual
+                        property rights, please contact us with sufficient
+                        information for the matter to be reviewed.
+                    </p>
+                </div>
+
+            </section>
+
+
+            <!-- USER RESPONSIBILITY -->
+            <section class="terms-section">
+
+                <h2>12. User Responsibility</h2>
+
+                <p>
+                    You are responsible for your own actions when using
+                    APKCity and for ensuring that your use of downloaded
+                    software complies with applicable laws, licenses,
+                    terms of service, and regulations.
+                </p>
+
+                <p>
+                    You are also responsible for maintaining appropriate
+                    security on your own device.
+                </p>
+
+            </section>
+
+
+            <!-- DISCLAIMER -->
+            <section class="terms-section">
+
+                <h2>13. Disclaimer</h2>
+
+                <p>
+                    APKCity is provided on an "as available" basis.
+                    We do not guarantee that the website will always be
+                    available, uninterrupted, secure, or completely free
+                    from errors.
+                </p>
+
+                <p>
+                    APKCity does not guarantee that every application,
+                    game, download, link, or third-party service will work
+                    on every device or operating system.
+                </p>
+
+            </section>
+
+
+            <!-- LIABILITY -->
+            <section class="terms-section">
+
+                <h2>14. Limitation of Liability</h2>
+
+                <p>
+                    To the extent permitted by applicable law, APKCity
+                    and its operators shall not be responsible for losses,
+                    damages, data loss, device issues, service interruptions,
+                    or other consequences resulting from the use of the
+                    website or third-party resources accessed through it.
+                </p>
+
+                <p>
+                    Users access and use downloaded software and external
+                    services at their own discretion and risk.
+                </p>
+
+            </section>
+
+
+            <!-- AVAILABILITY -->
+            <section class="terms-section">
+
+                <h2>15. Website Availability</h2>
+
+                <p>
+                    APKCity may modify, suspend, restrict, or discontinue
+                    any part of the website, including specific pages,
+                    categories, download links, or services, at any time.
+                </p>
+
+                <p>
+                    We may also remove outdated or unavailable content
+                    without prior notice.
+                </p>
+
+            </section>
+
+
+            <!-- CHANGES -->
+            <section class="terms-section">
+
+                <h2>16. Changes to These Terms</h2>
+
+                <p>
+                    APKCity may update these Terms and Conditions from time
+                    to time.
+                </p>
+
+                <p>
+                    Changes become effective when the revised Terms are
+                    published on this page. You should periodically review
+                    this page to remain informed about the current Terms.
+                </p>
+
+            </section>
+
+
+            <!-- GOVERNING LAW -->
+            <section class="terms-section">
+
+                <h2>17. Applicable Law</h2>
+
+                <p>
+                    These Terms shall be interpreted and applied in
+                    accordance with applicable laws and regulations.
+                </p>
+
+                <p>
+                    If you have specific legal questions regarding these
+                    Terms, you should obtain advice from a qualified legal
+                    professional in your jurisdiction.
+                </p>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer>
+
+        <p>
+            © 2026 <strong>APKCity</strong>. All rights reserved.
+        </p>
+
+        <p style="margin-top:8px;">
+            Apps • Games • MOD Games • PC Games for Android
+        </p>
+
+    </footer>
+
+
+    <script>
+
+        function toggleMenu() {
+            document.getElementById("navLinks").classList.toggle("show");
+        }
+
+    </script>
+
+</body>
+</html>
